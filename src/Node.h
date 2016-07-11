@@ -1,7 +1,9 @@
 #pragma once
+#include "ASTVisitor.hpp"
 #include <iostream>
 #include <vector>
 #include <stdint.h>
+
 
 class CodeGenContext;
 class NStatement;
@@ -15,15 +17,23 @@ class Node {
 public:
     virtual ~Node() {}
     
+    virtual void Accept(ASTVisitor& v) = 0;
+    
 };
 
-class Expression : public Node{};
-class Statement  : public Node{};
+class Expression : public Node{
+  virtual void Accept(ASTVisitor& v) = 0;
+};
+class Statement  : public Node{
+  virtual void Accept(ASTVisitor& v) = 0;
+};
 
 class Block : public Expression {
 public:
     std::vector<Statement> statements;
     Block() { }
+    
+    void Accept(ASTVisitor& v){ v.Visit(*this); }
 };
 
 /////////////////////////////////////////////////////////
@@ -34,6 +44,8 @@ public:
     Expression& expression;
     ExpressionStatement(Expression& expression) : 
         expression(expression) { }
+        
+    void Accept(ASTVisitor& v){ v.Visit(*this); }
 };
 
 /////////////////////////////////////////////////////////
@@ -42,6 +54,7 @@ class Literal : public Expression {
 public:
     uint32_t value;
     Literal(uint32_t const &value) : value(value) { }
+    void Accept(ASTVisitor& v){ v.Visit(*this); }
 };
 
 
@@ -53,6 +66,7 @@ public:
     Expression& rhs;
     BinaryOp(Expression &lhs, int op, Expression &rhs) :
         lhs(lhs), rhs(rhs), op(op) { }
+    void Accept(ASTVisitor& v){ v.Visit(*this); }
 };
 
 
