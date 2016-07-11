@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Node.h"
-#include "CodeGenerator.h"
+#include "ASTVisitorCodeGenerator.hpp"
+#include "ASTVisitorPrettyPrinter.hpp"
 
 // using namespace AST_Nodes;
 extern Block* programBlock;
@@ -10,7 +11,7 @@ int main(int argc, char **argv)
 {
     yyparse();
 
-    CodeGenerator::printAST(programBlock);
+    std::cout << "print AST\n";
     
     return 0;
 }
