@@ -5,6 +5,7 @@ void ASTVisitorPrettyPrinter::Visit(Block const& p) {
   if (this->ActBefore(p)) { return; }
 
   for (auto c : p.statements){
+      std::cout << "Statement: ";
       c.Accept(*this);
       std::cout << std::endl;
   }
@@ -12,7 +13,7 @@ void ASTVisitorPrettyPrinter::Visit(Block const& p) {
   this->ActAfter(p);
 }  
 
-bool ASTVisitorPrettyPrinter::ActBefore(Block const& p){};
+bool ASTVisitorPrettyPrinter::ActBefore(Block const& p){return false;};
 void ASTVisitorPrettyPrinter::ActAfter (Block const& p){};
 
 /////////////////////////////////////////////////////////////////////////////
@@ -24,7 +25,7 @@ void ASTVisitorPrettyPrinter::Visit(ExpressionStatement const& p){
   this->ActAfter(p);  
 }
 
-bool ASTVisitorPrettyPrinter::ActBefore(ExpressionStatement const& p){};
+bool ASTVisitorPrettyPrinter::ActBefore(ExpressionStatement const& p){return false;};
 void ASTVisitorPrettyPrinter::ActAfter (ExpressionStatement const& p){};   
 
 /////////////////////////////////////////////////////////////////////////////
@@ -34,7 +35,7 @@ void ASTVisitorPrettyPrinter::Visit(Literal const& p){
   this->ActAfter(p);   
 }
 
-bool ASTVisitorPrettyPrinter::ActBefore(Literal const& p){};
+bool ASTVisitorPrettyPrinter::ActBefore(Literal const& p){ return false;};
 void ASTVisitorPrettyPrinter::ActAfter (Literal const& p){};     
 
 /////////////////////////////////////////////////////////////////////////////
@@ -48,5 +49,5 @@ void ASTVisitorPrettyPrinter::Visit(BinaryOp const& p){
   this->ActAfter(p);    
 }
 
-bool ASTVisitorPrettyPrinter::ActBefore(BinaryOp const& p){};
+bool ASTVisitorPrettyPrinter::ActBefore(BinaryOp const& p){return false;};
 void ASTVisitorPrettyPrinter::ActAfter (BinaryOp const& p){};   

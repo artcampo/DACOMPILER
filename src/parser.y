@@ -12,8 +12,8 @@
     Node *node;
     Block *block;
     Expression *expr;
-    Statement *stmt;
-    std::vector<Statement> *stmts;
+    ExpressionStatement *stmt;
+    std::vector<ExpressionStatement> *stmts;
     std::string *string;
     int token;
 }      
@@ -44,18 +44,18 @@ program : block { programBlock = $1; }
 block: stmts
       ;
         
-stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back(*$<stmt>1); std::cout << "; ";}
-      | stmts stmt TSEMICOLON { $1->statements.push_back(*$<stmt>2);  std::cout << "; "; }
+stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back(*$<stmt>1); std::cout << "\n;\n ";}
+      | stmts stmt TSEMICOLON { $1->statements.push_back(*$<stmt>2);  std::cout << "\n;\n "; }
       ;
 
 stmt : expr { $$ = new ExpressionStatement(*$1); }
      ;
 
-numeric : TINTEGER { $$ = new Literal(atol($1->c_str()));  std::cout << $1->c_str(); delete $1; }
+numeric : TINTEGER { $$ = new Literal(atol($1->c_str()));  std::cout << "\n"<<$1->c_str() <<"\n"; delete $1; }
         ;
     
 expr : numeric
-     | expr TPLUS expr { $$ = new BinaryOp(*$1, $2, *$3); std::cout << " + ";}
+     | expr TPLUS expr { $$ = new BinaryOp(*$1, $2, *$3); std::cout << "\n + \n";}
      ;
     
 

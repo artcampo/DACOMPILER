@@ -17,5 +17,4 @@ public:
     virtual void Visit(ExpressionStatement const& p);
     virtual void Visit(Literal const& p);
     virtual void Visit(BinaryOp const& p);
-    
 };

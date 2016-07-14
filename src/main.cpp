@@ -13,5 +13,8 @@ int main(int argc, char **argv)
 
     std::cout << "print AST\n";
     
+    ASTVisitorPrettyPrinter visitor;
+    visitor.Visit(*programBlock);
+    
     return 0;
 }
