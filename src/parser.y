@@ -44,18 +44,18 @@ program : block { programBlock = $1; }
 block: stmts
       ;
         
-stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back(*$<stmt>1); std::cout << "\n;\n ";}
-      | stmts stmt TSEMICOLON { $1->statements.push_back(*$<stmt>2);  std::cout << "\n;\n "; }
+stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back($<stmt>1); std::cout << "\n;\n ";}
+      | stmts stmt TSEMICOLON { $1->statements.push_back($<stmt>2);  std::cout << "\n;\n "; }
       ;
 
-stmt : expr { $$ = new ExpressionStatement(*$1); }
+stmt : expr { $$ = new ExpressionStatement($1); }
      ;
 
 numeric : TINTEGER { $$ = new Literal(atol($1->c_str()));  std::cout << "\n"<<$1->c_str() <<"\n"; delete $1; }
         ;
     
 expr : numeric
-     | expr TPLUS expr { $$ = new BinaryOp(*$1, $2, *$3); std::cout << "\n + \n";}
+     | expr TPLUS expr { $$ = new BinaryOp($1, $2, $3); std::cout << "\n + \n";}
      ;
     
 

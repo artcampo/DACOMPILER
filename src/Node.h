@@ -31,7 +31,7 @@ public:
 /////////////////////////////////////////////////////////
 class Block : public Expression {
 public:
-    std::vector<Statement> statements;
+    std::vector<Statement*> statements;
     Block() {std::cout << "Block Ctor" <<std::endl;}
     
     void Accept(ASTVisitor& v);
@@ -40,8 +40,8 @@ public:
 /////////////////////////////////////////////////////////
 class ExpressionStatement : public Statement {
 public:
-    Expression& expression;
-    ExpressionStatement(Expression& expression) : 
+    Expression* expression;
+    ExpressionStatement(Expression* expression) : 
         expression(expression) {std::cout << "ExpressionStatement Ctor" <<std::endl;}
         
     void Accept(ASTVisitor& v);
@@ -60,9 +60,9 @@ public:
 class BinaryOp : public Expression {
 public:
     int op;
-    Expression& lhs;
-    Expression& rhs;
-    BinaryOp(Expression &lhs, int op, Expression &rhs) :
+    Expression* lhs;
+    Expression* rhs;
+    BinaryOp(Expression *lhs, int op, Expression *rhs) :
         lhs(lhs), rhs(rhs), op(op) {std::cout << "BinaryOp Ctor" <<std::endl;}
     void Accept(ASTVisitor& v);
 };

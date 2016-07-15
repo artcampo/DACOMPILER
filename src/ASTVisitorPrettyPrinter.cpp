@@ -7,7 +7,7 @@ void ASTVisitorPrettyPrinter::Visit(Block const& p) {
 
   for (auto c : p.statements){
       std::cout << "Statement: ";
-      c.Accept(*this);
+      c->Accept(*this);
       std::cout << std::endl;
   }
   
@@ -21,7 +21,7 @@ void ASTVisitorPrettyPrinter::ActAfter (Block const& p){};
 void ASTVisitorPrettyPrinter::Visit(ExpressionStatement const& p){
   if (this->ActBefore(p)) { return; }
 
-  p.expression.Accept(*this);
+  p.expression->Accept(*this);
   
   this->ActAfter(p);  
 }
@@ -43,9 +43,9 @@ void ASTVisitorPrettyPrinter::ActAfter (Literal const& p){};
 void ASTVisitorPrettyPrinter::Visit(BinaryOp const& p){
   if (this->ActBefore(p)) { return; }
 
-  p.lhs.Accept(*this);
+  p.lhs->Accept(*this);
   std::cout << " + ";
-  p.rhs.Accept(*this);
+  p.rhs->Accept(*this);
   
   this->ActAfter(p);    
 }
