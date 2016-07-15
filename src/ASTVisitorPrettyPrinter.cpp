@@ -2,6 +2,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Block const& p) {
+  std::cout << "visit on Block\n";
   if (this->ActBefore(p)) { return; }
 
   for (auto c : p.statements){
