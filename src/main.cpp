@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 {
     yyparse();
 
-    std::cout << "print AST\n";
+    std::cout << "Print AST\n";
     
     ASTVisitorPrettyPrinter visitor;
     visitor.Visit(*programBlock);
