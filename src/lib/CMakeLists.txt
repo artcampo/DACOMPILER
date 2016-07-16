@@ -23,11 +23,14 @@ if(BISON_FOUND)
     add_custom_command(
     OUTPUT ${BisonOutput}
     COMMAND ${BISON_EXECUTABLE}
+        -d
+            --output=${TMP_DIR}/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/${BisonSpecFile}
+    DEPENDS ${BisonSpecFile}
+    COMMENT "Generating ${BisonOutput} - with: ${BISON_EXECUTABLE}
         --defines=${CMAKE_SOURCE_DIR}/parser.h
             --output=${TMP_DIR}/parser.cpp
-        ${BisonSpecFile}
-    DEPENDS ${BisonSpecFile}
-    COMMENT "Generating ${BisonOutput}"
+            ${BisonSpecFile} in DIR: ${CMAKE_CURRENT_SOURCE_DIR}"
     VERBATIM
     )
 endif()
