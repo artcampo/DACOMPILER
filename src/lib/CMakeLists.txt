@@ -53,4 +53,4 @@ endif()
 add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput})
 target_link_libraries(dacomp COMPILER)
 
-INSTALL(FILES ${PROJECT_BINARY_DIR}/src/lib/dacomp DESTINATION tests)
+INSTALL(TARGETS dacomp DESTINATION tests)
