@@ -2,11 +2,11 @@
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Block const& p) {
-  std::cout << "visit on Block\n";
+//   std::cout << "visit on Block\n";
   if (this->ActBefore(p)) { return; }
 
   for (auto c : p.statements){
-      std::cout << "Statement: ";
+//       std::cout << "Statement: ";
       c->Accept(*this);
       std::cout << std::endl;
   }
@@ -21,7 +21,7 @@ void ASTVisitorPrettyPrinter::ActAfter (Block const& p){};
 void ASTVisitorPrettyPrinter::Visit(ExpressionStatement const& p){
   if (this->ActBefore(p)) { return; }
 
-  p.expression->Accept(*this);
+  p.expression->  Accept(*this);
   
   this->ActAfter(p);  
 }
