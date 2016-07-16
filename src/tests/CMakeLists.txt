@@ -9,4 +9,4 @@ add_definitions( -std=c++11 -g)
 # add_executable(test2 test2.cpp)
 # target_link_libraries(test2 VM)
 
-INSTALL(TARGETS test.txt test1.txt DESTINATION tests)
+# INSTALL(TARGETS test.txt test1.txt DESTINATION tests)

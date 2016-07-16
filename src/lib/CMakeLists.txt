@@ -17,7 +17,7 @@ set(TMP_DIR "generated")
 file(MAKE_DIRECTORY ${TMP_DIR})
 
 find_package(BISON REQUIRED)
-set(BisonOutput ${TMP_DIR}/parser.cpp ${CMAKE_SOURCE_DIR}/../include/parser.h)
+set(BisonOutput ${TMP_DIR}/parser.cpp ${CMAKE_SOURCE_DIR}/parser.h)
 set(BisonSpecFile parser.y)
 if(BISON_FOUND)
     add_custom_command(
@@ -48,5 +48,5 @@ if(FLEX_FOUND)
 endif()
 
 #Set final compiler
-add_executable(dacomp main.cpp)
+add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput})
 target_link_libraries(dacomp COMPILER)
