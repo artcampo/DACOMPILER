@@ -1,2 +1,1 @@
-- Better build system
 - policy for logging

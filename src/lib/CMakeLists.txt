@@ -26,10 +26,7 @@ if(BISON_FOUND)
         -d --output=${TMP_DIR}/parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/${BisonSpecFile}
     DEPENDS ${BisonSpecFile}
-    COMMENT "Generating ${BisonOutput} - with: ${BISON_EXECUTABLE}
-        --defines=${CMAKE_SOURCE_DIR}/parser.h
-            --output=${TMP_DIR}/parser.cpp
-            ${BisonSpecFile} in DIR: ${CMAKE_CURRENT_SOURCE_DIR}"
+    COMMENT "Generating ${BisonOutput}"
     VERBATIM
     )
 endif()
