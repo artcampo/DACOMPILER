@@ -1,5 +1,5 @@
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include")
-
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/include")
 
 set(files
     Node.cpp
@@ -46,8 +46,10 @@ if(FLEX_FOUND)
     )
 endif()
 
+set(VMInstructionBuilder ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/IRCodification.cpp)
+
 #Set final compiler
-add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput})
+add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput} ${VMInstructionBuilder})
 target_link_libraries(dacomp COMPILER)
 
 INSTALL(TARGETS dacomp DESTINATION tests)
