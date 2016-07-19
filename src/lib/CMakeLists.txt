@@ -1,4 +1,5 @@
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include/CodeGenerator")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/include")
 
 set(files
@@ -6,6 +7,7 @@ set(files
     ASTVisitor.cpp
     ASTVisitorPrettyPrinter.cpp
     ASTVisitorCodeGenerator.cpp
+    CodeGenerator/RegisterAllocator.cpp
 )
 
 #Set intermediate library
