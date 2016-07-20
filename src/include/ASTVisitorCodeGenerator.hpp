@@ -1,20 +1,22 @@
 #pragma once
 #include "ASTVisitor.hpp"
 #include "Node.h"
+#include "CodeGenerator/RegisterAllocator.hpp"
+#include "ByteCode.h"
+#include <map>
 
 class ASTVisitorCodeGenerator : public ASTVisitor{
 public:
-    virtual bool ActBefore(Block const& p);
-    virtual void ActAfter (Block const& p);
-    virtual bool ActBefore(ExpressionStatement const& p);
-    virtual void ActAfter (ExpressionStatement const& p);    
-    virtual bool ActBefore(Literal const& p);
-    virtual void ActAfter (Literal const& p);     
-    virtual bool ActBefore(BinaryOp const& p);
-    virtual void ActAfter (BinaryOp const& p);        
-
     virtual void Visit(Block const& p);
     virtual void Visit(ExpressionStatement const& p);
     virtual void Visit(Literal const& p);
     virtual void Visit(BinaryOp const& p);
+    
+    ASTVisitorCodeGenerator() : reg_allocator_(){};
+    
+    void Print() const;
+private:
+    CodeGenerator::RegisterAllocator  reg_allocator_;
+    std::map<const Node*,uint32_t>    reg_of_expression_;
+    ByteCode                          byte_code_;
 };

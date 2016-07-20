@@ -48,7 +48,10 @@ if(FLEX_FOUND)
     )
 endif()
 
-set(VMInstructionBuilder ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/IRCodification.cpp)
+set(VMInstructionBuilder 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/IRCodification.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/Utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/IRBuilder.cpp)
 
 #Set final compiler
 add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput} ${VMInstructionBuilder})

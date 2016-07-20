@@ -1,50 +1,43 @@
 #include "ASTVisitorCodeGenerator.hpp"
+// #include "IRCodification.h"
+#include "IRBuilder.h"
+#include "Utils.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(Block const& p) {
-//   std::cout << "visit on Block\n";
-  if (this->ActBefore(p)) { return; }
-
-  for (auto c : p.statements){
+void ASTVisitorCodeGenerator::Visit(Block const& n) {
+  for (auto c : n.statements){
       c->Accept(*this);
   }
-  
-  this->ActAfter(p);
 }  
 
-bool ASTVisitorCodeGenerator::ActBefore(Block const& p){return false;};
-void ASTVisitorCodeGenerator::ActAfter (Block const& p){};
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(ExpressionStatement const& p){
-  if (this->ActBefore(p)) { return; }
+void ASTVisitorCodeGenerator::Visit(ExpressionStatement const& n){
+  n.expression->Accept(*this);
+}
 
-  p.expression->  Accept(*this);
+/////////////////////////////////////////////////////////////////////////////
+void ASTVisitorCodeGenerator::Visit(Literal const& n){
+  const uint32_t reg_assigned = reg_allocator_.freeRegister();
+  reg_of_expression_[&n]      = reg_assigned;
+  byte_code_.stream.push_back( IRBuilder::Load(reg_assigned, n.value) );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
+  n.lhs->Accept(*this);
+  n.rhs->Accept(*this);
   
-  this->ActAfter(p);  
+  const uint32_t reg_assigned = reg_allocator_.freeRegister();
+  reg_of_expression_[&n]      = reg_assigned;
+  const uint32_t reg_src1     = reg_of_expression_[n.lhs];
+  const uint32_t reg_src2     = reg_of_expression_[n.rhs];
+  byte_code_.stream.push_back( IRBuilder::Add(reg_src1, reg_src2, 
+                                              reg_assigned));
 }
-
-bool ASTVisitorCodeGenerator::ActBefore(ExpressionStatement const& p){return false;};
-void ASTVisitorCodeGenerator::ActAfter (ExpressionStatement const& p){};   
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(Literal const& p){
-  if (this->ActBefore(p)) { return; }
-  this->ActAfter(p);   
+void ASTVisitorCodeGenerator::Print() const{
+  VMUtils::print(byte_code_);
 }
-
-bool ASTVisitorCodeGenerator::ActBefore(Literal const& p){ return false;};
-void ASTVisitorCodeGenerator::ActAfter (Literal const& p){};     
-
-/////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(BinaryOp const& p){
-  if (this->ActBefore(p)) { return; }
-
-  p.lhs->Accept(*this);
-  p.rhs->Accept(*this);
-  
-  this->ActAfter(p);    
-}
-
-bool ASTVisitorCodeGenerator::ActBefore(BinaryOp const& p){return false;};
-void ASTVisitorCodeGenerator::ActAfter (BinaryOp const& p){};   

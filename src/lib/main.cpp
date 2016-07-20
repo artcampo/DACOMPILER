@@ -2,6 +2,7 @@
 #include "Node.h"
 #include "ASTVisitorCodeGenerator.hpp"
 #include "ASTVisitorPrettyPrinter.hpp"
+#include "ASTVisitorCodeGenerator.hpp"
 
 // using namespace AST_Nodes;
 extern Block* programBlock;
@@ -13,8 +14,13 @@ int main(int argc, char **argv)
 
     std::cout << "Print AST\n";
     
-    ASTVisitorPrettyPrinter visitor;
+//     ASTVisitorPrettyPrinter visitor;
+//     visitor.Visit(*programBlock);
+    
+    ASTVisitorCodeGenerator visitor;
     visitor.Visit(*programBlock);
+    
+    visitor.Print();
     
     return 0;
 }
