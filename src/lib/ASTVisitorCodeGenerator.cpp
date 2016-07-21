@@ -1,6 +1,5 @@
 #include "ASTVisitorCodeGenerator.hpp"
-// #include "IRCodification.h"
-#include "IRBuilder.h"
+#include "IRBuilder.hpp"
 #include "Utils.hpp"
 
 /////////////////////////////////////////////////////////////////////////////

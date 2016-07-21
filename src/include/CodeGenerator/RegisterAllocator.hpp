@@ -1,5 +1,5 @@
 #pragma once
-#include "VM.h"
+#include "VM.hpp"
 
 namespace CodeGenerator{
 

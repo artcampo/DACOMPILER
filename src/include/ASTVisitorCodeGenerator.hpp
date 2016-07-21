@@ -1,8 +1,8 @@
 #pragma once
 #include "ASTVisitor.hpp"
-#include "Node.h"
+#include "Node.hpp"
 #include "CodeGenerator/RegisterAllocator.hpp"
-#include "ByteCode.h"
+#include "ByteCode.hpp"
 #include <map>
 
 class ASTVisitorCodeGenerator : public ASTVisitor{

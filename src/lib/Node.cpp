@@ -1,4 +1,4 @@
-#include "Node.h"
+#include "Node.hpp"
 #include "ASTVisitor.hpp"
 
 void Block::Accept              (ASTVisitor& v){ v.Visit(*this); }

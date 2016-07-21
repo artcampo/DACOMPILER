@@ -1,6 +1,6 @@
 #pragma once
 #include "ASTVisitor.hpp"
-#include "Node.h"
+#include "Node.hpp"
 
 class ASTVisitorPrettyPrinter : public ASTVisitor{
 public:

@@ -1,8 +1,7 @@
 #include <iostream>
-#include "Node.h"
+#include "Node.hpp"
 #include "ASTVisitorCodeGenerator.hpp"
 #include "ASTVisitorPrettyPrinter.hpp"
-#include "ASTVisitorCodeGenerator.hpp"
 
 // using namespace AST_Nodes;
 extern Block* programBlock;

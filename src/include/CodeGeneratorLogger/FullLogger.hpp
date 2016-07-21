@@ -1,5 +1,5 @@
 #pragma once
-#include "CodeGeneratorLogger/Logger.h"
+#include "CodeGeneratorLogger/Logger.hpp"
 
 class FullLogger : public Logger{
   virtual void Logger(){};

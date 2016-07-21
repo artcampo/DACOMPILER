@@ -1,5 +1,5 @@
 %{
-    #include "Node.h"
+    #include "Node.hpp"
     #include <iostream>
     Block *programBlock; /* the top level root node of our final AST */
 
