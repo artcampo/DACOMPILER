@@ -1,1 +1,8 @@
-t1
+Print AST
+2 + 1
+--------------------------
+ByteCode:
+Load, r:0 val: 2
+Load, r:1 val: 1
+ADD, rs1:0 rs2: 1 rd:2
+Stop

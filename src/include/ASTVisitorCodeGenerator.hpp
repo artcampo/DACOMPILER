@@ -14,6 +14,7 @@ public:
     
     ASTVisitorCodeGenerator() : reg_allocator_(){};
     
+    void EndOfProgram();
     void Print() const;
 private:
     CodeGenerator::RegisterAllocator  reg_allocator_;

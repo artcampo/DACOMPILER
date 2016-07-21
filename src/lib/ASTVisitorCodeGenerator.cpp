@@ -41,3 +41,8 @@ void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
 void ASTVisitorCodeGenerator::Print() const{
   VMUtils::print(byte_code_);
 }
+
+/////////////////////////////////////////////////////////////////////////////
+void ASTVisitorCodeGenerator::EndOfProgram(){
+  byte_code_.stream.push_back( IRBuilder::Stop());
+}
