@@ -1,7 +1,8 @@
-#include <iostream>
 #include "Node.hpp"
 #include "ASTVisitorCodeGenerator.hpp"
 #include "ASTVisitorPrettyPrinter.hpp"
+#include <iostream>
+#include <ifstream>
 
 // using namespace AST_Nodes;
 extern Block* programBlock;
@@ -24,6 +25,11 @@ int main(int argc, char **argv)
     visitor.EndOfProgram();
     
     visitor.Print();
+    
+    if(argc == 2){
+      std::cout << "--------------------------\n";
+      std::cout << "Bytecode written to: " << argv[1] << "\n";
+    }
     
     return 0;
 }
