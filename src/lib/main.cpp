@@ -9,10 +9,6 @@
 extern Block* programBlock;
 extern int yyparse();
 
-void write(ByteCode const &byte_code){
-  std::cout << byte_code.stream.size();
-}
-
 int main(int argc, char **argv)
 {
     yyparse();
@@ -32,8 +28,8 @@ int main(int argc, char **argv)
     visitor.Print();
     
     if(argc == 2){
-      //VMUtils::writeByteCode( visitor.byte_code_, std::string(argv[1]) );
-      write( visitor.byte_code_);
+      VMUtils::writeByteCode( visitor.byte_code(), std::string(argv[1]) );
+      
       std::cout << "--------------------------\n";
       std::cout << "Bytecode written to: " << argv[1] << "\n";
     }
