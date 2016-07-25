@@ -3,6 +3,7 @@
 #include "Node.hpp"
 #include "CodeGenerator/RegisterAllocator.hpp"
 #include "ByteCode.hpp"
+#include "Utils.hpp"
 #include <map>
 
 class ASTVisitorCodeGenerator : public ASTVisitor{
@@ -20,4 +21,9 @@ private:
     CodeGenerator::RegisterAllocator  reg_allocator_;
     std::map<const Node*,uint32_t>    reg_of_expression_;
     ByteCode                          byte_code_;
+    
+    friend void VMUtils::writeByteCode(ByteCode const &byte_code, 
+                          std::string const &file_name);
+    
+    friend void write(ByteCode const &byte_code);
 };
