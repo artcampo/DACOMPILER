@@ -30,8 +30,8 @@ int main(int argc, char **argv)
     if(argc == 2){
       VMUtils::writeByteCode( visitor.byte_code(), std::string(argv[1]) );
       
-      std::cout << "--------------------------\n";
-      std::cout << "Bytecode written to: " << argv[1] << "\n";
+//       std::cout << "--------------------------\n";
+//       std::cout << "Bytecode written to: " << argv[1] << "\n";
     }
     
     return 0;
