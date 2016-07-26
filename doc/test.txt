@@ -1,0 +1,5 @@
+For a test named "x", the output of dacomp execution produces two outputs:
+- bc file, compared against x.bc.ver
+- stdout log, compared against x.ver
+
+Both are used to verify it. 
