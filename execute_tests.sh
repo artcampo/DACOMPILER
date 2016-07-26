@@ -1,16 +1,14 @@
+#!/bin/sh 
 cd install/tests
 
-#test1
-./dacomp test1.bc < test1.txt > test1.out
-diff test1.out test1.ver
-diff test1.bc test1.bc.ver
-rm test1.out
+test(){
+    ./dacomp $1.bc < $1.txt > $1.out
+    diff $1.out $1.ver
+    diff $1.bc $1.bc.ver
+    rm $1.out
+}
 
-#test2
-./dacomp test2.bc < test2.txt > test2.out
-diff test2.out test2.ver
-diff test2.bc test2.bc.ver
-rm test2.out
+test test1
+test test2
 
-#end
 echo "No messages of error means all tests passed."
