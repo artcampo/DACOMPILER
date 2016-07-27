@@ -18,6 +18,7 @@
     int token;
 }      
 
+%left TPLUS
 
 //terminal symbols
  
