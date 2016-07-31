@@ -35,6 +35,7 @@ void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
   const uint32_t op           = n.op;
   byte_code_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2, 
                                                 reg_assigned, op));
+//   std::cout << "OP: " << op << "\n";
 }
 
 /////////////////////////////////////////////////////////////////////////////

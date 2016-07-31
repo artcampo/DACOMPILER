@@ -5,9 +5,9 @@ Print AST
 ByteCode:
 Load, r:0 val: 4
 Load, r:1 val: 1
-ADD, rs1:0 rs2: 1 rd:2
+SUB, rs1:0 rs2: 1 rd:2
 Load, r:3 val: 2
 MUL, rs1:2 rs2: 3 rd:4
 Load, r:5 val: 3
-MUL, rs1:4 rs2: 5 rd:6
+DIV, rs1:4 rs2: 5 rd:6
 Stop
