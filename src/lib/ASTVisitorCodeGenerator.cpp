@@ -32,8 +32,9 @@ void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
   reg_of_expression_[&n]      = reg_assigned;
   const uint32_t reg_src1     = reg_of_expression_[n.lhs];
   const uint32_t reg_src2     = reg_of_expression_[n.rhs];
-  byte_code_.stream.push_back( IRBuilder::Add(reg_src1, reg_src2, 
-                                              reg_assigned));
+  const uint32_t op           = n.op;
+  byte_code_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2, 
+                                                reg_assigned, op));
 }
 
 /////////////////////////////////////////////////////////////////////////////

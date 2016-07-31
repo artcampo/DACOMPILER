@@ -1,11 +1,15 @@
 /////////////////////////////////////////////////////////////////////////
 %{
     #include "Node.hpp"
+    #include "IRDefinition.hpp"
     #include <iostream>
     Block *programBlock;
 
     extern int yylex();
     void yyerror(const char *s) { std::cout << "ERROR: " << s << std::endl; }
+    
+    using namespace IRDefinition;
+    using namespace SubtypesArithmetic;
 %}
 
 /////////////////////////////////////////////////////////////////////////
@@ -53,13 +57,13 @@ stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back($<stmt>1); 
 stmt : expr { $$ = new ExpressionStatement($1); }
      ;
 
-expr : expr TPLUS  expr { $$ = new BinaryOp($1, $2, $3); }
-     | expr TMINUS expr { $$ = new BinaryOp($1, $2, $3); }
+expr : expr TPLUS  expr { $$ = new BinaryOp($1, IR_ADD, $3); }
+     | expr TMINUS expr { $$ = new BinaryOp($1, IR_SUB, $3); }
      | term
      ;
 
-term : term TMUL factor { $$ = new BinaryOp($1, $2, $3); }
-     | term TDIV factor { $$ = new BinaryOp($1, $2, $3); }
+term : term TMUL factor { $$ = new BinaryOp($1, IR_MUL, $3); }
+     | term TDIV factor { $$ = new BinaryOp($1, IR_DIV, $3); }
      | factor
      ;     
      

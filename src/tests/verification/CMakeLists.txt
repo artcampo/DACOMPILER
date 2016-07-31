@@ -7,4 +7,6 @@ INSTALL(FILES
     test2.bc.ver 
     test3.ver 
     test3.bc.ver 
+    test4.ver 
+    test4.bc.ver 
     DESTINATION tests)

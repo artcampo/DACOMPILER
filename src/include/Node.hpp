@@ -78,6 +78,8 @@ public:
 //           std::cout << "BinaryOp Ctor" <<std::endl;
         }
     void Accept(ASTVisitor& v);
+    
+    std::string OpString() const;
 };
 
 

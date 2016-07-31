@@ -10,6 +10,7 @@ regenerate(){
 regenerate test1
 regenerate test2
 regenerate test3
+regenerate test4
 
 #end
 echo "Tests regenerated. You need to reinstall before running tests again."
