@@ -1,4 +1,4 @@
-version 0.1
 
+- version 0.1
 Support for multiple statements that end in ';'.
 The statements allow literals and sums.
