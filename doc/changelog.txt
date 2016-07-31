@@ -1,3 +1,6 @@
+- version 0.2
+Supports parenthesis. Properly parses left to right.
+Supports: -,*,/
 
 - version 0.1
 Support for multiple statements that end in ';'.
