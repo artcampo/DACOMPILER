@@ -1,0 +1,17 @@
+
+Print AST
+2 + 4 + 6
+2 + 4 + 6
+--------------------------
+ByteCode:
+Load, r:0 val: 2
+Load, r:1 val: 4
+ADD, rs1:0 rs2: 1 rd:2
+Load, r:3 val: 6
+ADD, rs1:2 rs2: 3 rd:4
+Load, r:5 val: 2
+Load, r:6 val: 4
+Load, r:7 val: 6
+ADD, rs1:6 rs2: 7 rd:8
+ADD, rs1:5 rs2: 8 rd:9
+Stop

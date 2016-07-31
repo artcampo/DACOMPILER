@@ -7,4 +7,8 @@ add_subdirectory(verification)
 # add_executable(test2 test2.cpp)
 # target_link_libraries(test2 VM)
 
-INSTALL(FILES test1.txt test2.txt DESTINATION tests)
+INSTALL(FILES 
+        test1.txt 
+        test2.txt 
+        test3.txt 
+        DESTINATION tests)

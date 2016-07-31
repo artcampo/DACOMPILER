@@ -11,5 +11,6 @@ test(){
 
 test test1
 test test2
+test test3
 
 echo "No messages of error means all tests passed."

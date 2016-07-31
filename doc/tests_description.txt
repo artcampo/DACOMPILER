@@ -1,0 +1,3 @@
+test1: single statement with add
+test2: multiple statements with add
+test3: use of parenthesis
