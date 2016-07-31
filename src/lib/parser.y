@@ -1,13 +1,15 @@
+/////////////////////////////////////////////////////////////////////////
 %{
     #include "Node.hpp"
     #include <iostream>
-    Block *programBlock; /* the top level root node of our final AST */
+    Block *programBlock;
 
     extern int yylex();
     void yyerror(const char *s) { std::cout << "ERROR: " << s << std::endl; }
 %}
 
-/* Represents the many different ways we can access our data */
+/////////////////////////////////////////////////////////////////////////
+// 
 %union {
     Node *node;
     Block *block;
@@ -18,23 +20,22 @@
     int token;
 }      
 
-%left TPLUS
+/////////////////////////////////////////////////////////////////////////
+// Tokens
 
-//terminal symbols
- 
+%left TPLUS TMINUS
+%left TMUL TDIV
+
 %token <string> TINTEGER
-%token <token> TPLUS 
-%token <token> TSEMICOLON
-
-/* Define the type of node our nonterminal symbols represent.
-   The types refer to the %union declaration above. Ex: when
-   we call an ident (defined by union type ident) we are really
-   calling an (NIdentifier*). It makes the compiler happy.
- */
-%type <expr> numeric expr
+%token <token> TPLUS TMINUS TMUL TDIV 
+%token <token> TSEMICOLON TLPAREN TRPAREN
+ 
+%type <expr> numeric expr term factor
 %type <block> program stmts block
 %type <stmt> stmt
- 
+
+/////////////////////////////////////////////////////////////////////////
+// Parsing of program
 %start program
 
 %%
@@ -52,12 +53,21 @@ stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back($<stmt>1); 
 stmt : expr { $$ = new ExpressionStatement($1); }
      ;
 
+expr : expr TPLUS  expr { $$ = new BinaryOp($1, $2, $3); }
+     | expr TMINUS expr { $$ = new BinaryOp($1, $2, $3); }
+     | term
+     ;
+
+term : term TMUL factor { $$ = new BinaryOp($1, $2, $3); }
+     | term TDIV factor { $$ = new BinaryOp($1, $2, $3); }
+     | factor
+     ;     
+     
+factor : TLPAREN expr TRPAREN { $$ = $2; }
+       | numeric { $$ = $1; }
+       ;     
+     
 numeric : TINTEGER { $$ = new Literal(atol($1->c_str()));  delete $1; }
         ;
-    
-expr : numeric
-     | expr TPLUS expr { $$ = new BinaryOp($1, $2, $3); }
-     ;
-    
 
 %%

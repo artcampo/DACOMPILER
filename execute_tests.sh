@@ -2,6 +2,7 @@
 cd install/tests
 
 test(){
+    echo "Test: $1"
     ./dacomp $1.bc < $1.txt > $1.out
     diff $1.out $1.ver
     diff $1.bc $1.bc.ver
