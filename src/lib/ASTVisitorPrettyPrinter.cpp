@@ -24,7 +24,9 @@ void ASTVisitorPrettyPrinter::Visit(Literal const& p){
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(BinaryOp const& p){
+  std::cout << " ( ";
   p.lhs->Accept(*this);
   std::cout << " + ";
   p.rhs->Accept(*this);   
+  std::cout << " ) ";
 }
