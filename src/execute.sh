@@ -1,1 +1,0 @@
-./parser < test1.txt 
