@@ -1,0 +1,5 @@
+High priority:
+- policy for logging
+
+Low priority:
+- Implement an acyclic visitor

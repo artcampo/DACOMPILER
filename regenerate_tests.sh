@@ -1,16 +1,17 @@
+#!/bin/sh
+
 cd install/tests
 
-regenerate(){
-    ./dacomp $1.bc < $1.txt > $1.out
-    cp $1.out ../../src/tests/verification/$1.ver
-    cp $1.bc  ../../src/tests/verification/$1.bc.ver
-    rm $1.out
+regeneratescript() {
+    ./dacomp test$1.bc < test$1.txt > test$1.out
+    cp test$1.out test$1.ver
+    cp test$1.bc ../../src/tests/verification/test$1.bc.ver
 }
 
-regenerate test1
-regenerate test2
-regenerate test3
-regenerate test4
+for i in `seq 1 2`
+do
+    echo "Regenerating test $i"
+    regenerate $i
+done
 
-#end
-echo "Tests regenerated. You need to reinstall before running tests again."
+echo "Tests regenerated.  You need to reinstall before running tests again."
