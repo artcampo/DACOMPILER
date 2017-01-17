@@ -1,5 +1,17 @@
-High priority:
-- policy for logging
+program := block
+block   := stmts
+stmts   := stmt;
+        |  stmts stmt;
+stmt    := expr    
 
-Low priority:
-- Implement an acyclic visitor
+num     := TINTEGER
+expr    := term
+        |  expr + expr
+        |  expr - expr
+term    := term * factor
+        |  term / factor
+        |  factor
+factor  := ( expr )
+        |  num
+        
+Without left-recursion:        

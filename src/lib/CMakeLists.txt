@@ -1,6 +1,6 @@
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include/CodeGenerator")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../DAVM/src/include")
 
 set(files
     Node.cpp
@@ -49,9 +49,9 @@ if(FLEX_FOUND)
 endif()
 
 set(VMInstructionBuilder 
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/IRCodification.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/Utils.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DA_VM/src/lib/IRBuilder.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DAVM/src/lib/IRCodification.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DAVM/src/lib/Utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../DAVM/src/lib/IRBuilder.cpp)
 
 #Set final compiler
 add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput} ${VMInstructionBuilder})
