@@ -54,7 +54,7 @@ set(VMInstructionBuilder
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../DAVM/src/lib/IRBuilder.cpp)
 
 #Bare compiler without flex/bison
-add_library(BARECOMPILER STATIC ${VMInstructionBuilder})
+add_library(BARECOMPILER STATIC ${files} ${VMInstructionBuilder})
     
 #Set final compiler
 add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput} ${VMInstructionBuilder})
