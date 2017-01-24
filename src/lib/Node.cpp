@@ -7,7 +7,7 @@ void ExpressionStatement::Accept(ASTVisitor& v){ v.Visit(*this); }
 void Literal::Accept            (ASTVisitor& v){ v.Visit(*this); }
 void BinaryOp::Accept           (ASTVisitor& v){ v.Visit(*this); }
 
-std::string BinaryOp::OpString() const{
+std::string BinaryOp::OpString() const noexcept{
   using namespace IRDefinition;
   using namespace SubtypesArithmetic;
   if (op == IR_ADD ) return std::string(" + ");

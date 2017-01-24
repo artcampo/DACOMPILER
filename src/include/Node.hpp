@@ -47,7 +47,7 @@ public:
 class ExpressionStatement : public Statement {
 public:
     Expression* expression;
-    ExpressionStatement(Expression* expression) : 
+    ExpressionStatement(Expression* const expression) : 
         expression(expression) {
 //           std::cout << "ExpressionStatement Ctor" <<std::endl;
           
@@ -60,7 +60,7 @@ public:
 class Literal : public Expression {
 public:
     uint32_t value;
-    Literal(uint32_t const &value) : value(value){
+    Literal(const uint32_t &value) : value(value){
 //       std::cout << "Literal Ctor" <<std::endl;
     }
     void Accept(ASTVisitor& v);
@@ -73,13 +73,13 @@ public:
     int op;
     Expression* lhs;
     Expression* rhs;
-    BinaryOp(Expression *lhs, int op, Expression *rhs) :
+    BinaryOp(Expression* const lhs, const int op, Expression* const rhs) :
         lhs(lhs), rhs(rhs), op(op) {
 //           std::cout << "BinaryOp Ctor" <<std::endl;
         }
     void Accept(ASTVisitor& v);
     
-    std::string OpString() const;
+    std::string OpString() const noexcept;
 };
 
 
