@@ -27,8 +27,11 @@ public:
   }
   virtual void Accept(ASTVisitor& v){std::cout << "Accept on Expression";};
 };
+
+/////////////////////////////////////////////////////////
 class Statement  : public Node{
 public:  
+  Statement(){};
   virtual void Accept(ASTVisitor& v){std::cout << "Accept on Statement";};
 };
 
@@ -73,6 +76,7 @@ public:
     int op;
     Expression* lhs;
     Expression* rhs;
+    //TODO change op to own type
     BinaryOp(Expression* const lhs, const int op, Expression* const rhs) :
         lhs(lhs), rhs(rhs), op(op) {
 //           std::cout << "BinaryOp Ctor" <<std::endl;
