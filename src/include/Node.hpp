@@ -42,6 +42,10 @@ public:
     Block() {
 //       std::cout << "Block Ctor" <<std::endl;
     }
+    void AddStatement(Statement* const s){ statements.push_back(s);}
+
+    Statement* FirstStatement(){return statements[0];}
+    Statement* const FirstStatement() const{return statements[0];}
     
     void Accept(ASTVisitor& v);
 };
