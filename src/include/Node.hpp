@@ -69,10 +69,10 @@ public:
     Expression* condition_;
     Block*  block1_;
     Block*  block2_;
-    StatementIf(Expression* const condition
+    StmtIf(Expression* const condition
               , Block* const block1
               , Block* const block2) 
-      : condition_(expression)
+      : condition_(condition)
       , block1_(block1)
       , block2_(block2){}
         
