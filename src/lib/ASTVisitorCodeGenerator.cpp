@@ -16,6 +16,12 @@ void ASTVisitorCodeGenerator::Visit(ExpressionStatement const& n){
 }
 
 /////////////////////////////////////////////////////////////////////////////
+void ASTVisitorCodeGenerator::Visit(StmtIf const& p){
+  //TODO
+//   p.expression->Accept(*this);
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void ASTVisitorCodeGenerator::Visit(Literal const& n){
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
   reg_of_expression_[&n]      = reg_assigned;

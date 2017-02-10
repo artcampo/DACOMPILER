@@ -75,6 +75,12 @@ public:
       : condition_(condition)
       , block1_(block1)
       , block2_(block2){}
+      
+    StmtIf(Expression* const condition
+              , Block* const block1) 
+      : condition_(condition)
+      , block1_(block1)
+      , block2_(nullptr){}      
         
     void Accept(ASTVisitor& v);
 };

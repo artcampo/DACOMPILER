@@ -10,6 +10,7 @@ class ASTVisitorCodeGenerator : public ASTVisitor{
 public:
     virtual void Visit(Block const& p);
     virtual void Visit(ExpressionStatement const& p);
+    virtual void Visit(StmtIf const& p);
     virtual void Visit(Literal const& p);
     virtual void Visit(BinaryOp const& p);
     
