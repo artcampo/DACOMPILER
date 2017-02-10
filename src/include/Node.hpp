@@ -36,7 +36,7 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class Block : public Expression {
+class Block : public Node {
 public:
     std::vector<Statement*> statements;
     Block() {
@@ -59,6 +59,22 @@ public:
 //           std::cout << "ExpressionStatement Ctor" <<std::endl;
           
         }
+        
+    void Accept(ASTVisitor& v);
+};
+
+/////////////////////////////////////////////////////////
+class StmtIf : public Statement {
+public:
+    Expression* condition_;
+    Block*  block1_;
+    Block*  block2_;
+    StatementIf(Expression* const condition
+              , Block* const block1
+              , Block* const block2) 
+      : condition_(expression)
+      , block1_(block1)
+      , block2_(block2){}
         
     void Accept(ASTVisitor& v);
 };
