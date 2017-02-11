@@ -18,14 +18,22 @@ void ASTVisitorPrettyPrinter::Visit(ExpressionStatement const& p){
 void ASTVisitorPrettyPrinter::Visit(StmtIf const& p){
   
   std::cout << "if(";
-  p.condition_->Accept(*this);
+  p.GetCond()->Accept(*this);
   std::cout << "){\n";
   IncreaseIndent();
   Indent();
-  p.block1_->Accept(*this);
+  p.GetThen()->Accept(*this);
   DecreaseIndent();  
   std::cout << "}";
   
+  if(p.HasElse()){
+    std::cout << "else{\n";
+    IncreaseIndent();
+    Indent();
+    p.GetElse()->Accept(*this);
+    DecreaseIndent();  
+    std::cout << "}";    
+  }
 }
 
 

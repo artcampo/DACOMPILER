@@ -66,23 +66,23 @@ public:
 /////////////////////////////////////////////////////////
 class StmtIf : public Statement {
 public:
-    Expression* condition_;
-    Block*  block1_;
-    Block*  block2_;
-    StmtIf(Expression* const condition
-              , Block* const block1
-              , Block* const block2) 
-      : condition_(condition)
-      , block1_(block1)
-      , block2_(block2){}
+  StmtIf(Expression* const condition, Block* const block1, Block* const block2) 
+   : condition_(condition), block1_(block1), block2_(block2){}
       
-    StmtIf(Expression* const condition
-              , Block* const block1) 
-      : condition_(condition)
-      , block1_(block1)
-      , block2_(nullptr){}      
+  StmtIf(Expression* const condition, Block* const block1) 
+  : condition_(condition), block1_(block1), block2_(nullptr){}      
         
     void Accept(ASTVisitor& v);
+    
+    Expression* GetCond() const noexcept{ return condition_;};
+    Block* GetThen() const noexcept{ return block1_;};
+    Block* GetElse() const noexcept{ return block2_;};
+    const bool HasElse()const noexcept{ return block2_ != nullptr;};
+    
+private:    
+    Expression* condition_;
+    Block*  block1_;
+    Block*  block2_;    
 };
 
 /////////////////////////////////////////////////////////
