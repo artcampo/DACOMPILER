@@ -1,0 +1,24 @@
+           ind bar spc
+t          0
+|\_t       1
+|\_t       1
+|  |\_t    2
+|  |  |\t  3
+|  |\_t
+|\_t
+
+0 ""
+1 "|\_"
+2 "|  |\_"
+3 "|  |  |\_"
+
+Knowing last element:
+
+           ind bar spc
+t          0
+|\_t       1
+|\_t       1
+|  |\_t    2
+|  |  |\t  3
+|  |\_t
+|\_t

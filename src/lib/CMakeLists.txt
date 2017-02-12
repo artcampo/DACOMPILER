@@ -5,6 +5,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../DAVM/src/include")
 set(files
     Node.cpp
     ASTVisitor.cpp
+    ASTVisitorDump.cpp
     ASTVisitorPrettyPrinter.cpp
     ASTVisitorCodeGenerator.cpp
     CodeGenerator/RegisterAllocator.cpp
