@@ -27,7 +27,7 @@ void ASTVisitorPrettyPrinter::Visit(StmtIf const& p){
   std::cout << "}";
   
   if(p.HasElse()){
-    std::cout << "else{\n";
+    std::cout << "\nelse{\n";
     IncreaseIndent();
     Indent();
     p.GetElse()->Accept(*this);
@@ -61,5 +61,5 @@ void ASTVisitorPrettyPrinter::IncreaseIndent(){
   indent_ += 2;
 }
 void ASTVisitorPrettyPrinter::DecreaseIndent(){
-  if(indent_ > 2) indent_ -= 2;
+  if(indent_ >= 2) indent_ -= 2;
 }
