@@ -86,6 +86,32 @@ private:
 };
 
 /////////////////////////////////////////////////////////
+class DeclStmt : public Statement {
+public:
+    VarDeclList* decl_list_;
+    DeclStmt(VarDeclList* const decl_list): decl_list_(decl_list) {}
+        
+    void Accept(ASTVisitor& v);
+};
+
+/////////////////////////////////////////////////////////
+class VarDeclList  : public Node{
+public:  
+  std::vector<VarDecl*> list_;
+  VarDeclList(const std::vector<VarDecl*>& list): list_(list) {}
+  virtual void Accept(ASTVisitor& v);
+};
+
+/////////////////////////////////////////////////////////
+class VarDecl : public Node{
+public:  
+  
+  VarDecl(): {}
+  virtual void Accept(ASTVisitor& v);
+};
+
+
+/////////////////////////////////////////////////////////
 class Literal : public Expression {
 public:
     uint32_t value;
