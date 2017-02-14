@@ -12,6 +12,9 @@ public:
     virtual void Visit(ExpressionStatement const& p);
     virtual void Visit(Literal const& p);
     virtual void Visit(BinaryOp const& p);
+    virtual void Visit(DeclStmt const& p){};
+    virtual void Visit(VarDeclList const& p){};
+    virtual void Visit(VarDecl const& p){};        
     
     ASTVisitorDump(): indent_(0){};
     

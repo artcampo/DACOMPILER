@@ -16,6 +16,9 @@ public:
     virtual void Visit(StmtIf const& p);
     virtual void Visit(Literal const& p);
     virtual void Visit(BinaryOp const& p);
+    virtual void Visit(DeclStmt const& p){};
+    virtual void Visit(VarDeclList const& p){};
+    virtual void Visit(VarDecl const& p){};    
     
     ASTVisitorCodeGenerator() : reg_allocator_(){};
     

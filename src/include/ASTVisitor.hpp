@@ -13,6 +13,9 @@ public:
     virtual void Visit(StmtIf const& p) = 0;
     virtual void Visit(Literal const& p) = 0;
     virtual void Visit(BinaryOp const& p) = 0;
+    virtual void Visit(DeclStmt const& p) = 0;
+    virtual void Visit(VarDeclList const& p) = 0;
+    virtual void Visit(VarDecl const& p) = 0;
     
 };
 

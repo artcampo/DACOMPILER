@@ -1,5 +1,6 @@
 High priority:
 - move bison implementation to test folder
+- make stmt, node and others into interfaces
 - policy for logging
 
 Low priority:

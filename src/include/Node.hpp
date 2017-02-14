@@ -79,25 +79,25 @@ public:
   StmtIf(Expression* const condition, Block* const block1) 
   : condition_(condition), block1_(block1), block2_(nullptr){}      
         
-    void Accept(ASTVisitor& v);
+  void Accept(ASTVisitor& v);
     
-    Expression* GetCond() const noexcept{ return condition_;};
-    Block* GetThen() const noexcept{ return block1_;};
-    Block* GetElse() const noexcept{ return block2_;};
-    const bool HasElse()const noexcept{ return block2_ != nullptr;};
+  Expression* GetCond() const noexcept{ return condition_;};
+  Block* GetThen() const noexcept{ return block1_;};
+  Block* GetElse() const noexcept{ return block2_;};
+  const bool HasElse()const noexcept{ return block2_ != nullptr;};
     
 private:    
-    Expression* condition_;
-    Block*  block1_;
-    Block*  block2_;    
+  Expression* condition_;
+  Block*  block1_;
+  Block*  block2_;    
 };
 
 /////////////////////////////////////////////////////////
 class DeclStmt : public Statement {
 public:
-    
   DeclStmt(VarDeclList* const decl_list): decl_list_(decl_list) {}      
   void Accept(ASTVisitor& v);
+  VarDeclList* GetVarDeclList() const noexcept{return decl_list_;}
   
 private:
   VarDeclList* decl_list_;
@@ -105,7 +105,7 @@ private:
 
 
 /////////////////////////////////////////////////////////
-class VarDeclList  : public Node{
+class VarDeclList : public Node{
 public:  
   
   VarDeclList(const std::vector<VarDecl*>& list): list_(list) {}
