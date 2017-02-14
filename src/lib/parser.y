@@ -1,25 +1,30 @@
 /////////////////////////////////////////////////////////////////////////
 %{
+    #include "AST.hpp"
     #include "Node.hpp"
     #include "IRDefinition.hpp"
     #include <iostream>
+
+    using namespace IRDefinition;
+    using namespace SubtypesArithmetic;
+    
+    using namespace Compiler;
+    using namespace AST;  
+  
     Block *programBlock;
 
     extern int yylex();
     void yyerror(const char *s) { std::cout << "ERROR: " << s << std::endl; }
-    
-    using namespace IRDefinition;
-    using namespace SubtypesArithmetic;
 %}
 
 /////////////////////////////////////////////////////////////////////////
 // 
-%union {
-    Node *node;
-    Block *block;
-    Expression *expr;
-    ExpressionStatement *stmt;
-    std::vector<ExpressionStatement> *stmts;
+%union {    
+    Compiler::AST::Node *node;
+    Compiler::AST::Block *block;
+    Compiler::AST::Expression *expr;
+    Compiler::AST::ExpressionStatement *stmt;
+    std::vector<Compiler::AST::ExpressionStatement> *stmts;
     std::string *string;
     int token;
 }      

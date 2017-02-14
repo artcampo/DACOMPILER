@@ -1,0 +1,6 @@
+Passes 
+
+variable declaration list expansion
+type inference and synthesis
+type cohercion
+backpatch

@@ -1,4 +1,10 @@
 #pragma once
 #include "Node.hpp"
 
-// typedef Block Program;
+namespace Compiler{
+namespace AST{  
+  
+using AST = Block;
+
+}//end namespace AST
+}//end namespace Compiler

@@ -2,6 +2,9 @@
 #include "AST.hpp"
 #include "Node.hpp"
 
+namespace Compiler{
+namespace AST{  
+  
 class ASTVisitor{
 public: 
 
@@ -12,3 +15,6 @@ public:
     virtual void Visit(BinaryOp const& p) = 0;
     
 };
+
+}//end namespace AST
+}//end namespace Compiler

@@ -2,6 +2,9 @@
 #include "ASTVisitor.hpp"
 #include "IRDefinition.hpp"
 
+namespace Compiler{
+namespace AST{
+
 void Block::Accept              (ASTVisitor& v){ v.Visit(*this); }
 //void Statement::Accept          (ASTVisitor& v){ v.Visit(*this); }
 void ExpressionStatement::Accept(ASTVisitor& v){ v.Visit(*this); }
@@ -17,3 +20,6 @@ std::string BinaryOp::OpString() const noexcept{
   if (op == IR_MUL ) return std::string(" * ");
   if (op == IR_DIV ) return std::string(" / ");
 }
+
+}//end namespace AST
+}//end namespace Compiler

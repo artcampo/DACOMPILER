@@ -1,5 +1,8 @@
 #include "ASTVisitorDump.hpp"
 
+namespace Compiler{
+namespace AST{
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorDump::Visit(Block const& p) {
 //   std::cout << "Stmts:\n";
@@ -77,3 +80,6 @@ void ASTVisitorDump::IncreaseIndent(){
 void ASTVisitorDump::DecreaseIndent(){
   if(indent_ > 0) indent_ -= 1;
 }
+
+}//end namespace AST
+}//end namespace Compiler

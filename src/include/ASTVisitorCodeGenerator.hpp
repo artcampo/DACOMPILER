@@ -6,6 +6,9 @@
 #include "Utils.hpp"
 #include <map>
 
+namespace Compiler{
+namespace AST{  
+
 class ASTVisitorCodeGenerator : public ASTVisitor{
 public:
     virtual void Visit(Block const& p);
@@ -26,3 +29,6 @@ private:
     ByteCode                          byte_code_;
     
 };
+
+}//end namespace AST
+}//end namespace Compiler

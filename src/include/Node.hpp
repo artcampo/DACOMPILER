@@ -5,10 +5,17 @@
 #include <stdint.h>
 
 
+namespace Compiler{
+namespace AST{
+
 class ASTVisitor;
 
-// namespace AST_Nodes{
-
+class Node;
+class Expression;
+class DeclStmt;
+class VarDeclList;
+class VarDecl;
+  
 class Node {
 public:
     Node(){
@@ -88,25 +95,31 @@ private:
 /////////////////////////////////////////////////////////
 class DeclStmt : public Statement {
 public:
-    VarDeclList* decl_list_;
-    DeclStmt(VarDeclList* const decl_list): decl_list_(decl_list) {}
-        
-    void Accept(ASTVisitor& v);
+    
+  DeclStmt(VarDeclList* const decl_list): decl_list_(decl_list) {}      
+  void Accept(ASTVisitor& v);
+  
+private:
+  VarDeclList* decl_list_;
 };
+
 
 /////////////////////////////////////////////////////////
 class VarDeclList  : public Node{
 public:  
-  std::vector<VarDecl*> list_;
+  
   VarDeclList(const std::vector<VarDecl*>& list): list_(list) {}
   virtual void Accept(ASTVisitor& v);
+  
+private:
+  std::vector<VarDecl*> list_;  
 };
 
 /////////////////////////////////////////////////////////
 class VarDecl : public Node{
 public:  
   
-  VarDecl(): {}
+  VarDecl() {}
   virtual void Accept(ASTVisitor& v);
 };
 
@@ -139,4 +152,5 @@ public:
 };
 
 
-// };  //end namespace AST_Nodes
+}//end namespace AST
+}//end namespace Compiler

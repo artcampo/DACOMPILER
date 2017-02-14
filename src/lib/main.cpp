@@ -1,3 +1,4 @@
+#include "AST.hpp"
 #include "Node.hpp"
 #include "Utils.hpp"
 #include "ASTVisitorCodeGenerator.hpp"
@@ -5,7 +6,10 @@
 #include <iostream>
 #include <fstream>
 
-// using namespace AST_Nodes;
+
+using namespace Compiler;
+using namespace AST;
+
 extern Block* programBlock;
 extern int yyparse();
 

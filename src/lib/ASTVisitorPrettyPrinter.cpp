@@ -1,5 +1,8 @@
 #include "ASTVisitorPrettyPrinter.hpp"
 
+namespace Compiler{
+namespace AST{
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Block const& p) {
   for (auto c : p.statements){
@@ -63,3 +66,6 @@ void ASTVisitorPrettyPrinter::IncreaseIndent(){
 void ASTVisitorPrettyPrinter::DecreaseIndent(){
   if(indent_ >= 2) indent_ -= 2;
 }
+
+}//end namespace AST
+}//end namespace Compiler

@@ -2,6 +2,9 @@
 #include "ASTVisitor.hpp"
 #include "Node.hpp"
 
+namespace Compiler{
+namespace AST{  
+
 class ASTVisitorPrettyPrinter : public ASTVisitor{
 public:
     virtual void Visit(Block const& p);
@@ -19,3 +22,6 @@ private:
     
     int  indent_;
 };
+
+}//end namespace AST
+}//end namespace Compiler

@@ -2,6 +2,9 @@
 #include "IRBuilder.hpp"
 #include "Utils.hpp"
 
+namespace Compiler{
+namespace AST{
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorCodeGenerator::Visit(Block const& n) {
   for (auto c : n.statements){
@@ -53,3 +56,6 @@ void ASTVisitorCodeGenerator::Print() const{
 void ASTVisitorCodeGenerator::EndOfProgram(){
   byte_code_.stream.push_back( IRBuilder::Stop());
 }
+
+}//end namespace AST
+}//end namespace Compiler
