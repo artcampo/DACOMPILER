@@ -9,7 +9,7 @@
     using namespace SubtypesArithmetic;
     
     using namespace Compiler;
-    using namespace AST;  
+    using namespace AST;
   
     Block *programBlock;
 
