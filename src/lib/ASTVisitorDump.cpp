@@ -15,9 +15,9 @@ void ASTVisitorDump::Visit(Block const& p) {
 
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorDump::Visit(ExpressionStatement const& p){
+void ASTVisitorDump::Visit(ExprStmt const& p){
 //   std::cout << "StmtExpr:\n";
-  p.expression->Accept(*this);
+  p.GetExpr()->Accept(*this);
   
 }
 
@@ -44,8 +44,8 @@ void ASTVisitorDump::Visit(BinaryOp const& p){
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorDump::Visit(StmtIf const& p){
-  std::cout << "StmtIf:\n";
+void ASTVisitorDump::Visit(IfStmt const& p){
+  std::cout << "IfStmt:\n";
   
   IncreaseIndent();
   Indent();std::cout << "Cond: ";
@@ -83,6 +83,19 @@ void ASTVisitorDump::Visit(VarDeclList const& p){
 void ASTVisitorDump::Visit(VarDecl const& p){
   std::cout << p.str();
 }
+
+void ASTVisitorDump::Visit(AssignStmt const& p){
+  std::cout << "Assign\n";
+  IncreaseIndent();
+  Indent(); p.GetLhs()->Accept(*this); std::cout << "\n";
+  Indent(); p.GetRhs()->Accept(*this); std::cout ;
+  DecreaseIndent();  
+}
+
+void ASTVisitorDump::Visit(Var const& p){
+  std::cout << p.str();
+}
+
 
 void ASTVisitorDump::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< "-";  

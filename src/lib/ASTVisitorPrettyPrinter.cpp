@@ -13,12 +13,12 @@ void ASTVisitorPrettyPrinter::Visit(Block const& p) {
 
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorPrettyPrinter::Visit(ExpressionStatement const& p){
-  p.expression->Accept(*this);
+void ASTVisitorPrettyPrinter::Visit(ExprStmt const& p){
+  p.GetExpr()->Accept(*this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorPrettyPrinter::Visit(StmtIf const& p){
+void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
   
   std::cout << "if(";
   p.GetCond()->Accept(*this);
@@ -68,6 +68,16 @@ void ASTVisitorPrettyPrinter::Visit(VarDeclList const& p){
   }
 }
 void ASTVisitorPrettyPrinter::Visit(VarDecl const& p){
+  std::cout << p.str();
+}
+
+void ASTVisitorPrettyPrinter::Visit(AssignStmt const& p){
+  p.GetLhs()->Accept(*this);
+  std::cout << "=";
+  p.GetRhs()->Accept(*this);
+}
+
+void ASTVisitorPrettyPrinter::Visit(Var const& p){
   std::cout << p.str();
 }
 

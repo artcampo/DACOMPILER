@@ -22,9 +22,9 @@
 %union {    
     Compiler::AST::Node *node;
     Compiler::AST::Block *block;
-    Compiler::AST::Expression *expr;
-    Compiler::AST::ExpressionStatement *stmt;
-    std::vector<Compiler::AST::ExpressionStatement> *stmts;
+    Compiler::AST::Expr *expr;
+    Compiler::AST::ExprStmt *stmt;
+    std::vector<Compiler::AST::ExprStmt> *stmts;
     std::string *string;
     int token;
 }      
@@ -59,7 +59,7 @@ stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back($<stmt>1); 
       | stmts stmt TSEMICOLON { $1->statements.push_back($<stmt>2);  }
       ;
 
-stmt : expr { $$ = new ExpressionStatement($1); }
+stmt : expr { $$ = new ExprStmt($1); }
      ;
 
 expr : expr TPLUS  expr { $$ = new BinaryOp($1, IR_ADD, $3); }

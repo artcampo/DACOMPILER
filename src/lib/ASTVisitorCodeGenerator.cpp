@@ -14,20 +14,20 @@ void ASTVisitorCodeGenerator::Visit(Block const& n) {
 
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(ExpressionStatement const& n){
-  n.expression->Accept(*this);
+void ASTVisitorCodeGenerator::Visit(ExprStmt const& n){
+  n.GetExpr()->Accept(*this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(StmtIf const& p){
+void ASTVisitorCodeGenerator::Visit(IfStmt const& p){
   //TODO
-//   p.expression->Accept(*this);
+//   p.Expr->Accept(*this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorCodeGenerator::Visit(Literal const& n){
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
-  reg_of_expression_[&n]      = reg_assigned;
+  reg_of_Expr_[&n]      = reg_assigned;
   byte_code_.stream.push_back( IRBuilder::Load(reg_assigned, n.value) );
 }
 
@@ -38,9 +38,9 @@ void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
   n.rhs->Accept(*this);
   
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
-  reg_of_expression_[&n]      = reg_assigned;
-  const uint32_t reg_src1     = reg_of_expression_[n.lhs];
-  const uint32_t reg_src2     = reg_of_expression_[n.rhs];
+  reg_of_Expr_[&n]      = reg_assigned;
+  const uint32_t reg_src1     = reg_of_Expr_[n.lhs];
+  const uint32_t reg_src2     = reg_of_Expr_[n.rhs];
   const uint32_t op           = n.op;
   byte_code_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2, 
                                                 reg_assigned, op));

@@ -8,13 +8,15 @@ namespace AST{
 class ASTVisitorDump : public ASTVisitor{
 public:
     virtual void Visit(Block const& p);
-    virtual void Visit(StmtIf const& p);
-    virtual void Visit(ExpressionStatement const& p);
+    virtual void Visit(IfStmt const& p);
+    virtual void Visit(ExprStmt const& p);
     virtual void Visit(Literal const& p);
     virtual void Visit(BinaryOp const& p);
     virtual void Visit(DeclStmt const& p);
     virtual void Visit(VarDeclList const& p);
-    virtual void Visit(VarDecl const& p);        
+    virtual void Visit(VarDecl const& p);  
+    virtual void Visit(AssignStmt const& p);
+    virtual void Visit(Var const& p);
     
     ASTVisitorDump(): indent_(0){};
     
