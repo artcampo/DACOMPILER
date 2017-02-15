@@ -70,6 +70,20 @@ void ASTVisitorDump::Visit(StmtIf const& p){
   DecreaseIndent();  
 }
 
+void ASTVisitorDump::Visit(DeclStmt const& p){
+  p.GetVarDeclList()->Accept(*this);
+}
+void ASTVisitorDump::Visit(VarDeclList const& p){
+  for(const auto it : p.GetVarDeclVector()){
+    Indent();
+    it->Accept(*this);
+    std::cout << " ";
+  }
+}
+void ASTVisitorDump::Visit(VarDecl const& p){
+  std::cout << p.str();
+}
+
 void ASTVisitorDump::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< "-";  
 }

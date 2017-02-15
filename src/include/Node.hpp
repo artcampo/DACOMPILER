@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <stdint.h>
+#include "Types.hpp"
 
 
 namespace Compiler{
@@ -97,7 +98,7 @@ class DeclStmt : public Statement {
 public:
   DeclStmt(VarDeclList* const decl_list): decl_list_(decl_list) {}      
   void Accept(ASTVisitor& v);
-  VarDeclList* GetVarDeclList() const noexcept{return decl_list_;}
+  VarDeclList* const GetVarDeclList() const noexcept{return decl_list_;}
   
 private:
   VarDeclList* decl_list_;
@@ -111,6 +112,8 @@ public:
   VarDeclList(const std::vector<VarDecl*>& list): list_(list) {}
   virtual void Accept(ASTVisitor& v);
   
+  std::vector<VarDecl*>& GetVarDeclVector() noexcept{return list_;};
+  const std::vector<VarDecl*>& GetVarDeclVector() const noexcept{return list_;};
 private:
   std::vector<VarDecl*> list_;  
 };
@@ -119,8 +122,21 @@ private:
 class VarDecl : public Node{
 public:  
   
-  VarDecl() {}
+  VarDecl(const std::string& name, const TypeId& typeId)
+    : name_(name), typeId_(typeId){}
   virtual void Accept(ASTVisitor& v);
+  
+  std::string str() const noexcept{
+    std::string s;
+    s += typeId_.str();
+    s += " ";
+    s += name_;
+    return s;
+  }
+  
+private:  
+  const std::string name_;
+  const TypeId typeId_;
 };
 
 

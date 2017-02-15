@@ -56,6 +56,22 @@ void ASTVisitorPrettyPrinter::Visit(BinaryOp const& p){
   std::cout << " )";
 }
 
+/////////////////////////////////////////////////////////////////////////////
+void ASTVisitorPrettyPrinter::Visit(DeclStmt const& p){
+  p.GetVarDeclList()->Accept(*this);
+}
+void ASTVisitorPrettyPrinter::Visit(VarDeclList const& p){
+  for(const auto it : p.GetVarDeclVector()){
+    Indent();
+    it->Accept(*this);
+    std::cout << " ";
+  }
+}
+void ASTVisitorPrettyPrinter::Visit(VarDecl const& p){
+  std::cout << p.str();
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< " ";
 }

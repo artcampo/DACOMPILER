@@ -21,6 +21,12 @@ public:
   
   static TypeId Int() noexcept{ return TypeId(kFirstClass::typeid_int);}
   static TypeId Bool() noexcept{ return TypeId(kFirstClass::typeid_bool);}
+  
+  std::string str()const noexcept{
+    if(id_ == size_t(kFirstClass::typeid_int)) return std::string("int");
+    if(id_ == size_t(kFirstClass::typeid_bool)) return std::string("bool");
+    return std::string("type_uknown");
+  }
 private:
   size_t id_;
 };
