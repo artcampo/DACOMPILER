@@ -3,7 +3,7 @@
 #include "Node.hpp"
 
 namespace Compiler{
-namespace AST{  
+namespace AST{
 
 class ASTVisitorDump : public ASTVisitor{
 public:
@@ -14,17 +14,17 @@ public:
     virtual void Visit(BinaryOp const& p);
     virtual void Visit(DeclStmt const& p);
     virtual void Visit(VarDeclList const& p);
-    virtual void Visit(VarDecl const& p);  
+    virtual void Visit(VarDecl const& p);
     virtual void Visit(AssignStmt const& p);
     virtual void Visit(Var const& p);
-    
+
     ASTVisitorDump(): indent_(0){};
-    
+
 private:
     void Indent();
     void IncreaseIndent();
     void DecreaseIndent();
-    
+
     int  indent_;
 };
 

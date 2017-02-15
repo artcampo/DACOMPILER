@@ -3,10 +3,10 @@
 #include "Node.hpp"
 
 namespace Compiler{
-namespace AST{  
-  
+namespace AST{
+
 class ASTVisitor{
-public: 
+public:
 
     virtual void Visit(Block const& p) = 0;
     virtual void Visit(ExprStmt const& p) = 0;
@@ -18,8 +18,8 @@ public:
     virtual void Visit(VarDecl const& p) = 0;
     virtual void Visit(AssignStmt const& p) = 0;
     virtual void Visit(Var const& p) = 0;
-    
-    
+
+
 };
 
 }//end namespace AST
