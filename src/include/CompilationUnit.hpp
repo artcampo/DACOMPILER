@@ -13,7 +13,7 @@ public:
   CompilationUnit(): ast_(), scope_(nullptr){}
 
   Ast            ast_;
-  LexicalScope*   scope_;
+  LexicalScope*  scope_;
 };
 
 
