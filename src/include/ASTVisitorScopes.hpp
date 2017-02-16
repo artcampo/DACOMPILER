@@ -1,0 +1,45 @@
+#pragma once
+#include "ASTVisitor.hpp"
+#include "Node.hpp"
+#include "ByteCode.hpp"
+#include "Utils.hpp"
+#include <map>
+
+namespace Compiler{
+namespace AST{
+
+class ASTVisitorScopes : public ASTVisitor{
+public:
+
+  ASTVisitorScopes(CompilationUnit& unit): unit_(unit){};
+
+  virtual void Visit(Block const& p){
+    std::cout << unit_.GetScope(p.GetScopeId())->str() <<"\n";
+    for (auto c : p.statements) c->Accept(*this);
+  };
+  virtual void Visit(IfStmt const& p){
+//     std::cout << unit_.GetScope(p.GetThen()->GetScopeId())->str() <<"\n";
+    p.GetThen()->Accept(*this);
+
+    if(p.HasElse()){
+      p.GetElse()->Accept(*this);
+//       std::cout << unit_.GetScope(p.GetElse()->GetScopeId())->str() <<"\n";
+    }
+  };
+
+  virtual void Visit(BinaryOp const& p){};
+  virtual void Visit(AssignStmt const& p){};
+
+  virtual void Visit(Literal const& p){};
+  virtual void Visit(Var const& p)    {};
+  virtual void Visit(DeclStmt const& p){};
+  virtual void Visit(VarDeclList const& p){};
+  virtual void Visit(VarDecl const& p){};
+
+private:
+  CompilationUnit&  unit_;
+};
+
+
+}//end namespace AST
+}//end namespace Compiler

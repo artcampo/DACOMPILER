@@ -30,7 +30,14 @@ public:
   LexicalScope* GetParentScope() const noexcept{return parent_;};
 
   std::string str() const noexcept{
-    return std::string("Scope ") + std::to_string(id_);
+    std::string s = std::string("Scope ") + std::to_string(id_)
+                  + std::string(": {");
+    for(auto it : symbol_table_){
+      s+= std::to_string(it.second) + std::string(", ");
+      s+= it.first + std::string(" ");
+    }
+    s += std::string("}");
+    return s;
   }
 
 private:
