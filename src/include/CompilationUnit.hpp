@@ -24,6 +24,13 @@ public:
   void RecordType(const Node* n, const TypeId& t){
     type_info_[n]=t;
   }
+  TypeId GetTypeId(const Node* n){
+    return type_info_[n];
+  }
+
+  void Error(const std::string& e){
+    std::cout << e << "\n";
+  }
 private:
   std::map<const Node*,TypeId> type_info_;
 };

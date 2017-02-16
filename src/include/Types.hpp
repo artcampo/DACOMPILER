@@ -30,6 +30,7 @@ public:
 
   const bool operator< ( const TypeId &t ) const{return id_ < t.id_;}
   TypeId& operator= ( const TypeId &t ){id_ = t.id_;}
+  const bool operator== ( const TypeId &t ) const noexcept {return id_ == t.id_;}
 
 private:
   size_t id_;

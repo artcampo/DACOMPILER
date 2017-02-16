@@ -104,8 +104,8 @@ public:
     : lhs_(lhs), rhs_(rhs) {}
   void Accept(ASTVisitor& v);
 
-  Expr* const GetLhs() const noexcept{return lhs_.get();}
-  Expr* const GetRhs() const noexcept{return rhs_.get();}
+  Expr* const Lhs() const noexcept{return lhs_.get();}
+  Expr* const Rhs() const noexcept{return rhs_.get();}
 
   virtual std::string str() const{
     return lhs_->str() + "=" + rhs_->str();

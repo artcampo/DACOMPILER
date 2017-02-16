@@ -72,9 +72,9 @@ void ASTVisitorPrettyPrinter::Visit(VarDecl const& p){
 }
 
 void ASTVisitorPrettyPrinter::Visit(AssignStmt const& p){
-  p.GetLhs()->Accept(*this);
+  p.Lhs()->Accept(*this);
   std::cout << "=";
-  p.GetRhs()->Accept(*this);
+  p.Rhs()->Accept(*this);
 }
 
 void ASTVisitorPrettyPrinter::Visit(Var const& p){

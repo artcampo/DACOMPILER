@@ -86,8 +86,8 @@ void ASTVisitorDump::Visit(VarDecl const& p){
 void ASTVisitorDump::Visit(AssignStmt const& p){
   std::cout << "Assign\n";
   IncreaseIndent();
-  Indent(); p.GetLhs()->Accept(*this); std::cout << "\n";
-  Indent(); p.GetRhs()->Accept(*this); std::cout ;
+  Indent(); p.Lhs()->Accept(*this); std::cout << "\n";
+  Indent(); p.Rhs()->Accept(*this); std::cout ;
   DecreaseIndent();
 }
 
