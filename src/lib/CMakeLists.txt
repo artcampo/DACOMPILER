@@ -10,6 +10,7 @@ set(files
     ASTVisitorCodeGenerator.cpp
     CodeGenerator/RegisterAllocator.cpp
     LexicalScope.cpp
+    Passes/TypeInference.cpp
 )
 
 #Set intermediate library
