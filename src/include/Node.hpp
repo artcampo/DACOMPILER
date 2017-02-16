@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <memory>
 #include "Types.hpp"
+#include "ScopeId.hpp"
 
 
 namespace Compiler{
@@ -21,19 +22,21 @@ class AssignStmt;
 
 class Node {
 public:
-    Node(){
-//       std::cout << "Node Ctor"<<std::endl;
-    }
-    virtual ~Node() {}
+  Node(const ScopeId id) : scope_id_(id){}
+  virtual ~Node() {}
 
-    virtual void Accept(ASTVisitor& v){std::cout << "Accept on Node";};
-    virtual std::string str() const = 0;
+  virtual void Accept(ASTVisitor& v){std::cout << "Accept on Node";};
+  virtual std::string str() const = 0;
+
+  ScopeId GetScopeId() const noexcept{return scope_id_;};
+private:
+  ScopeId scope_id_;
 
 };
 
 class Expr : public Node{
 public:
-//   Expr(){}
+  Expr(const ScopeId id) : Node(id){};
   virtual void Accept(ASTVisitor& v){std::cout << "Accept on Expr";};
   virtual std::string str() const = 0;
 };
@@ -41,7 +44,7 @@ public:
 /////////////////////////////////////////////////////////
 class Statement  : public Node{
 public:
-  Statement(){};
+  Statement(const ScopeId id) : Node(id){};
   virtual void Accept(ASTVisitor& v){std::cout << "Accept on Statement";};
   virtual std::string str() const = 0;
 };
@@ -50,9 +53,8 @@ public:
 class Block : public Node {
 public:
     std::vector<Statement*> statements;
-    Block() {
-//       std::cout << "Block Ctor" <<std::endl;
-    }
+    Block(const ScopeId id) : Node(id){}
+
     void AddStatement(Statement* const s){ statements.push_back(s);}
 
     Statement* FirstStatement(){return statements[0];}
@@ -63,25 +65,14 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class ExprStmt : public Statement {
-public:
-  ExprStmt(Expr* const expr) : expr_(expr) {}
-
-  Expr* const GetExpr() const { return expr_;}
-  void Accept(ASTVisitor& v);
-  virtual std::string str() const{ return std::string("string not implemented");};
-private:
-  Expr* expr_;
-};
-
-/////////////////////////////////////////////////////////
 class IfStmt : public Statement {
 public:
-  IfStmt(Expr* const condition, Block* const block1, Block* const block2)
-   : condition_(condition), block1_(block1), block2_(block2){}
+  IfStmt(Expr* const condition, Block* const block1, Block* const block2
+        ,const ScopeId id)
+   : Statement(id), condition_(condition), block1_(block1), block2_(block2){}
 
-  IfStmt(Expr* const condition, Block* const block1)
-  : condition_(condition), block1_(block1), block2_(nullptr){}
+  IfStmt(Expr* const condition, Block* const block1, const ScopeId id)
+  : Statement(id), condition_(condition), block1_(block1), block2_(nullptr){}
 
   void Accept(ASTVisitor& v);
 
@@ -100,8 +91,8 @@ private:
 /////////////////////////////////////////////////////////
 class AssignStmt : public Statement {
 public:
-  AssignStmt(Expr* const lhs, Expr* const rhs)
-    : lhs_(lhs), rhs_(rhs) {}
+  AssignStmt(Expr* const lhs, Expr* const rhs, const ScopeId id)
+    : Statement(id), lhs_(lhs), rhs_(rhs) {}
   void Accept(ASTVisitor& v);
 
   Expr* const Lhs() const noexcept{return lhs_.get();}
@@ -118,7 +109,8 @@ private:
 /////////////////////////////////////////////////////////
 class DeclStmt : public Statement {
 public:
-  DeclStmt(VarDeclList* const decl_list): decl_list_(decl_list) {}
+  DeclStmt(VarDeclList* const decl_list, const ScopeId id)
+    : Statement(id), decl_list_(decl_list) {}
   void Accept(ASTVisitor& v);
   VarDeclList* const GetVarDeclList() const noexcept{return decl_list_;}
 
@@ -132,7 +124,8 @@ private:
 class VarDeclList : public Node{
 public:
 
-  VarDeclList(const std::vector<VarDecl*>& list): list_(list) {}
+  VarDeclList(const std::vector<VarDecl*>& list, const ScopeId id)
+    : Node(id), list_(list) {}
   virtual void Accept(ASTVisitor& v);
 
   std::vector<VarDecl*>& GetVarDeclVector() noexcept{return list_;};
@@ -146,8 +139,8 @@ private:
 class VarDecl : public Node{
 public:
 
-  VarDecl(const std::string& name, const TypeId& typeId)
-    : name_(name), typeId_(typeId){}
+  VarDecl(const std::string& name, const TypeId& typeId, const ScopeId id)
+    : Node(id), name_(name), typeId_(typeId){}
   virtual void Accept(ASTVisitor& v);
 
   std::string str() const noexcept{
@@ -167,8 +160,8 @@ private:
 /////////////////////////////////////////////////////////
 class Literal : public Expr {
 public:
-  Literal(const uint32_t &value, const TypeId& t)
-    : value_(value), t_(t){}
+  Literal(const uint32_t &value, const TypeId& t, const ScopeId id)
+    : Expr(id), value_(value), t_(t){}
 
   TypeId GetTypeId()const noexcept{return t_;}
   uint32_t Value() const noexcept{ return value_;};
@@ -187,9 +180,10 @@ class BinaryOp : public Expr {
 public:
   int op;
   //TODO change op to own type
-  BinaryOp(Expr* const lhs, const int op, Expr* const rhs) :
-    lhs_(lhs), rhs_(rhs), op(op){}
-    void Accept(ASTVisitor& v);
+  BinaryOp(Expr* const lhs, const int op, Expr* const rhs, const ScopeId id)
+    : Expr(id), lhs_(lhs), rhs_(rhs), op(op){}
+
+  void Accept(ASTVisitor& v);
 
   Expr* Lhs() const noexcept{return lhs_;}
   Expr* Rhs() const noexcept{return rhs_;}
@@ -207,7 +201,8 @@ private:
 class Var : public Expr{
 public:
 
-  Var(const std::string& name, const TypeId& t): name_(name),t_(t){}
+  Var(const std::string& name, const TypeId& t, const ScopeId id)
+    : Expr(id), name_(name),t_(t){}
   virtual void Accept(ASTVisitor& v);
 
   TypeId GetTypeId()const noexcept{return t_;}

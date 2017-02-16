@@ -13,23 +13,11 @@ void ASTVisitorDump::Visit(Block const& p) {
   }
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-void ASTVisitorDump::Visit(ExprStmt const& p){
-//   std::cout << "StmtExpr:\n";
-  p.GetExpr()->Accept(*this);
-
-}
-
-
-
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorDump::Visit(Literal const& p){
   std::cout << "Literal: ";
   std::cout << p.Value();
 }
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorDump::Visit(BinaryOp const& p){

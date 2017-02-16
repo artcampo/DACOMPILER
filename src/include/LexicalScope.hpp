@@ -5,6 +5,7 @@
 #include <vector>
 #include "Symbol.hpp"
 #include "Types.hpp"
+#include "ScopeId.hpp"
 
 namespace Compiler{
 namespace AST{
@@ -27,6 +28,10 @@ public:
 
   LexicalScope* NewNestedScope(const ScopeId id);
   LexicalScope* GetParentScope() const noexcept{return parent_;};
+
+  std::string str() const noexcept{
+    return std::string("Scope ") + std::to_string(id_);
+  }
 
 private:
   ScopeId       id_;

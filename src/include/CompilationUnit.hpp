@@ -23,13 +23,17 @@ public:
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
   ScopeId NewFirstScope(){
-    main_scope_ = new LexicalScope(free_scope_id_, nullptr);
+    const ScopeId id = free_scope_id_;
+    main_scope_ = new LexicalScope(id, nullptr);
+    scope_by_id_[id] = main_scope_;
     ++free_scope_id_;
     current_scope_ = main_scope_;
+    return id;
   }
 
   const ScopeId NewNestedScope(){
     LexicalScope* new_scope = current_scope_->NewNestedScope(free_scope_id_);
+    scope_by_id_[free_scope_id_] = new_scope;
     ++free_scope_id_;
     current_scope_ = new_scope;
     return new_scope->GetScopeId();
@@ -51,8 +55,15 @@ public:
   void Error(const std::string& e){
     std::cout << e << "\n";
   }
+  LexicalScope* GetScope(const ScopeId id) const{
+//     std::cout << "asking: " << id<<std::endl;
+    return scope_by_id_.at(id);
+  }
+  size_t NumScopes() const noexcept{ return free_scope_id_;};
+
 private:
   std::map<const Node*,TypeId> type_info_;
+  std::map<ScopeId,LexicalScope*> scope_by_id_;
 
   LexicalScope*  main_scope_;
   LexicalScope*  current_scope_;

@@ -39,7 +39,6 @@ public:
 
   virtual void Visit(Literal const& p){unit_.RecordType(&p, p.GetTypeId());};
   virtual void Visit(Var const& p)    {unit_.RecordType(&p, p.GetTypeId());};
-  virtual void Visit(ExprStmt const& p){};
   virtual void Visit(DeclStmt const& p){};
   virtual void Visit(VarDeclList const& p){};
   virtual void Visit(VarDecl const& p){};

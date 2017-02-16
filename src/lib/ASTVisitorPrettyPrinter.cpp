@@ -11,12 +11,6 @@ void ASTVisitorPrettyPrinter::Visit(Block const& p) {
   }
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-void ASTVisitorPrettyPrinter::Visit(ExprStmt const& p){
-  p.GetExpr()->Accept(*this);
-}
-
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
 
@@ -39,13 +33,10 @@ void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
   }
 }
 
-
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Literal const& p){
   std::cout << p.Value();
 }
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(BinaryOp const& p){

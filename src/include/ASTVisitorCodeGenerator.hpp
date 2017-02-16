@@ -12,7 +12,6 @@ namespace AST{
 class ASTVisitorCodeGenerator : public ASTVisitor{
 public:
     virtual void Visit(Block const& p);
-    virtual void Visit(ExprStmt const& p);
     virtual void Visit(IfStmt const& p);
     virtual void Visit(Literal const& p);
     virtual void Visit(BinaryOp const& p);

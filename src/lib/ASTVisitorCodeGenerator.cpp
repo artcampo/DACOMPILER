@@ -14,11 +14,6 @@ void ASTVisitorCodeGenerator::Visit(Block const& n) {
 
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(ExprStmt const& n){
-  n.GetExpr()->Accept(*this);
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void ASTVisitorCodeGenerator::Visit(IfStmt const& p){
   //TODO
 //   p.Expr->Accept(*this);

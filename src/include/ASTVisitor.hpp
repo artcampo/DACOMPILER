@@ -9,7 +9,6 @@ class ASTVisitor{
 public:
 
     virtual void Visit(Block const& p) = 0;
-    virtual void Visit(ExprStmt const& p) = 0;
     virtual void Visit(IfStmt const& p) = 0;
     virtual void Visit(Literal const& p) = 0;
     virtual void Visit(BinaryOp const& p) = 0;
