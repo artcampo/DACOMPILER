@@ -2,7 +2,10 @@
 #include "AST.hpp"
 #include "LexicalScope.hpp"
 #include "Types.hpp"
+#include "Symbol.hpp"
+#include "SymbolTable.hpp"
 #include <map>
+
 
 namespace Compiler{
 
@@ -11,6 +14,8 @@ using AST::LexicalScope;
 using AST::TypeId;
 using AST::Node;
 using AST::ScopeId;
+using AST::SymbolTable;
+using AST::DeclarationTable;
 
 class CompilationUnit {
 public:
@@ -24,7 +29,7 @@ public:
 
   ScopeId NewFirstScope(){
     const ScopeId id = free_scope_id_;
-    main_scope_ = new LexicalScope(id, nullptr);
+    main_scope_ = new LexicalScope(id, nullptr, symbol_table_, declaration_table_);
     scope_by_id_[id] = main_scope_;
     ++free_scope_id_;
     current_scope_ = main_scope_;
@@ -40,6 +45,7 @@ public:
   }
 
   void RestoreScope(){
+    current_scope_->UndoTables();
     current_scope_ = current_scope_->GetParentScope();
   }
 
@@ -64,7 +70,8 @@ public:
 private:
   std::map<const Node*,TypeId> type_info_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
-
+  SymbolTable       symbol_table_;
+  DeclarationTable  declaration_table_;
   LexicalScope*  main_scope_;
   LexicalScope*  current_scope_;
   ScopeId        free_scope_id_;
