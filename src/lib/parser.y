@@ -7,10 +7,10 @@
 
     using namespace IRDefinition;
     using namespace SubtypesArithmetic;
-    
+
     using namespace Compiler;
     using namespace AST;
-  
+
     Block *programBlock;
 
     extern int yylex();
@@ -18,8 +18,8 @@
 %}
 
 /////////////////////////////////////////////////////////////////////////
-// 
-%union {    
+//
+%union {
     Compiler::AST::Node *node;
     Compiler::AST::Block *block;
     Compiler::AST::Expr *expr;
@@ -27,7 +27,7 @@
     std::vector<Compiler::AST::ExprStmt> *stmts;
     std::string *string;
     int token;
-}      
+}
 
 /////////////////////////////////////////////////////////////////////////
 // Tokens
@@ -36,9 +36,9 @@
 %left TMUL TDIV
 
 %token <string> TINTEGER
-%token <token> TPLUS TMINUS TMUL TDIV 
+%token <token> TPLUS TMINUS TMUL TDIV
 %token <token> TSEMICOLON TLPAREN TRPAREN
- 
+
 %type <expr> numeric expr term factor
 %type <block> program stmts block
 %type <stmt> stmt
@@ -54,7 +54,7 @@ program : block { programBlock = $1; }
 
 block: stmts
       ;
-        
+
 stmts : stmt TSEMICOLON { $$ = new Block(); $$->statements.push_back($<stmt>1); }
       | stmts stmt TSEMICOLON { $1->statements.push_back($<stmt>2);  }
       ;
@@ -70,13 +70,13 @@ expr : expr TPLUS  expr { $$ = new BinaryOp($1, IR_ADD, $3); }
 term : term TMUL factor { $$ = new BinaryOp($1, IR_MUL, $3); }
      | term TDIV factor { $$ = new BinaryOp($1, IR_DIV, $3); }
      | factor
-     ;     
-     
+     ;
+
 factor : TLPAREN expr TRPAREN { $$ = $2; }
        | numeric { $$ = $1; }
-       ;     
-     
-numeric : TINTEGER { $$ = new Literal(atol($1->c_str()));  delete $1; }
+       ;
+
+numeric : TINTEGER { $$ = new Literal(atol($1->c_str()), kFirstClass::typeid_int);  delete $1; }
         ;
 
 %%

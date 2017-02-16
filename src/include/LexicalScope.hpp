@@ -16,6 +16,8 @@ public:
   : parent_(parent), generator_(generator), free_id_(0){}
 
   bool RegDecl(const std::string& name, const TypeId& type);
+  bool IsDecl(const std::string& name);
+  TypeId GetTypeId(const std::string& name);
 private:
   LexicalScope* const parent_;
   Node* generator_;

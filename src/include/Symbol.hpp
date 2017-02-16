@@ -28,6 +28,9 @@ public:
     name_ = s.name_;
     type_ = s.type_;
   }
+
+  TypeId GetTypeId() const noexcept{return type_;}
+
 private:
   SymbolString name_;
   TypeId       type_;

@@ -21,7 +21,11 @@ public:
   Ast            ast_;
   LexicalScope*  scope_;
 
-  std::map<Node*,TypeId> type_info_;
+  void RecordType(const Node* n, const TypeId& t){
+    type_info_[n]=t;
+  }
+private:
+  std::map<const Node*,TypeId> type_info_;
 };
 
 

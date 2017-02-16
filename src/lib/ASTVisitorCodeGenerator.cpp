@@ -28,19 +28,19 @@ void ASTVisitorCodeGenerator::Visit(IfStmt const& p){
 void ASTVisitorCodeGenerator::Visit(Literal const& n){
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
   reg_of_Expr_[&n]      = reg_assigned;
-  byte_code_.stream.push_back( IRBuilder::Load(reg_assigned, n.value) );
+  byte_code_.stream.push_back( IRBuilder::Load(reg_assigned, n.Value()) );
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
-  n.lhs->Accept(*this);
-  n.rhs->Accept(*this);
+  n.Lhs()->Accept(*this);
+  n.Rhs()->Accept(*this);
 
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
   reg_of_Expr_[&n]      = reg_assigned;
-  const uint32_t reg_src1     = reg_of_Expr_[n.lhs];
-  const uint32_t reg_src2     = reg_of_Expr_[n.rhs];
+  const uint32_t reg_src1     = reg_of_Expr_[n.Lhs()];
+  const uint32_t reg_src2     = reg_of_Expr_[n.Rhs()];
   const uint32_t op           = n.op;
   byte_code_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2,
                                                 reg_assigned, op));

@@ -9,7 +9,7 @@ void ASTVisitorPrettyPrinter::Visit(Block const& p) {
       c->Accept(*this);
       std::cout << std::endl;Indent();
   }
-}  
+}
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -19,30 +19,30 @@ void ASTVisitorPrettyPrinter::Visit(ExprStmt const& p){
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
-  
+
   std::cout << "if(";
   p.GetCond()->Accept(*this);
   std::cout << "){\n";
   IncreaseIndent();
   Indent();
   p.GetThen()->Accept(*this);
-  DecreaseIndent();  
+  DecreaseIndent();
   std::cout << "}";
-  
+
   if(p.HasElse()){
     std::cout << "\nelse{\n";
     IncreaseIndent();
     Indent();
     p.GetElse()->Accept(*this);
-    DecreaseIndent();  
-    std::cout << "}";    
+    DecreaseIndent();
+    std::cout << "}";
   }
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Literal const& p){
-  std::cout << p.value;
+  std::cout << p.Value();
 }
 
 
@@ -50,9 +50,9 @@ void ASTVisitorPrettyPrinter::Visit(Literal const& p){
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(BinaryOp const& p){
   std::cout << "( ";
-  p.lhs->Accept(*this);
+  p.Lhs()->Accept(*this);
   std::cout << p.OpString();
-  p.rhs->Accept(*this);   
+  p.Rhs()->Accept(*this);
   std::cout << " )";
 }
 
