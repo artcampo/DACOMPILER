@@ -1,0 +1,3 @@
+Language with nested scopes.
+
+First class types: int, bool.

@@ -4,6 +4,7 @@
 #include "Types.hpp"
 #include "Symbol.hpp"
 #include "SymbolTable.hpp"
+#include "ErrorLog.hpp"
 #include <map>
 
 
@@ -67,14 +68,23 @@ public:
   }
   size_t NumScopes() const noexcept{ return free_scope_id_;};
 
+  void SetFileData(std::vector<char>* file_data){
+    error_log_.SetFileData(file_data);
+  }
+
+  void Error(const std::string& message, const Locus& locus){
+    error_log_.Error(message, locus);
+  }
+
 private:
   std::map<const Node*,TypeId> type_info_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
   SymbolTable       symbol_table_;
   DeclarationTable  declaration_table_;
-  LexicalScope*  main_scope_;
-  LexicalScope*  current_scope_;
-  ScopeId        free_scope_id_;
+  LexicalScope*     main_scope_;
+  LexicalScope*     current_scope_;
+  ScopeId           free_scope_id_;
+  ErrorLog          error_log_;
 
 };
 

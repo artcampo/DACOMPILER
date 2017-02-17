@@ -60,7 +60,7 @@ set(VMInstructionBuilder
 add_library(BARECOMPILER STATIC ${files} ${VMInstructionBuilder})
 
 #Set final compiler
-add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput} ${VMInstructionBuilder})
-target_link_libraries(dacomp COMPILER)
+# add_executable(dacomp main.cpp ${BisonOutput} ${FlexOutput} ${VMInstructionBuilder})
+# target_link_libraries(dacomp COMPILER)
 
-INSTALL(TARGETS dacomp DESTINATION tests)
+# INSTALL(TARGETS dacomp DESTINATION tests)
