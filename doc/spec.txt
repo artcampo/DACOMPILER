@@ -1,3 +1,7 @@
 Language with nested scopes.
 
 First class types: int, bool.
+
+Variables have to be defined before use.
+Multiple variable declaration is allowed, comma-separated
+Ex: int a, b, c;
