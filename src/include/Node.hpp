@@ -29,6 +29,7 @@ public:
   virtual std::string str() const = 0;
 
   ScopeId GetScopeId() const noexcept{return scope_id_;};
+  Locus   GetLocus() const noexcept{return locus_;};
 private:
   ScopeId scope_id_;
   const Locus locus_;

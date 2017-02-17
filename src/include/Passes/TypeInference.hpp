@@ -26,7 +26,7 @@ public:
     if(unit_.GetTypeId(p.Lhs()) == unit_.GetTypeId(p.Rhs()))
       unit_.RecordType(&p, unit_.GetTypeId(p.Lhs()));
     else
-      unit_.Error("[err:17] Incompatible types in op");
+      unit_.Error("[err:17] Incompatible types in op", p.GetLocus());
   };
   virtual void Visit(AssignStmt const& p){
     p.Lhs()->Accept(*this);
@@ -34,7 +34,7 @@ public:
     if(unit_.GetTypeId(p.Lhs()) == unit_.GetTypeId(p.Rhs()))
       unit_.RecordType(&p, unit_.GetTypeId(p.Lhs()));
     else
-      unit_.Error("[err:18] Incompatible types in assignment");
+      unit_.Error("[err:18] Incompatible types in assignment", p.GetLocus());
   };
 
   virtual void Visit(Literal const& p){unit_.RecordType(&p, p.GetTypeId());};

@@ -15,6 +15,7 @@ public:
 //ErrorLog(std::vector<char>& file_data) : file_data_(file_data){}
 
 void Error(const std::string& message, const Locus& locus){
+  std::cout << message << " at: \"";
   std::vector<char>::const_iterator current_position = locus.Iterator();
   {
     std::vector<char>::const_iterator start_of_error = current_position;

@@ -59,9 +59,6 @@ public:
     return type_info_[n];
   }
 
-  void Error(const std::string& e){
-    std::cout << e << "\n";
-  }
   LexicalScope* GetScope(const ScopeId id) const{
 //     std::cout << "asking: " << id<<std::endl;
     return scope_by_id_.at(id);
