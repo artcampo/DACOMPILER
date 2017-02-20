@@ -25,7 +25,6 @@ public:
   CompilationUnit(): ast_(), main_scope_(nullptr), current_scope_(nullptr),
     free_scope_id_(0){}
 
-  const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
@@ -50,6 +49,8 @@ public:
     current_scope_->UndoTables();
     current_scope_ = current_scope_->GetParentScope();
   }
+
+  const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
 
   void InitAst(std::unique_ptr<ProgBody>& prog){
     ast_.prog_ = std::move(prog);
