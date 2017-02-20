@@ -3,6 +3,18 @@
 namespace Compiler{
 namespace AST{
 
+void ASTVisitorDump::Visit(Prog const& p){
+
+}
+
+void ASTVisitorDump::Visit(ProgInit const& p){
+
+
+}
+void ASTVisitorDump::Visit(ProgEnd const& p){
+
+}
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorDump::Visit(Block const& p) {
 //   std::cout << "Stmts:\n";

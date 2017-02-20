@@ -3,6 +3,18 @@
 namespace Compiler{
 namespace AST{
 
+void ASTVisitorPrettyPrinter::Visit(Prog const& p){
+
+}
+
+void ASTVisitorPrettyPrinter::Visit(ProgInit const& p){
+
+
+}
+void ASTVisitorPrettyPrinter::Visit(ProgEnd const& p){
+
+}
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Block const& p) {
   for (auto c : p.statements){

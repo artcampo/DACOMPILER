@@ -7,6 +7,9 @@
 namespace Compiler{
 namespace AST{
 
+void Prog::Accept       (ASTVisitor& v){ v.Visit(*this); }
+void ProgInit::Accept       (ASTVisitor& v){ v.Visit(*this); }
+void ProgEnd::Accept       (ASTVisitor& v){ v.Visit(*this); }
 void Block::Accept       (ASTVisitor& v){ v.Visit(*this); }
 void IfStmt::Accept      (ASTVisitor& v){ v.Visit(*this); }
 void Literal::Accept     (ASTVisitor& v){ v.Visit(*this); }
@@ -18,6 +21,9 @@ void AssignStmt::Accept  (ASTVisitor& v){ v.Visit(*this); }
 void Var::Accept         (ASTVisitor& v){ v.Visit(*this); }
 
 
+void Prog::Accept       (CodeGen& v, const Statement* successor){ return v.Visit(*this, successor); }
+void ProgInit::Accept       (CodeGen& v, const Statement* successor){ return v.Visit(*this, successor); }
+void ProgEnd::Accept       (CodeGen& v, const Statement* successor){ return v.Visit(*this, successor); }
 void Block::Accept       (CodeGen& v, const Statement* successor){ return v.Visit(*this, successor); }
 void IfStmt::Accept      (CodeGen& v, const Statement* successor){ return v.Visit(*this, successor); }
 void Literal::Accept     (CodeGen& v, const Statement* successor){ return v.Visit(*this, successor); }

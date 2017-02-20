@@ -5,12 +5,28 @@
 namespace Compiler{
 namespace AST{
 
+void CodeGen::Visit(Prog const& p, const Statement* successor){
+
+}
+
+void CodeGen::Visit(ProgInit const& p, const Statement* successor){
+
+
+}
+void CodeGen::Visit(ProgEnd const& p, const Statement* successor){
+
+}
+
 /////////////////////////////////////////////////////////////////////////////
 void CodeGen::Visit(Block const& n, const Statement* successor) {
   bool patch = false;
-  for (auto c : n.statements){
+  for (std::vector<Statement*>::const_iterator c = n.statements.cbegin();
+        c != n.statements.cend(); ++c){
+    const Statement* actual_successor = successor;
+    if(c != n.statements.cend() - 1 ) actual_successor = *(c + 1);
+
       //std::cout << "patching " << back_patch_.top()->str() << "to: " <<
-//       c->Accept(*this, back_patch);
+    (*c)->Accept(*this, successor);
 //       patch = not back_patch_.empty();
 
   }

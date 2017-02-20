@@ -14,7 +14,7 @@ set(files
 )
 
 #Set intermediate library
-add_definitions( -std=c++11 -g)
+add_definitions( -std=c++14 -g)
 add_library(COMPILER STATIC ${files})
 
 #Set Flex/bison output

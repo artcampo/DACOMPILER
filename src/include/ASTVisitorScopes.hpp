@@ -13,6 +13,10 @@ public:
 
   ASTVisitorScopes(CompilationUnit& unit): unit_(unit){};
 
+  virtual void Visit(Prog const& p){};
+  virtual void Visit(ProgInit const& p){};
+  virtual void Visit(ProgEnd const& p){};
+
   virtual void Visit(Block const& p){
     std::cout << unit_.GetScope(p.GetScopeId())->str() <<"\n";
     for (auto c : p.statements) c->Accept(*this);

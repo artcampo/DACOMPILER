@@ -23,6 +23,9 @@ class DeclStmt;
 class VarDeclList;
 class VarDecl;
 class AssignStmt;
+class Prog;
+class ProgInit;
+class ProgEnd;
 
 class Node {
 public:
@@ -75,7 +78,37 @@ public:
     std::vector<Statement*> statements;
 };
 
+/////////////////////////////////////////////////////////
+class Prog : public Node {
+public:
+    Prog(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
+
+    virtual void Accept(CodeGen& v, const Statement* successor);
+    virtual void Accept(ASTVisitor& v);
+    virtual std::string str() const{ return std::string("ProgInit");};
+};
+
+/////////////////////////////////////////////////////////
+class ProgInit : public Node {
+public:
+    ProgInit(const ScopeId id, const Locus& locus) : Node(id, locus){}
+
+
+    virtual void Accept(CodeGen& v, const Statement* successor);
+    virtual void Accept(ASTVisitor& v);
+    virtual std::string str() const{ return std::string("ProgInit");};
+};
+
+/////////////////////////////////////////////////////////
+class ProgEnd : public Node {
+public:
+    ProgEnd(const ScopeId id, const Locus& locus) : Node(id, locus){}
+
+    virtual void Accept(CodeGen& v, const Statement* successor);
+    virtual void Accept(ASTVisitor& v);
+    virtual std::string str() const{ return std::string("ProgInit");};
+};
 
 /////////////////////////////////////////////////////////
 class VarDeclList : public Node{

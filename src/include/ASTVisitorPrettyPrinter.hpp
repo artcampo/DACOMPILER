@@ -7,6 +7,9 @@ namespace AST{
 
 class ASTVisitorPrettyPrinter : public ASTVisitor{
 public:
+  virtual void Visit(Prog const& p);
+  virtual void Visit(ProgInit const& p);
+  virtual void Visit(ProgEnd const& p);
     virtual void Visit(Block const& p);
     virtual void Visit(IfStmt const& p);
     virtual void Visit(Literal const& p);
