@@ -11,9 +11,15 @@ public:
 
   ASTVisitorTypeInference(CompilationUnit& unit): unit_(unit){};
 
-  virtual void Visit(ProgBody const& p){};
+  virtual void Visit(ProgBody const& p){
+    p.GetProgInit()->Accept(*this);
+    p.GetBlock()->Accept(*this);
+    p.GetProgEnd()->Accept(*this);
+  };
+
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
+
   virtual void Visit(Block const& p){
     for (auto c : p.statements) c->Accept(*this);
   };

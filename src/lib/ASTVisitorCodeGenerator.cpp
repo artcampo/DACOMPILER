@@ -6,7 +6,9 @@ namespace Compiler{
 namespace AST{
 
 void CodeGen::Visit(ProgBody const& p, const Statement* successor){
-
+  p.GetProgInit()->Accept(*this, successor);
+//   p.GetBlock()->Accept(*this, successor);
+//   p.GetProgEnd()->Accept(*this, successor);
 }
 
 void CodeGen::Visit(ProgInit const& p, const Statement* successor){

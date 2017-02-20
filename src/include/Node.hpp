@@ -92,6 +92,14 @@ public:
   virtual void Accept(CodeGen& v, const Statement* successor);
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const{ return std::string("ProgInit");};
+
+//   ProgInit* GetProgInit() noexcept{ return pinit_.get();}
+//   ProgEnd*  GetProgEnd()  noexcept{ return pend_.get();}
+//   Block*    GetBlock()    noexcept{ return block_.get();}
+
+  ProgInit* GetProgInit() const noexcept{ return pinit_.get();}
+  ProgEnd*  GetProgEnd()  const noexcept{ return pend_.get();}
+  Block*    GetBlock()    const noexcept{ return block_.get();}
 private:
   std::unique_ptr<AST::ProgInit>  pinit_;
   std::unique_ptr<AST::ProgEnd>   pend_;

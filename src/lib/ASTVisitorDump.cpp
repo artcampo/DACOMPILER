@@ -4,7 +4,9 @@ namespace Compiler{
 namespace AST{
 
 void ASTVisitorDump::Visit(ProgBody const& p){
-
+  p.GetProgInit()->Accept(*this);
+  p.GetBlock()->Accept(*this);
+  p.GetProgEnd()->Accept(*this);
 }
 
 void ASTVisitorDump::Visit(ProgInit const& p){
