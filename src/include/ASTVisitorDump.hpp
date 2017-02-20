@@ -7,7 +7,7 @@ namespace AST{
 
 class ASTVisitorDump : public ASTVisitor{
 public:
-  virtual void Visit(Prog const& p);
+  virtual void Visit(ProgBody const& p);
   virtual void Visit(ProgInit const& p);
   virtual void Visit(ProgEnd const& p);
     virtual void Visit(Block const& p);

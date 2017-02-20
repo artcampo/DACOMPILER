@@ -5,7 +5,7 @@
 namespace Compiler{
 namespace AST{
 
-void CodeGen::Visit(Prog const& p, const Statement* successor){
+void CodeGen::Visit(ProgBody const& p, const Statement* successor){
 
 }
 

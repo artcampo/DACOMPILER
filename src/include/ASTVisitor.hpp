@@ -7,7 +7,7 @@ namespace AST{
 
 class ASTVisitor{
 public:
-  virtual void Visit(Prog const& p) = 0;
+  virtual void Visit(ProgBody const& p) = 0;
   virtual void Visit(ProgInit const& p) = 0;
   virtual void Visit(ProgEnd const& p) = 0;
   virtual void Visit(Block const& p) = 0;

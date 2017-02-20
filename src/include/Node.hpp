@@ -23,7 +23,7 @@ class DeclStmt;
 class VarDeclList;
 class VarDecl;
 class AssignStmt;
-class Prog;
+class ProgBody;
 class ProgInit;
 class ProgEnd;
 
@@ -79,14 +79,23 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class Prog : public Node {
+class ProgBody : public Node {
 public:
-    Prog(const ScopeId id, const Locus& locus) : Node(id, locus){}
+  ProgBody(const ScopeId id, const Locus& locus
+    , std::unique_ptr<AST::ProgInit>& pinit
+    , std::unique_ptr<AST::ProgEnd>& pend
+    , std::unique_ptr<AST::Block>& block)
+  : Node(id, locus), pinit_(std::move(pinit)), pend_(std::move(pend))
+  , block_(std::move(block)){}
 
 
-    virtual void Accept(CodeGen& v, const Statement* successor);
-    virtual void Accept(ASTVisitor& v);
-    virtual std::string str() const{ return std::string("ProgInit");};
+  virtual void Accept(CodeGen& v, const Statement* successor);
+  virtual void Accept(ASTVisitor& v);
+  virtual std::string str() const{ return std::string("ProgInit");};
+private:
+  std::unique_ptr<AST::ProgInit>  pinit_;
+  std::unique_ptr<AST::ProgEnd>   pend_;
+  std::unique_ptr<AST::Block>     block_;
 };
 
 /////////////////////////////////////////////////////////

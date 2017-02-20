@@ -14,7 +14,7 @@ namespace AST{
 
 class CodeGen{
 public:
-  virtual void Visit(Prog const& p, const Statement* successor);
+  virtual void Visit(ProgBody const& p, const Statement* successor);
   virtual void Visit(ProgInit const& p, const Statement* successor);
   virtual void Visit(ProgEnd const& p, const Statement* successor);
   virtual void Visit(Block const& p, const Statement* successor);

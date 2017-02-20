@@ -6,7 +6,7 @@
 #include "SymbolTable.hpp"
 #include "ErrorLog.hpp"
 #include <map>
-
+#include <memory>
 
 namespace Compiler{
 
@@ -14,6 +14,7 @@ using AST::Ast;
 using AST::LexicalScope;
 using AST::TypeId;
 using AST::Node;
+using AST::ProgBody;
 using AST::ScopeId;
 using AST::SymbolTable;
 using AST::DeclarationTable;
@@ -24,7 +25,7 @@ public:
   CompilationUnit(): ast_(), main_scope_(nullptr), current_scope_(nullptr),
     free_scope_id_(0){}
 
-  const bool ValidAst() const noexcept { return ast_.block_ != nullptr; }
+  const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
@@ -50,7 +51,13 @@ public:
     current_scope_ = current_scope_->GetParentScope();
   }
 
-  Ast            ast_;
+  void InitAst(std::unique_ptr<ProgBody>& prog){
+    ast_.prog_ = std::move(prog);
+  }
+
+//   const Prog* GetAstProg() const noexcept{ return *ast_.prog_;}
+  ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
+
 
   void RecordType(const Node* n, const TypeId& t){
     type_info_[n]=t;
@@ -82,6 +89,7 @@ private:
   LexicalScope*     current_scope_;
   ScopeId           free_scope_id_;
   ErrorLog          error_log_;
+  Ast               ast_;
 
 };
 

@@ -1,13 +1,16 @@
 #pragma once
 #include "Node.hpp"
+#include <memory>
+
 
 namespace Compiler{
 namespace AST{
 
 struct Ast{
-  Ast():block_(nullptr){}
+  Ast() : prog_(nullptr){}
+//   Ast(AST::ProgBody* const prog) : prog_(std::make_unique<AST::ProgBody>(prog)){}
 
-  Block* block_;
+  std::unique_ptr<AST::ProgBody> prog_;
 };
 
 }//end namespace AST

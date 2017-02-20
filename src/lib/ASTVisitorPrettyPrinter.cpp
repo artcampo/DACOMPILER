@@ -3,7 +3,7 @@
 namespace Compiler{
 namespace AST{
 
-void ASTVisitorPrettyPrinter::Visit(Prog const& p){
+void ASTVisitorPrettyPrinter::Visit(ProgBody const& p){
 
 }
 

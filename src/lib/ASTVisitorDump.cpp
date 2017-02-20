@@ -3,7 +3,7 @@
 namespace Compiler{
 namespace AST{
 
-void ASTVisitorDump::Visit(Prog const& p){
+void ASTVisitorDump::Visit(ProgBody const& p){
 
 }
 
