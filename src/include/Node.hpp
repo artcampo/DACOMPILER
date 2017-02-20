@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdint.h>
 #include <memory>
+#include <cstddef>
 #include "Types.hpp"
 #include "ScopeId.hpp"
 #include "Locus.hpp"
@@ -11,10 +12,13 @@
 namespace Compiler{
 namespace AST{
 
-class ASTVisitor;
-
 class Node;
+
+class ASTVisitor;
+class CodeGen;
+
 class Expr;
+class Statement;
 class DeclStmt;
 class VarDeclList;
 class VarDecl;
@@ -25,7 +29,8 @@ public:
   Node(const ScopeId id, const Locus& locus) : scope_id_(id), locus_(locus){}
   virtual ~Node() {}
 
-  virtual void Accept(ASTVisitor& v){std::cout << "Accept on Node";};
+  virtual void Accept(ASTVisitor& v) = 0;
+  virtual void Accept(CodeGen& v, const Statement* successor) = 0;
   virtual std::string str() const = 0;
 
   ScopeId GetScopeId() const noexcept{return scope_id_;};
@@ -39,7 +44,8 @@ private:
 class Expr : public Node{
 public:
   Expr(const ScopeId id, const Locus& locus) : Node(id, locus){};
-  virtual void Accept(ASTVisitor& v){std::cout << "Accept on Expr";};
+  virtual void Accept(ASTVisitor& v) = 0;
+  virtual void Accept(CodeGen& v, const Statement* successor) = 0;
   virtual std::string str() const = 0;
 };
 
@@ -47,7 +53,8 @@ public:
 class Statement  : public Node{
 public:
   Statement(const ScopeId id, const Locus& locus) : Node(id, locus){};
-  virtual void Accept(ASTVisitor& v){std::cout << "Accept on Statement";};
+  virtual void Accept(ASTVisitor& v) = 0;
+  virtual void Accept(CodeGen& v, const Statement* successor) = 0;
   virtual std::string str() const = 0;
 };
 
@@ -61,7 +68,8 @@ public:
     Statement* FirstStatement(){return statements[0];}
     Statement* const FirstStatement() const{return statements[0];}
 
-    void Accept(ASTVisitor& v);
+    virtual void Accept(CodeGen& v, const Statement* successor);
+    virtual void Accept(ASTVisitor& v);
     virtual std::string str() const{ return std::string("string not implemented");};
 
     std::vector<Statement*> statements;
@@ -77,6 +85,7 @@ public:
             , const Locus& locus)
     : Node(id, locus), list_(list) {}
   virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Statement* successor);
 
   std::vector<VarDecl*>& GetVarDeclVector() noexcept{return list_;};
   const std::vector<VarDecl*>& GetVarDeclVector() const noexcept{return list_;};
@@ -93,6 +102,7 @@ public:
     , const Locus& locus)
     : Node(id, locus), name_(name), typeId_(typeId){}
   virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Statement* successor);
 
   std::string str() const noexcept{
     std::string s;

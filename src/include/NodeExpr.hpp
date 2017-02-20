@@ -23,7 +23,8 @@ public:
   TypeId GetTypeId()const noexcept{return t_;}
   uint32_t Value() const noexcept{ return value_;};
 
-  void Accept(ASTVisitor& v);
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Statement* successor);
   std::string str() const noexcept{return std::to_string(value_);}
 
 private:
@@ -41,14 +42,15 @@ public:
     , const Locus& locus)
     : Expr(id, locus), lhs_(lhs), rhs_(rhs), op(op){}
 
-  void Accept(ASTVisitor& v);
-
   Expr* Lhs() const noexcept{return lhs_;}
   Expr* Rhs() const noexcept{return rhs_;}
 
   //TODO: merge these
   std::string OpString() const noexcept;
   std::string str() const noexcept{return OpString();}
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Statement* successor);
 private:
   Expr* lhs_;
   Expr* rhs_;
@@ -62,11 +64,12 @@ public:
   Var(const std::string& name, const TypeId& t, const ScopeId id
     , const Locus& locus)
     : Expr(id, locus), name_(name),t_(t){}
-  virtual void Accept(ASTVisitor& v);
 
   TypeId GetTypeId()const noexcept{return t_;}
   std::string str() const noexcept{return name_;}
 
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Statement* successor);
 private:
   const std::string name_;
   TypeId  t_;

@@ -6,21 +6,29 @@ namespace Compiler{
 namespace AST{
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(Block const& n) {
+void CodeGen::Visit(Block const& n, const Statement* successor) {
+  bool patch = false;
   for (auto c : n.statements){
-      c->Accept(*this);
+      //std::cout << "patching " << back_patch_.top()->str() << "to: " <<
+//       c->Accept(*this, back_patch);
+//       patch = not back_patch_.empty();
+
   }
 }
 
+void CodeGen::Visit(AssignStmt const& p, const Statement* successor){
 
-/////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(IfStmt const& p){
-  //TODO
-//   p.Expr->Accept(*this);
+}
+void CodeGen::Visit(DeclStmt const& p, const Statement* successor){
+
+}
+void CodeGen::Visit(IfStmt const& p, const Statement* successor){
+//   back_patch_.push(&p);
 }
 
+
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(Literal const& n){
+void CodeGen::Visit(Literal const& n, const Statement* successor){
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
   reg_of_Expr_[&n]      = reg_assigned;
   byte_code_.stream.push_back( IRBuilder::Load(reg_assigned, n.Value()) );
@@ -28,9 +36,9 @@ void ASTVisitorCodeGenerator::Visit(Literal const& n){
 
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
-  n.Lhs()->Accept(*this);
-  n.Rhs()->Accept(*this);
+void CodeGen::Visit(BinaryOp const& n, const Statement* successor){
+  n.Lhs()->Accept(*this, successor);
+  n.Rhs()->Accept(*this, successor);
 
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
   reg_of_Expr_[&n]      = reg_assigned;
@@ -43,13 +51,14 @@ void ASTVisitorCodeGenerator::Visit(BinaryOp const& n){
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::Print() const{
+void CodeGen::Print() const{
   VMUtils::print(byte_code_);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void ASTVisitorCodeGenerator::EndOfProgram(){
+void CodeGen::EndOfProgram(){
   byte_code_.stream.push_back( IRBuilder::Stop());
+  Print();
 }
 
 }//end namespace AST
