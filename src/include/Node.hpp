@@ -33,7 +33,7 @@ public:
   virtual ~Node() {}
 
   virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(CodeGen& v, const Statement* successor) = 0;
+  virtual void Accept(CodeGen& v, const Node* successor) = 0;
   virtual std::string str() const = 0;
 
   ScopeId GetScopeId() const noexcept{return scope_id_;};
@@ -48,7 +48,7 @@ class Expr : public Node{
 public:
   Expr(const ScopeId id, const Locus& locus) : Node(id, locus){};
   virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(CodeGen& v, const Statement* successor) = 0;
+  virtual void Accept(CodeGen& v, const Node* successor) = 0;
   virtual std::string str() const = 0;
 };
 
@@ -57,7 +57,7 @@ class Statement  : public Node{
 public:
   Statement(const ScopeId id, const Locus& locus) : Node(id, locus){};
   virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(CodeGen& v, const Statement* successor) = 0;
+  virtual void Accept(CodeGen& v, const Node* successor) = 0;
   virtual std::string str() const = 0;
 };
 
@@ -71,9 +71,9 @@ public:
     Statement* FirstStatement(){return statements[0];}
     Statement* const FirstStatement() const{return statements[0];}
 
-    virtual void Accept(CodeGen& v, const Statement* successor);
+    virtual void Accept(CodeGen& v, const Node* successor);
     virtual void Accept(ASTVisitor& v);
-    virtual std::string str() const{ return std::string("string not implemented");};
+    virtual std::string str() const;
 
     std::vector<Statement*> statements;
 };
@@ -89,9 +89,9 @@ public:
   , block_(std::move(block)){}
 
 
-  virtual void Accept(CodeGen& v, const Statement* successor);
+  virtual void Accept(CodeGen& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const{ return std::string("ProgInit");};
+  virtual std::string str() const{ return std::string("ProgBody");};
 
 //   ProgInit* GetProgInit() noexcept{ return pinit_.get();}
 //   ProgEnd*  GetProgEnd()  noexcept{ return pend_.get();}
@@ -112,7 +112,7 @@ public:
     ProgInit(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
 
-    virtual void Accept(CodeGen& v, const Statement* successor);
+    virtual void Accept(CodeGen& v, const Node* successor);
     virtual void Accept(ASTVisitor& v);
     virtual std::string str() const{ return std::string("ProgInit");};
 };
@@ -122,9 +122,9 @@ class ProgEnd : public Node {
 public:
     ProgEnd(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
-    virtual void Accept(CodeGen& v, const Statement* successor);
+    virtual void Accept(CodeGen& v, const Node* successor);
     virtual void Accept(ASTVisitor& v);
-    virtual std::string str() const{ return std::string("ProgInit");};
+    virtual std::string str() const{ return std::string("ProgEnd");};
 };
 
 /////////////////////////////////////////////////////////
@@ -135,11 +135,11 @@ public:
             , const Locus& locus)
     : Node(id, locus), list_(list) {}
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Statement* successor);
+  virtual void Accept(CodeGen& v, const Node* successor);
 
   std::vector<VarDecl*>& GetVarDeclVector() noexcept{return list_;};
   const std::vector<VarDecl*>& GetVarDeclVector() const noexcept{return list_;};
-  virtual std::string str() const{ return std::string("string not implemented");};
+  virtual std::string str() const;
 private:
   std::vector<VarDecl*> list_;
 };
@@ -152,7 +152,7 @@ public:
     , const Locus& locus)
     : Node(id, locus), name_(name), typeId_(typeId){}
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Statement* successor);
+  virtual void Accept(CodeGen& v, const Node* successor);
 
   std::string str() const noexcept{
     std::string s;

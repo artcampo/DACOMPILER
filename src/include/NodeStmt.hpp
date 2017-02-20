@@ -24,14 +24,14 @@ public:
   : IfStmt(condition, block1, nullptr, id, locus){}
   //Statement(id), condition_(condition), block1_(block1), block2_(nullptr){}
 
-  Expr* GetCond() const noexcept{ return condition_;};
+  Expr*  GetCond() const noexcept{ return condition_;};
   Block* GetThen() const noexcept{ return block1_;};
   Block* GetElse() const noexcept{ return block2_;};
   const bool HasElse()const noexcept{ return block2_ != nullptr;};
-  virtual std::string str() const{ return std::string("string not implemented");};
+  virtual std::string str() const;
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Statement* successor);
+  virtual void Accept(CodeGen& v, const Node* successor);
 private:
   Expr* condition_;
   Block*  block1_;
@@ -53,7 +53,7 @@ public:
   };
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Statement* successor);
+  virtual void Accept(CodeGen& v, const Node* successor);
 private:
   std::unique_ptr<Expr> lhs_;
   std::unique_ptr<Expr> rhs_;
@@ -66,10 +66,10 @@ public:
     : Statement(id, locus), decl_list_(decl_list) {}
   VarDeclList* const GetVarDeclList() const noexcept{return decl_list_;}
 
-  virtual std::string str() const{ return std::string("string not implemented");};
+  virtual std::string str() const;
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Statement* successor);
+  virtual void Accept(CodeGen& v, const Node* successor);
 private:
   VarDeclList* decl_list_;
 };

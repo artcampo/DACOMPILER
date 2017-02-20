@@ -20,7 +20,7 @@ public:
   virtual void Visit(AssignStmt const& p);
   virtual void Visit(Var const& p);
 
-  ASTVisitorDump(): indent_(0){};
+  ASTVisitorDump(): indent_(1){};
 
 private:
   void Indent();
