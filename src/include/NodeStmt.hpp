@@ -64,6 +64,7 @@ class DeclStmt : public Statement {
 public:
   DeclStmt(VarDeclList* const decl_list, const ScopeId id, const Locus& locus)
     : Statement(id, locus), decl_list_(decl_list) {}
+
   VarDeclList* const GetVarDeclList() const noexcept{return decl_list_;}
 
   virtual std::string str() const;

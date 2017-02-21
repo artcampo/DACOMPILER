@@ -19,12 +19,13 @@ public:
   virtual void Visit(Block const& p, const Node* successor);
 
   virtual void Visit(IfStmt const& p, const Node* successor);
+  virtual void Visit(DeclStmt const& p, const Node* successor);
+  virtual void Visit(AssignStmt const& p, const Node* successor);
+
   virtual void Visit(Literal const& p, const Node* successor);
   virtual void Visit(BinaryOp const& p, const Node* successor);
-  virtual void Visit(DeclStmt const& p, const Node* successor);
-  virtual void Visit(VarDeclList const& p, const Node* successor){};
-  virtual void Visit(VarDecl const& p, const Node* successor){};
-  virtual void Visit(AssignStmt const& p, const Node* successor);
+  virtual void Visit(VarDeclList const& p, const Node* successor);
+  virtual void Visit(VarDecl const& p, const Node* successor);
   virtual void Visit(Var const& p, const Node* successor){};
 
   CodeGen() : reg_allocator_(){};
