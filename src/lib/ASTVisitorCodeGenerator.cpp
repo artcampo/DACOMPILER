@@ -11,7 +11,7 @@ using namespace IRBuilder;
 using VM::Reg;
 
 void CodeGen::Visit(ProgBody const& p, const Node* successor){
-  std::cout << "P\n";
+//   std::cout << "P\n";
   p.GetProgInit()->Accept (*this, p.GetBlock());
   p.GetBlock()->Accept    (*this, p.GetProgEnd() );
   p.GetProgEnd()->Accept  (*this, nullptr );
@@ -26,30 +26,30 @@ void CodeGen::Visit(ProgEnd const& p, const Node* successor){
 }
 
 void CodeGen::BackPatch(const Node* n, const VM::Addr position){
-  std::cout << "**Backpatch try ["<< n->str()<< "]:" <<"("<<(void*)n<<")";
+//   std::cout << "**Backpatch try ["<< n->str()<< "]:" <<"("<<(void*)n<<")";
   std::map<const Node*, std::vector<VM::Addr>>::iterator it = back_patch_.find(n);
   if(it != back_patch_.end()){
     for(const auto& address : it->second){
       uint32_t& inst = byte_code_.GetInst(address);
-      std::cout << "Backpatch: "
-        << IRBuilder::PrintInstruction(inst)
-        << " with node: " << n->str() << "\n";
+//       std::cout << "Backpatch: "
+//         << IRBuilder::PrintInstruction(inst)
+//         << " with node: " << n->str() << "\n";
       IRBuilder::PatchJump(inst, position);
     }
     back_patch_.erase(it);
   }
 //   else std::cout << " no entries";
 
-  std::cout << "\n";
+//   std::cout << "\n";
 
 //   PrintBackPatch();
 }
 
 
 void CodeGen::AddToBackPatch(const Node* n, const VM::Addr position){
-  std::cout << "**Backpatch insert ["<< n->str()<< "] has to patch:"
-            << IRBuilder::PrintInstruction(byte_code_.GetInst(position))
-            << "\n";
+//   std::cout << "**Backpatch insert ["<< n->str()<< "] has to patch:"
+//             << IRBuilder::PrintInstruction(byte_code_.GetInst(position))
+//             << "\n";
   //<<"("<<(void*)n<<")\n";
   back_patch_[n].push_back(position);
 }
@@ -70,7 +70,7 @@ void CodeGen::PrintBackPatch() {
 // - next statetement in current block
 // - first node of block following enclosing block
 void CodeGen::Visit(Block const& n, const Node* successor) {
-  std::cout << "B" << n.str()<< " with successor: " << successor->str() << "\n";
+//   std::cout << "B" << n.str()<< " with successor: " << successor->str() << "\n";
   BackPatch(&n, byte_code_.NextAddress());
 
   for (std::vector<Statement*>::const_iterator stmt = n.statements.cbegin();
@@ -90,7 +90,7 @@ void CodeGen::Visit(AssignStmt const& p, const Node* successor){
 
 
 void CodeGen::Visit(DeclStmt const& p, const Node* successor){
-  std::cout << "D"<< p.str()<<" with successor: " << successor->str() << "\n";
+//   std::cout << "D"<< p.str()<<" with successor: " << successor->str() << "\n";
   p.GetVarDeclList()->Accept(*this, successor);
 }
 
@@ -103,7 +103,7 @@ void CodeGen::Visit(VarDecl const& p, const Node* successor){
 }
 
 void CodeGen::Visit(IfStmt const& p, const Node* successor){
-  std::cout << "If"<< p.str()<< " with successor: " << successor->str() << "\n";
+//   std::cout << "If"<< p.str()<< " with successor: " << successor->str() << "\n";
   p.GetCond()->Accept(*this, successor);
 
   const VM::Addr current_addr = byte_code_.NextAddress();
@@ -128,12 +128,24 @@ void CodeGen::Visit(IfStmt const& p, const Node* successor){
   AddToBackPatch(successor, byte_code_.NextAddress() - 1);
 
 //   std::cout << "-Store backp to: " << successor->str()<<"\n";
-  std::cout <<"\n";
+//   std::cout <<"\n";
 //   PrintBackPatch();
 }
 
 void CodeGen::Visit(WhileStmt const& p, const Node* successor){
-  //  p.GetBody()->Accept(*this);
+  //
+  const VM::Addr reentry_addr = byte_code_.NextAddress();
+  p.GetCond()->Accept(*this, successor);
+  const VM::Addr current_addr = byte_code_.NextAddress();
+  const VM::Reg reg_src       = reg_of_Expr_[p.GetCond()];
+
+  byte_code_.Append( JumpIfTrue (reg_src, 0) );
+  byte_code_.Append( JumpIfFalse(reg_src, 0) );
+  AddToBackPatch(p.GetBody(), current_addr + 0);
+  AddToBackPatch(successor,   current_addr + 1);
+
+  p.GetBody()->Accept(*this, successor);
+  byte_code_.Append( JumpIfFalse(reg_src, reentry_addr) );
 }
 
 /////////////////////////////////////////////////////////////////////////////
