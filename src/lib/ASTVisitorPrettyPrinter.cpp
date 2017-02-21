@@ -48,6 +48,14 @@ void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
 }
 
 /////////////////////////////////////////////////////////////////////////////
+void ASTVisitorPrettyPrinter::Visit(WhileStmt const& p){
+  std::cout << "while("; p.GetCond()->Accept(*this);
+  std::cout << "){\n";
+  IncreaseIndent(); Indent(); p.GetBody()->Accept(*this);DecreaseIndent();
+  std::cout << "}";
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Literal const& p){
   std::cout << p.Value();
 }
@@ -67,7 +75,6 @@ void ASTVisitorPrettyPrinter::Visit(DeclStmt const& p){
 }
 void ASTVisitorPrettyPrinter::Visit(VarDeclList const& p){
   for(const auto it : p.GetVarDeclVector()){
-    Indent();
     it->Accept(*this);
     std::cout << " ";
   }

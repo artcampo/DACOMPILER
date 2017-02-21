@@ -49,26 +49,27 @@ void ASTVisitorDump::Visit(BinaryOp const& p){
 void ASTVisitorDump::Visit(IfStmt const& p){
   std::cout << "IfStmt:\n";
 
-  IncreaseIndent();
-  Indent();std::cout << "Cond: ";
+  IncreaseIndent();Indent();std::cout << "Cond: ";
 
-  p.GetCond()->Accept(*this);
-  std::cout << "\n";
+  p.GetCond()->Accept(*this); std::cout << "\n";
 
   Indent();std::cout << "Then:\n";
-
-  IncreaseIndent();
-  p.GetThen()->Accept(*this);
-  DecreaseIndent();
-
+  IncreaseIndent(); p.GetThen()->Accept(*this); DecreaseIndent();
 
   if(p.HasElse()){
     Indent();std::cout << "Else:\n";
-    IncreaseIndent();
-    p.GetElse()->Accept(*this);
-    DecreaseIndent();
+    IncreaseIndent(); p.GetElse()->Accept(*this); DecreaseIndent();
   }
   DecreaseIndent();
+}
+
+void ASTVisitorDump::Visit(WhileStmt const& p){
+  //  p.GetBody()->Accept(*this);
+  std::cout << "WhileStmt:\n";
+  IncreaseIndent(); Indent();std::cout << "Cond: ";
+  p.GetCond()->Accept(*this); std::cout << "\n";
+  Indent();std::cout << "Body:\n";
+  IncreaseIndent();p.GetBody()->Accept(*this);DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(DeclStmt const& p){
@@ -76,7 +77,7 @@ void ASTVisitorDump::Visit(DeclStmt const& p){
 }
 void ASTVisitorDump::Visit(VarDeclList const& p){
   for(const auto it : p.GetVarDeclVector()){
-    Indent();
+//     Indent();
     it->Accept(*this);
     std::cout << " ";
   }

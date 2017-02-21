@@ -36,6 +36,10 @@ public:
     }
   };
 
+  virtual void Visit(WhileStmt const& p){
+    p.GetBody()->Accept(*this);
+  }
+
   virtual void Visit(BinaryOp const& p){};
   virtual void Visit(AssignStmt const& p){};
 

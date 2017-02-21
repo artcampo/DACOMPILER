@@ -21,6 +21,7 @@ public:
   virtual void Visit(IfStmt const& p, const Node* successor);
   virtual void Visit(DeclStmt const& p, const Node* successor);
   virtual void Visit(AssignStmt const& p, const Node* successor);
+  virtual void Visit(WhileStmt const& p, const Node* successor);
 
   virtual void Visit(Literal const& p, const Node* successor);
   virtual void Visit(BinaryOp const& p, const Node* successor);

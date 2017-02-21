@@ -17,12 +17,15 @@ class Node;
 class ASTVisitor;
 class CodeGen;
 
-class Expr;
 class Statement;
+class IfStmt;
+class WhileStmt;
 class DeclStmt;
+class AssignStmt;
+
+class Expr;
 class VarDeclList;
 class VarDecl;
-class AssignStmt;
 class ProgBody;
 class ProgInit;
 class ProgEnd;

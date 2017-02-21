@@ -12,12 +12,13 @@ void ProgInit::Accept    (ASTVisitor& v){ v.Visit(*this); }
 void ProgEnd::Accept     (ASTVisitor& v){ v.Visit(*this); }
 void Block::Accept       (ASTVisitor& v){ v.Visit(*this); }
 void IfStmt::Accept      (ASTVisitor& v){ v.Visit(*this); }
+void WhileStmt::Accept   (ASTVisitor& v){ v.Visit(*this); }
+void DeclStmt::Accept    (ASTVisitor& v){ v.Visit(*this); }
+void AssignStmt::Accept  (ASTVisitor& v){ v.Visit(*this); }
 void Literal::Accept     (ASTVisitor& v){ v.Visit(*this); }
 void BinaryOp::Accept    (ASTVisitor& v){ v.Visit(*this); }
-void DeclStmt::Accept    (ASTVisitor& v){ v.Visit(*this); }
 void VarDeclList::Accept (ASTVisitor& v){ v.Visit(*this); }
 void VarDecl::Accept     (ASTVisitor& v){ v.Visit(*this); }
-void AssignStmt::Accept  (ASTVisitor& v){ v.Visit(*this); }
 void Var::Accept         (ASTVisitor& v){ v.Visit(*this); }
 
 
@@ -26,12 +27,13 @@ void ProgInit::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*th
 void ProgEnd::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void Block::Accept       (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void IfStmt::Accept      (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+void WhileStmt::Accept   (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+void AssignStmt::Accept  (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+void DeclStmt::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void Literal::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void BinaryOp::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void DeclStmt::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void VarDeclList::Accept (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void VarDecl::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void AssignStmt::Accept  (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void Var::Accept         (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 
 std::string BinaryOp::OpString() const noexcept{
@@ -65,6 +67,17 @@ std::string IfStmt::str() const{
 std::string DeclStmt::str() const{
   return decl_list_->str();
 };
+
+std::string WhileStmt::str() const{
+  std::string s("While (");
+  s += GetCond()->str();
+  s += std::string(") {");
+  s += GetBody()->str();
+  s += std::string("}");
+  return s;
+};
+
+
 
 }//end namespace AST
 }//end namespace Compiler

@@ -132,6 +132,9 @@ void CodeGen::Visit(IfStmt const& p, const Node* successor){
 //   PrintBackPatch();
 }
 
+void CodeGen::Visit(WhileStmt const& p, const Node* successor){
+  //  p.GetBody()->Accept(*this);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void CodeGen::Visit(Literal const& n, const Node* successor){

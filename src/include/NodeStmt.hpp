@@ -1,5 +1,5 @@
 #pragma once
-
+#include <memory>
 
 namespace Compiler{
 namespace AST{
@@ -75,6 +75,26 @@ private:
   VarDeclList* decl_list_;
 };
 
+/////////////////////////////////////////////////////////
+class WhileStmt : public Statement {
+public:
+  WhileStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& body
+        ,const ScopeId id, const Locus& locus)
+   : Statement(id, locus), condition_(std::move(condition))
+   , body_(std::move(body)){}
+
+  Expr*  GetCond() const noexcept{ return condition_.get();};
+  Block* GetBody() const noexcept{ return body_.get();};
+
+
+  virtual std::string str() const;
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Node* successor);
+private:
+  std::unique_ptr<Expr>   condition_;
+  std::unique_ptr<Block>  body_;
+};
 
 }//end namespace AST
 }//end namespace Compiler
