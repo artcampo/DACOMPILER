@@ -6,7 +6,7 @@ namespace Compiler{
 namespace AST{
 
 
-enum class kFirstClass{
+enum class kFirstClass : size_t{
     typeid_int  = 0
   , typeid_bool = 1
 };
@@ -19,7 +19,7 @@ public:
 
   size_t Id() const noexcept {return id_;};
 
-  static TypeId Int() noexcept{ return TypeId(kFirstClass::typeid_int);}
+  static TypeId Int()  noexcept{ return TypeId(kFirstClass::typeid_int);}
   static TypeId Bool() noexcept{ return TypeId(kFirstClass::typeid_bool);}
 
   std::string str()const noexcept{
@@ -32,6 +32,8 @@ public:
   TypeId& operator= ( const TypeId &t ){id_ = t.id_;}
   const bool operator== ( const TypeId &t ) const noexcept {return id_ == t.id_;}
 
+  bool IsBool() const noexcept{ return id_ == size_t(kFirstClass::typeid_bool);}
+  bool IsInt() const noexcept{ return id_ == size_t(kFirstClass::typeid_int);}
 private:
   size_t id_;
 };

@@ -2,6 +2,8 @@
 #include "Passes/Pass.hpp"
 #include "ASTVisitor.hpp"
 #include "CompilationUnit.hpp"
+#include "Types.hpp"
+#include "ErrorLog/Messages.hpp"
 
 namespace Compiler{
 
@@ -28,11 +30,17 @@ public:
     p.GetCond()->Accept(*this);
     p.GetThen()->Accept(*this);
     if(p.HasElse()) p.GetElse()->Accept(*this);
+
+    if(not unit_.GetTypeId(p.GetCond()).IsBool())
+      unit_.Error(kErr21, p.GetCond()->GetLocus());
   }
 
   virtual void Visit(WhileStmt const& p){
     p.GetCond()->Accept(*this);
     p.GetBody()->Accept(*this);
+
+    if(not unit_.GetTypeId(p.GetCond()).IsBool())
+      unit_.Error(kErr20, p.GetCond()->GetLocus());
   }
 
   virtual void Visit(BinaryOp const& p){

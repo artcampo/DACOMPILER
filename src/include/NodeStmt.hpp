@@ -24,6 +24,7 @@ public:
   : IfStmt(condition, block1, nullptr, id, locus){}
   //Statement(id), condition_(condition), block1_(block1), block2_(nullptr){}
 
+  //Todo: this should be ref
   Expr*  GetCond() const noexcept{ return condition_;};
   Block* GetThen() const noexcept{ return block1_;};
   Block* GetElse() const noexcept{ return block2_;};
