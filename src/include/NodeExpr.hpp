@@ -76,5 +76,56 @@ private:
   TypeId  t_;
 };
 
+/////////////////////////////////////////////////////////
+class UnaryOp : public Expr {
+public:
+
+  //TODO change op to own type
+  UnaryOp( Expr* const rhs, const ScopeId id
+    , const Locus& locus)
+    : Expr(id, locus), rhs_(rhs){}
+
+  Expr* Rhs() const noexcept{return rhs_;}
+
+  virtual std::string str() const noexcept = 0;
+
+  virtual void Accept(ASTVisitor& v) = 0;
+  virtual void Accept(CodeGen& v, const Node* successor) = 0;
+private:
+  Expr* rhs_;
+};
+
+/////////////////////////////////////////////////////////
+class RefOp : public UnaryOp {
+public:
+
+  //TODO change op to own type
+  RefOp( Expr* const rhs, const ScopeId id, const Locus& locus)
+    : UnaryOp(rhs, id, locus){}
+
+  virtual std::string str() const noexcept{
+    return std::string("@");
+  };
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Node* successor);
+};
+
+/////////////////////////////////////////////////////////
+class DerefOp : public UnaryOp {
+public:
+
+  //TODO change op to own type
+  DerefOp( Expr* const rhs, const ScopeId id, const Locus& locus)
+    : UnaryOp(rhs, id, locus){}
+
+  virtual std::string str() const noexcept{
+    return std::string("@");
+  };
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(CodeGen& v, const Node* successor);
+};
+
 }//end namespace AST
 }//end namespace Compiler

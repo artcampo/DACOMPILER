@@ -93,6 +93,17 @@ void ASTVisitorPrettyPrinter::Visit(Var const& p){
   std::cout << p.str();
 }
 
+void ASTVisitorPrettyPrinter::Visit(RefOp const& p){
+  std::cout << p.str();
+  p.Rhs()->Accept(*this);
+
+}
+
+void ASTVisitorPrettyPrinter::Visit(DerefOp const& p){
+  std::cout << p.str();
+  p.Rhs()->Accept(*this);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< " ";

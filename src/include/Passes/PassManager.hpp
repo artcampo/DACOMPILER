@@ -10,22 +10,20 @@ class PassManager{
 public:
   PassManager(CompilationUnit& unit)
     : unit_(unit)
-    , type_inference_(unit_)
     , check_lval_rval_(unit_)
+    , type_inference_(unit_)
     , passes_{&type_inference_, &check_lval_rval_}{
       defined_[CompUnitInfo::kAst] = true;
     };
 
   void Run(){
-    for(auto& pass: passes_){
-      Run(*pass);
-    }
+    for(auto& pass: passes_) Run(*pass);
   };
 
 private:
   CompilationUnit&  unit_;
-  TypeInference type_inference_;
   CheckLvalRval check_lval_rval_;
+  TypeInference type_inference_;
   std::vector<Pass*> passes_;
   std::map<CompUnitInfo, bool> defined_;
 

@@ -20,6 +20,8 @@ public:
   virtual void Visit(VarDecl const& p);
   virtual void Visit(AssignStmt const& p);
   virtual void Visit(Var const& p);
+  virtual void Visit(RefOp const& p);
+  virtual void Visit(DerefOp const& p);
 
   ASTVisitorPrettyPrinter(): indent_(0){};
 

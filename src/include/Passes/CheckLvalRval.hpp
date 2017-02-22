@@ -39,15 +39,26 @@ public:
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
     unit_.SetNodeAsRval(p);
-
   }
+
   virtual void Visit(AssignStmt const& p){
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
 
     if(not unit_.IsLValue(*p.Lhs()))
       unit_.Error(kErr22, p.Lhs()->GetLocus());
+  }
 
+  virtual void Visit(RefOp const& p){
+    p.Rhs()->Accept(*this);
+    if(not unit_.IsLValue(*p.Rhs()))
+      unit_.Error(kErr23, p.Rhs()->GetLocus());
+  }
+
+  virtual void Visit(DerefOp const& p){
+    p.Rhs()->Accept(*this);
+    if(not unit_.IsLValue(*p.Rhs()))
+      unit_.Error(kErr24, p.Rhs()->GetLocus());
   }
 
   virtual void Visit(Literal const& p){unit_.SetNodeAsRval(p);}
@@ -58,6 +69,8 @@ public:
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
+//   virtual void Visit(UnaryOp const& p){}
+
 
 private:
   CompilationUnit&  unit_;

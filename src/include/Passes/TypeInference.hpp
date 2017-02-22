@@ -60,6 +60,21 @@ public:
       unit_.Error("[err:18] Incompatible types in assignment", p.GetLocus());
   }
 
+  //Pre: Lness/Rness of node has been already computed
+  virtual void Visit(RefOp const& p){
+    p.Rhs()->Accept(*this);
+    const TypeId t = unit_.GetTypeId(p.Rhs());
+    unit_.RecordType(&p, TypeId::PtrToT(t) );
+  }
+
+  virtual void Visit(DerefOp const& p){
+    p.Rhs()->Accept(*this);
+    const TypeId t = unit_.GetTypeId(p.Rhs());
+
+    if(not t.IsPtr()) unit_.Error(kErr25, p.GetLocus());
+    else              unit_.RecordType(&p, t.PointedType() );
+  }
+
   virtual void Visit(Literal const& p){unit_.RecordType(&p, p.GetTypeId());}
   virtual void Visit(Var const& p)    {unit_.RecordType(&p, p.GetTypeId());}
   virtual void Visit(DeclStmt const& p){}
@@ -73,7 +88,9 @@ private:
 class TypeInference : public Pass{
 public:
   TypeInference(CompilationUnit& unit)
-    : Pass(unit, {CompUnitInfo::kAst}, {CompUnitInfo::kTypeOfNode}) {};
+    : Pass(unit
+        , {CompUnitInfo::kAst, CompUnitInfo::kLnessRnessOfNode}
+        , {CompUnitInfo::kTypeOfNode}){};
 
   virtual void Run(){
     if(unit_.ValidAst()){

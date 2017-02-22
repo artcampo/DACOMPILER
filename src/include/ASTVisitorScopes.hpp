@@ -48,6 +48,8 @@ public:
   virtual void Visit(DeclStmt const& p){};
   virtual void Visit(VarDeclList const& p){};
   virtual void Visit(VarDecl const& p){};
+  virtual void Visit(RefOp const& p){};
+  virtual void Visit(DerefOp const& p){};
 
 private:
   CompilationUnit&  unit_;

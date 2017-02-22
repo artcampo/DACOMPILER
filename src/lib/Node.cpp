@@ -16,10 +16,13 @@ void WhileStmt::Accept   (ASTVisitor& v){ v.Visit(*this); }
 void DeclStmt::Accept    (ASTVisitor& v){ v.Visit(*this); }
 void AssignStmt::Accept  (ASTVisitor& v){ v.Visit(*this); }
 void Literal::Accept     (ASTVisitor& v){ v.Visit(*this); }
-void BinaryOp::Accept    (ASTVisitor& v){ v.Visit(*this); }
 void VarDeclList::Accept (ASTVisitor& v){ v.Visit(*this); }
 void VarDecl::Accept     (ASTVisitor& v){ v.Visit(*this); }
 void Var::Accept         (ASTVisitor& v){ v.Visit(*this); }
+void BinaryOp::Accept    (ASTVisitor& v){ v.Visit(*this); }
+void RefOp::Accept       (ASTVisitor& v){ v.Visit(*this); }
+void DerefOp::Accept     (ASTVisitor& v){ v.Visit(*this); }
+// void UnaryOp::Accept     (ASTVisitor& v){ v.Visit(*this); }
 
 
 void ProgBody::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
@@ -31,10 +34,13 @@ void WhileStmt::Accept   (CodeGen& v, const Node* successor){ return v.Visit(*th
 void AssignStmt::Accept  (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void DeclStmt::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void Literal::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void BinaryOp::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void VarDeclList::Accept (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void VarDecl::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 void Var::Accept         (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+void BinaryOp::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+void RefOp::Accept       (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+void DerefOp::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+// void UnaryOp::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
 
 std::string BinaryOp::OpString() const noexcept{
   using namespace IRDefinition;

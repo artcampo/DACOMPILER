@@ -98,6 +98,20 @@ void ASTVisitorDump::Visit(Var const& p){
   std::cout << p.str();
 }
 
+void ASTVisitorDump::Visit(RefOp const& p){
+  std::cout << p.str();
+  IncreaseIndent();Indent(); std::cout << "\n";
+  Indent(); p.Rhs()->Accept(*this);
+  DecreaseIndent();
+}
+
+void ASTVisitorDump::Visit(DerefOp const& p){
+  std::cout << p.str();
+  IncreaseIndent();Indent(); std::cout << "\n";
+  Indent(); p.Rhs()->Accept(*this);
+  DecreaseIndent();
+}
+
 
 void ASTVisitorDump::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< "-";

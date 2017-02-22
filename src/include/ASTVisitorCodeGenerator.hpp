@@ -28,6 +28,8 @@ public:
   virtual void Visit(VarDeclList const& p, const Node* successor);
   virtual void Visit(VarDecl const& p, const Node* successor);
   virtual void Visit(Var const& p, const Node* successor){};
+  virtual void Visit(RefOp const& p, const Node* successor){};
+  virtual void Visit(DerefOp const& p, const Node* successor){};
 
   CodeGen() : reg_allocator_(){};
 
