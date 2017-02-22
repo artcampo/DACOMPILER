@@ -1,6 +1,7 @@
 #pragma once
 #include "Passes/Pass.hpp"
 #include "ASTVisitor.hpp"
+#include "CompilationUnit.hpp"
 
 namespace Compiler{
 
@@ -63,13 +64,19 @@ private:
 
 class TypeInference : public Pass{
 public:
-  TypeInference(CompilationUnit& unit) : Pass(unit){};
+  TypeInference(CompilationUnit& unit)
+    : Pass(unit, {CompUnitInfo::kAst}, {CompUnitInfo::kTypeOfNode}) {};
 
+// std::vector<CompUnitInfo>()
   virtual void Run(){
     if(unit_.ValidAst()){
       ASTVisitorTypeInference v(unit_);
       v.Visit(*unit_.GetAstProg());
     }
+  };
+
+  virtual std::string str() const noexcept{
+    return std::string("Type inference");
   };
 protected:
 

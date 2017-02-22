@@ -81,6 +81,10 @@ public:
     error_log_.Error(message, locus);
   }
 
+  void Error(const std::string& message){
+    std::cout << message << "\n";
+  }
+
 private:
   std::map<const Node*,TypeId> type_info_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
@@ -92,7 +96,17 @@ private:
   ErrorLog          error_log_;
   Ast               ast_;
 
+public:
+
+
 };
 
+// namespace CompilationUnitInfo{
+  enum class CompUnitInfo : size_t{
+      kAst = 0
+    , kTypeOfNode = 1
+    , kLnessRnessOfNode = 2
+  };
+// }
 
 }//end namespace Compiler
