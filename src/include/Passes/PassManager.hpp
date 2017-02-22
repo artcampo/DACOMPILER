@@ -34,8 +34,7 @@ private:
       if(not InfoIsDefined(info))
         unit_.Error(p.str() + " is missing input info: " + str(info));
     p.Run();
-    for(const auto& info : p.Defines())
-      defined_[info] = true;
+    for(const auto& info : p.Defines()) defined_[info] = true;
   }
 
   bool InfoIsDefined(const CompUnitInfo& info) const{

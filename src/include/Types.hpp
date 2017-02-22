@@ -15,12 +15,17 @@ enum class kFirstClass : size_t{
 class TypeId {
 public:
   TypeId(){};
-  TypeId(const kFirstClass id): id_(size_t(id)){}
-
-  size_t Id() const noexcept {return id_;};
-
   static TypeId Int()  noexcept{ return TypeId(kFirstClass::typeid_int);}
   static TypeId Bool() noexcept{ return TypeId(kFirstClass::typeid_bool);}
+
+  static TypeId PtrToInt()  noexcept{ return TypeId(kFirstClass::typeid_int);}
+  static TypeId PtrToBool() noexcept{ return TypeId(kFirstClass::typeid_bool);}
+
+  static TypeId PtrToT(const TypeId t){return TypeId(t.id_, true);}
+
+  size_t Id() const noexcept {return id_;};
+  bool IsBool() const noexcept{ return id_ == size_t(kFirstClass::typeid_bool);}
+  bool IsInt() const noexcept { return id_ == size_t(kFirstClass::typeid_int);}
 
   std::string str()const noexcept{
     if(id_ == size_t(kFirstClass::typeid_int)) return std::string("int");
@@ -28,14 +33,18 @@ public:
     return std::string("type_uknown");
   }
 
-  const bool operator< ( const TypeId &t ) const{return id_ < t.id_;}
-  TypeId& operator= ( const TypeId &t ){id_ = t.id_;}
+  const bool operator<  ( const TypeId &t ) const{return id_ < t.id_;}
+  TypeId&    operator=  ( const TypeId &t ) {id_ = t.id_;}
   const bool operator== ( const TypeId &t ) const noexcept {return id_ == t.id_;}
-
-  bool IsBool() const noexcept{ return id_ == size_t(kFirstClass::typeid_bool);}
-  bool IsInt() const noexcept{ return id_ == size_t(kFirstClass::typeid_int);}
 private:
-  size_t id_;
+  size_t  id_;
+  bool    is_pointer_;
+
+  TypeId(const kFirstClass id, const bool is_pointer = false)
+  : id_(size_t(id)),is_pointer_(is_pointer){}
+  TypeId(const size_t id, const bool is_pointer = false)
+  : id_(id),is_pointer_(is_pointer){}
+
 };
 
 
