@@ -1,6 +1,7 @@
 #pragma once
 #include "CompilationUnit.hpp"
 #include "TypeInference.hpp"
+#include "CheckLvalRval.hpp"
 #include <memory>
 
 namespace Compiler{
@@ -8,7 +9,10 @@ namespace Compiler{
 class PassManager{
 public:
   PassManager(CompilationUnit& unit)
-    : unit_(unit), type_inference_(unit_), passes_{&type_inference_}{
+    : unit_(unit)
+    , type_inference_(unit_)
+    , check_lval_rval_(unit_)
+    , passes_{&type_inference_, &check_lval_rval_}{
       defined_[CompUnitInfo::kAst] = true;
     };
 
@@ -18,13 +22,12 @@ public:
     }
   };
 
-protected:
-  CompilationUnit&  unit_;
-
 private:
-  std::map<CompUnitInfo, bool> defined_;
+  CompilationUnit&  unit_;
   TypeInference type_inference_;
+  CheckLvalRval check_lval_rval_;
   std::vector<Pass*> passes_;
+  std::map<CompUnitInfo, bool> defined_;
 
   void Run(Pass& p){
     for(const auto& info : p.Uses())

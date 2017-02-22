@@ -5,6 +5,7 @@
 #include "Symbol.hpp"
 #include "SymbolTable.hpp"
 #include "ErrorLog.hpp"
+#include "LnessRness.hpp"
 #include <map>
 #include <memory>
 
@@ -19,7 +20,7 @@ using AST::ScopeId;
 using AST::SymbolTable;
 using AST::DeclarationTable;
 
-class CompilationUnit {
+class CompilationUnit : public LnessRness{
 public:
 
   CompilationUnit(): ast_(), main_scope_(nullptr), current_scope_(nullptr),
@@ -84,6 +85,8 @@ public:
   void Error(const std::string& message){
     std::cout << message << "\n";
   }
+
+
 
 private:
   std::map<const Node*,TypeId> type_info_;
