@@ -40,6 +40,10 @@ void Error(const std::string& message, const Locus& locus){
   std::cout << "\"" << std::endl;
 }
 
+void FatalError(const std::string& message){
+  std::cout << "FATAL: " << message << std::endl;
+}
+
 private:
   std::vector<char>* file_data_;
 

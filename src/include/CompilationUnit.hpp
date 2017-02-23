@@ -25,7 +25,7 @@ class CompilationUnit : public LnessRness, public TypeTable{
 public:
 
   CompilationUnit(): ast_(), main_scope_(nullptr), current_scope_(nullptr),
-    free_scope_id_(0){}
+    free_scope_id_(0), TypeTable(error_log_){}
 
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
@@ -61,7 +61,7 @@ public:
 //   const Prog* GetAstProg() const noexcept{ return *ast_.prog_;}
   ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
 
-  void RecordType(const Node* n, const Type& t){
+  void SetTypeOfNode(const Node* n, const Type& t){
     type_info_[n]=&t;
   }
 

@@ -31,7 +31,7 @@ public:
     p.GetThen()->Accept(*this);
     if(p.HasElse()) p.GetElse()->Accept(*this);
 
-    if(not unit_.GetType(p.GetCond()).IsBool())
+    if(not unit_.GetTypeOfNode(p.GetCond()).IsBool())
       unit_.Error(kErr21, p.GetCond()->GetLocus());
   }
 
@@ -39,23 +39,23 @@ public:
     p.GetCond()->Accept(*this);
     p.GetBody()->Accept(*this);
 
-    if(not unit_.GetType(p.GetCond()).IsBool())
+    if(not unit_.GetTypeOfNode(p.GetCond()).IsBool())
       unit_.Error(kErr20, p.GetCond()->GetLocus());
   }
 
   virtual void Visit(BinaryOp const& p){
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
-    if(unit_.GetType(p.Lhs()) == unit_.GetType(p.Rhs()))
-      unit_.RecordType(&p, unit_.GetType(p.Lhs()));
+    if(unit_.GetTypeOfNode(p.Lhs()) == unit_.GetTypeOfNode(p.Rhs()))
+      unit_.SetTypeOfNode(&p, unit_.GetTypeOfNode(p.Lhs()));
     else
       unit_.Error("[err:17] Incompatible types in op", p.GetLocus());
   }
   virtual void Visit(AssignStmt const& p){
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
-    if(unit_.GetType(p.Lhs()) == unit_.GetType(p.Rhs()))
-      unit_.RecordType(&p, unit_.GetType(p.Lhs()));
+    if(unit_.GetTypeOfNode(p.Lhs()) == unit_.GetTypeOfNode(p.Rhs()))
+      unit_.SetTypeOfNode(&p, unit_.GetTypeOfNode(p.Lhs()));
     else
       unit_.Error("[err:18] Incompatible types in assignment", p.GetLocus());
   }
@@ -63,20 +63,20 @@ public:
   //Pre: Lness/Rness of node has been already computed
   virtual void Visit(RefOp const& p){
     p.Rhs()->Accept(*this);
-    const Type t = unit_.GetType(p.Rhs());
-    unit_.RecordType(&p, Type::PtrToT(t) );
+    const Type& t = unit_.GetTypeOfNode(p.Rhs());
+    unit_.SetTypeOfNode(&p, unit_.PtrToT(t) );
   }
 
   virtual void Visit(DerefOp const& p){
     p.Rhs()->Accept(*this);
-    const Type t = unit_.GetType(p.Rhs());
+    const Type& t = unit_.GetTypeOfNode(p.Rhs());
 
     if(not t.IsPtr()) unit_.Error(kErr25, p.GetLocus());
-    else              unit_.RecordType(&p, t.PointedType() );
+    else              unit_.SetTypeOfNode(&p, unit_.PointedBy(t) );
   }
 
-  virtual void Visit(Literal const& p){unit_.RecordType(&p, p.GetType());}
-  virtual void Visit(Var const& p)    {unit_.RecordType(&p, p.GetType());}
+  virtual void Visit(Literal const& p){unit_.SetTypeOfNode(&p, p.GetType());}
+  virtual void Visit(Var const& p)    {unit_.SetTypeOfNode(&p, p.GetType());}
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
