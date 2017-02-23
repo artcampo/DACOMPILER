@@ -8,7 +8,7 @@ namespace AST{
 // returns:
 // - false if same symbol on same scope was already defined
 // - true otherwise
-bool LexicalScope::RegDecl(const std::string& name, const TypeId& type){
+bool LexicalScope::RegDecl(const std::string& name, const Type& type){
   auto it = symbol_table_.find(name);
   Symbols::SymbolId previous_id = -1;
   if(it != symbol_table_.end()){
@@ -37,9 +37,9 @@ bool LexicalScope::IsDecl(const std::string& name){
   return true;
 }
 
-TypeId LexicalScope::GetTypeId(const std::string& name){
+Type LexicalScope::GetType(const std::string& name){
   const Symbols::SymbolId id = symbol_table_[name];
-  return declaration_table_[id].GetTypeId();
+  return declaration_table_[id].GetType();
 }
 
 LexicalScope* LexicalScope::NewNestedScope(const ScopeId id){

@@ -151,7 +151,7 @@ private:
 class VarDecl : public Node{
 public:
 
-  VarDecl(const std::string& name, const TypeId& typeId, const ScopeId id
+  VarDecl(const std::string& name, const Type& typeId, const ScopeId id
     , const Locus& locus)
     : Node(id, locus), name_(name), typeId_(typeId){}
   virtual void Accept(ASTVisitor& v);
@@ -167,7 +167,7 @@ public:
 
 private:
   const std::string name_;
-  const TypeId typeId_;
+  const Type typeId_;
 };
 
 

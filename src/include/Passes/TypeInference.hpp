@@ -31,7 +31,7 @@ public:
     p.GetThen()->Accept(*this);
     if(p.HasElse()) p.GetElse()->Accept(*this);
 
-    if(not unit_.GetTypeId(p.GetCond()).IsBool())
+    if(not unit_.GetType(p.GetCond()).IsBool())
       unit_.Error(kErr21, p.GetCond()->GetLocus());
   }
 
@@ -39,23 +39,23 @@ public:
     p.GetCond()->Accept(*this);
     p.GetBody()->Accept(*this);
 
-    if(not unit_.GetTypeId(p.GetCond()).IsBool())
+    if(not unit_.GetType(p.GetCond()).IsBool())
       unit_.Error(kErr20, p.GetCond()->GetLocus());
   }
 
   virtual void Visit(BinaryOp const& p){
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
-    if(unit_.GetTypeId(p.Lhs()) == unit_.GetTypeId(p.Rhs()))
-      unit_.RecordType(&p, unit_.GetTypeId(p.Lhs()));
+    if(unit_.GetType(p.Lhs()) == unit_.GetType(p.Rhs()))
+      unit_.RecordType(&p, unit_.GetType(p.Lhs()));
     else
       unit_.Error("[err:17] Incompatible types in op", p.GetLocus());
   }
   virtual void Visit(AssignStmt const& p){
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
-    if(unit_.GetTypeId(p.Lhs()) == unit_.GetTypeId(p.Rhs()))
-      unit_.RecordType(&p, unit_.GetTypeId(p.Lhs()));
+    if(unit_.GetType(p.Lhs()) == unit_.GetType(p.Rhs()))
+      unit_.RecordType(&p, unit_.GetType(p.Lhs()));
     else
       unit_.Error("[err:18] Incompatible types in assignment", p.GetLocus());
   }
@@ -63,20 +63,20 @@ public:
   //Pre: Lness/Rness of node has been already computed
   virtual void Visit(RefOp const& p){
     p.Rhs()->Accept(*this);
-    const TypeId t = unit_.GetTypeId(p.Rhs());
-    unit_.RecordType(&p, TypeId::PtrToT(t) );
+    const Type t = unit_.GetType(p.Rhs());
+    unit_.RecordType(&p, Type::PtrToT(t) );
   }
 
   virtual void Visit(DerefOp const& p){
     p.Rhs()->Accept(*this);
-    const TypeId t = unit_.GetTypeId(p.Rhs());
+    const Type t = unit_.GetType(p.Rhs());
 
     if(not t.IsPtr()) unit_.Error(kErr25, p.GetLocus());
     else              unit_.RecordType(&p, t.PointedType() );
   }
 
-  virtual void Visit(Literal const& p){unit_.RecordType(&p, p.GetTypeId());}
-  virtual void Visit(Var const& p)    {unit_.RecordType(&p, p.GetTypeId());}
+  virtual void Visit(Literal const& p){unit_.RecordType(&p, p.GetType());}
+  virtual void Visit(Var const& p)    {unit_.RecordType(&p, p.GetType());}
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}

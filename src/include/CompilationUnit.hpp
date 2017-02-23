@@ -13,7 +13,7 @@ namespace Compiler{
 
 using AST::Ast;
 using AST::LexicalScope;
-using AST::TypeId;
+using AST::Type;
 using AST::Node;
 using AST::ProgBody;
 using AST::ScopeId;
@@ -61,10 +61,10 @@ public:
   ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
 
 
-  void RecordType(const Node* n, const TypeId& t){
+  void RecordType(const Node* n, const Type& t){
     type_info_[n]=t;
   }
-  TypeId GetTypeId(const Node* n){
+  Type GetType(const Node* n){
     return type_info_[n];
   }
 
@@ -89,7 +89,7 @@ public:
 
 
 private:
-  std::map<const Node*,TypeId> type_info_;
+  std::map<const Node*,Type> type_info_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
   SymbolTable       symbol_table_;
   DeclarationTable  declaration_table_;

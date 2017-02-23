@@ -17,11 +17,11 @@ class AssignStmt;
 /////////////////////////////////////////////////////////
 class Literal : public Expr {
 public:
-  Literal(const uint32_t &value, const TypeId& t, const ScopeId id
+  Literal(const uint32_t &value, const Type& t, const ScopeId id
     , const Locus& locus)
     : Expr(id, locus), value_(value), t_(t){}
 
-  TypeId GetTypeId()const noexcept{return t_;}
+  Type GetType()const noexcept{return t_;}
   uint32_t Value() const noexcept{ return value_;};
 
   virtual void Accept(ASTVisitor& v);
@@ -29,7 +29,7 @@ public:
   std::string str() const noexcept{return std::to_string(value_);}
 
 private:
-  TypeId  t_;
+  Type  t_;
   uint32_t  value_;
 };
 
@@ -62,18 +62,18 @@ private:
 class Var : public Expr{
 public:
 
-  Var(const std::string& name, const TypeId& t, const ScopeId id
+  Var(const std::string& name, const Type& t, const ScopeId id
     , const Locus& locus)
     : Expr(id, locus), name_(name),t_(t){}
 
-  TypeId GetTypeId()const noexcept{return t_;}
+  Type GetType()const noexcept{return t_;}
   std::string str() const noexcept{return name_;}
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
   const std::string name_;
-  TypeId  t_;
+  Type  t_;
 };
 
 /////////////////////////////////////////////////////////

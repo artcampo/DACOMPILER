@@ -44,9 +44,9 @@ public:
   : id_(id), parent_(parent), generator_(generator), free_symbol_id_(0)
   , symbol_table_(symbol_table), declaration_table_(declaration_table){}
 
-  bool RegDecl(const std::string& name, const TypeId& type);
+  bool RegDecl(const std::string& name, const Type& type);
   bool IsDecl(const std::string& name);
-  TypeId GetTypeId(const std::string& name);
+  Type GetType(const std::string& name);
   const ScopeId GetScopeId() const noexcept{return id_;};
 
   LexicalScope* NewNestedScope(const ScopeId id);
