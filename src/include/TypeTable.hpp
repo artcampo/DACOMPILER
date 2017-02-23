@@ -27,6 +27,13 @@ class TypeTable{
 public:
   TypeTable(ErrorLog& error_log) : free_type_id_(0), error_log_(error_log){}
 
+  const Type& GetTypeInt(){ return GetType(kBasicTypeId::kInt);}
+  const Type& GetTypeBool(){ return GetType(kBasicTypeId::kBool);}
+
+  const Type& GetTypePtrToInt(){return PtrToT(GetTypeInt());}
+  const Type& GetTypePtrToBool(){return PtrToT(GetTypeInt());}
+
+
   const Type& GetType(const kBasicTypeId basic_id){
     const TypeId& type_id = GetTypeId(basic_id);
     auto it = type_table_.find(type_id);

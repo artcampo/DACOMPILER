@@ -46,18 +46,16 @@ public:
   virtual void Visit(BinaryOp const& p){
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
-    if(unit_.GetTypeOfNode(p.Lhs()) == unit_.GetTypeOfNode(p.Rhs()))
-      unit_.SetTypeOfNode(&p, unit_.GetTypeOfNode(p.Lhs()));
-    else
+    if(unit_.GetTypeOfNode(p.Lhs()) != unit_.GetTypeOfNode(p.Rhs()))
       unit_.Error("[err:17] Incompatible types in op", p.GetLocus());
+    unit_.SetTypeOfNode(&p, unit_.GetTypeOfNode(p.Lhs()));
   }
   virtual void Visit(AssignStmt const& p){
     p.Lhs()->Accept(*this);
     p.Rhs()->Accept(*this);
-    if(unit_.GetTypeOfNode(p.Lhs()) == unit_.GetTypeOfNode(p.Rhs()))
-      unit_.SetTypeOfNode(&p, unit_.GetTypeOfNode(p.Lhs()));
-    else
+    if(unit_.GetTypeOfNode(p.Lhs()) != unit_.GetTypeOfNode(p.Rhs()))
       unit_.Error("[err:18] Incompatible types in assignment", p.GetLocus());
+//     unit_.SetTypeOfNode(&p, unit_.GetTypeOfNode(p.Lhs()));
   }
 
   //Pre: Lness/Rness of node has been already computed

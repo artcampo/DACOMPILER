@@ -62,11 +62,13 @@ public:
   ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
 
   void SetTypeOfNode(const Node* n, const Type& t){
-    type_info_[n]=&t;
+//     std::cout << "Set: " << n->str() << ": " << t.str() << "\n";
+    type_of_node_[n]=&t;
   }
 
   const Type& GetTypeOfNode(const Node* n){
-    return *type_info_[n];
+//     std::cout << "Get: " << n->str() << ": " << type_of_node_[n]->str() << "\n";
+    return *type_of_node_[n];
   }
 
   LexicalScope* GetScope(const ScopeId id) const{
@@ -88,7 +90,7 @@ public:
   }
 
 private:
-  std::map<const Node*, const Type* > type_info_;
+  std::map<const Node*, const Type* > type_of_node_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
   SymbolTable       symbol_table_;
   DeclarationTable  declaration_table_;

@@ -12,7 +12,7 @@ public:
     : unit_(unit)
     , check_lval_rval_(unit_)
     , type_inference_(unit_)
-    , passes_{&type_inference_, &check_lval_rval_}{
+    , passes_{&check_lval_rval_, &type_inference_}{
       defined_[CompUnitInfo::kAst] = true;
     };
 
