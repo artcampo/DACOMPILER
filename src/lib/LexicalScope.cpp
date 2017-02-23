@@ -13,21 +13,20 @@ bool LexicalScope::RegDecl(const std::string& name, const Type& type){
   Symbols::SymbolId previous_id = -1;
   if(it != symbol_table_.end()){
     previous_id = it->second;
-    if(declaration_table_[previous_id].GetScopeId() == GetScopeId())
+    if(declaration_table_[previous_id]->GetScopeId() == GetScopeId())
       return false;
   }
 
   Symbols::SymbolId id = free_symbol_id_;
   ++free_symbol_id_;
 
-  const Symbols::Symbol symbol = Symbols::Symbol(name, type, GetScopeId());
-
   symbol_table_[name] = id;
-  declaration_table_[id] = symbol;
+  declaration_table_[id] = std::make_unique<Symbols::Symbol>
+                              (name, type, GetScopeId());
 
   //store for deletion when scope is exited
   symbols_.push_back( InsertedSymbol(name, previous_id));
-  declarations_.push_back( InsertedDeclarations(id, symbol));
+  declarations_.push_back( InsertedDeclarations(id, *declaration_table_[id]));
   return true;
 }
 
@@ -37,9 +36,9 @@ bool LexicalScope::IsDecl(const std::string& name){
   return true;
 }
 
-Type LexicalScope::GetType(const std::string& name){
+const Type& LexicalScope::GetType(const std::string& name){
   const Symbols::SymbolId id = symbol_table_[name];
-  return declaration_table_[id].GetType();
+  return declaration_table_[id]->GetType();
 }
 
 LexicalScope* LexicalScope::NewNestedScope(const ScopeId id){

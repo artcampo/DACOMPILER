@@ -4,6 +4,7 @@
 #include "Types.hpp"
 #include "Symbol.hpp"
 #include "SymbolTable.hpp"
+#include "TypeTable.hpp"
 #include "ErrorLog.hpp"
 #include "LnessRness.hpp"
 #include <map>
@@ -20,7 +21,7 @@ using AST::ScopeId;
 using AST::SymbolTable;
 using AST::DeclarationTable;
 
-class CompilationUnit : public LnessRness{
+class CompilationUnit : public LnessRness, public TypeTable{
 public:
 
   CompilationUnit(): ast_(), main_scope_(nullptr), current_scope_(nullptr),
@@ -60,12 +61,12 @@ public:
 //   const Prog* GetAstProg() const noexcept{ return *ast_.prog_;}
   ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
 
-
   void RecordType(const Node* n, const Type& t){
-    type_info_[n]=t;
+    type_info_[n]=&t;
   }
-  Type GetType(const Node* n){
-    return type_info_[n];
+
+  const Type& GetTypeOfNode(const Node* n){
+    return *type_info_[n];
   }
 
   LexicalScope* GetScope(const ScopeId id) const{
@@ -86,10 +87,8 @@ public:
     std::cout << message << "\n";
   }
 
-
-
 private:
-  std::map<const Node*,Type> type_info_;
+  std::map<const Node*, const Type* > type_info_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
   SymbolTable       symbol_table_;
   DeclarationTable  declaration_table_;

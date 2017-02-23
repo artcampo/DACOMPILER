@@ -16,7 +16,7 @@ using SymbolId     = int;
 
 class Symbol {
 public:
-  Symbol(){}
+//   Symbol(){}
   Symbol(const SymbolString& name, const Type& type, const ScopeId scope_id)
     :name_(name), type_(type), scope_id_(scope_id){}
 
@@ -25,18 +25,20 @@ public:
     else                  return name_ < s.name_;
   }
 
+  /*
   Symbol& operator= ( const Symbol &s ){
     name_     = s.name_;
     type_     = s.type_;
     scope_id_ = s.scope_id_;
-  }
+  }*/
 
-  Type GetType() const noexcept{return type_;}
+  const Type& GetType() const noexcept{return type_;}
+//   Type& GetType() noexcept{return type_;}
   ScopeId GetScopeId() const noexcept{return scope_id_;}
 
 private:
   SymbolString  name_;
-  Type        type_;
+  const Type&   type_;
   ScopeId       scope_id_;
 };
 

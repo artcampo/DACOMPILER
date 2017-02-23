@@ -151,15 +151,15 @@ private:
 class VarDecl : public Node{
 public:
 
-  VarDecl(const std::string& name, const Type& typeId, const ScopeId id
+  VarDecl(const std::string& name, const Type& type, const ScopeId id
     , const Locus& locus)
-    : Node(id, locus), name_(name), typeId_(typeId){}
+    : Node(id, locus), name_(name), type_(type){}
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 
   std::string str() const noexcept{
     std::string s;
-    s += typeId_.str();
+    s += type_.str();
     s += " ";
     s += name_;
     return s;
@@ -167,7 +167,7 @@ public:
 
 private:
   const std::string name_;
-  const Type typeId_;
+  const Type& type_;
 };
 
 

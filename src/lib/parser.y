@@ -76,7 +76,7 @@ factor : TLPAREN expr TRPAREN { $$ = $2; }
        | numeric { $$ = $1; }
        ;
 
-numeric : TINTEGER { $$ = new Literal(atol($1->c_str()), kFirstClass::typeid_int, 0);  delete $1; }
+numeric : TINTEGER { $$ = new Literal(atol($1->c_str()), kBasicTypeId::kInt, 0);  delete $1; }
         ;
 
 %%

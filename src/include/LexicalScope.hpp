@@ -27,7 +27,7 @@ namespace AST{
 using ScopeId = size_t;
 //pair of name and symbol that was shadowed (or -1 if none)
 using InsertedSymbol = std::pair<Symbols::SymbolString, Symbols::SymbolId>;
-using InsertedDeclarations = std::pair<Symbols::SymbolId, Symbols::Symbol>;
+using InsertedDeclarations = std::pair<Symbols::SymbolId, Symbols::Symbol&>;
 
 class LexicalScope {
 public:
@@ -46,7 +46,7 @@ public:
 
   bool RegDecl(const std::string& name, const Type& type);
   bool IsDecl(const std::string& name);
-  Type GetType(const std::string& name);
+  const Type& GetType(const std::string& name);
   const ScopeId GetScopeId() const noexcept{return id_;};
 
   LexicalScope* NewNestedScope(const ScopeId id);
