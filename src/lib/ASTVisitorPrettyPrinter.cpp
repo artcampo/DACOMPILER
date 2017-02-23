@@ -4,9 +4,9 @@ namespace Compiler{
 namespace AST{
 
 void ASTVisitorPrettyPrinter::Visit(ProgBody const& p){
-  p.GetProgInit()->Accept(*this);
-  p.GetBlock()->Accept(*this);
-  p.GetProgEnd()->Accept(*this);
+  p.GetProgInit().Accept(*this);
+  p.GetBlock().Accept(*this);
+  p.GetProgEnd().Accept(*this);
 }
 
 void ASTVisitorPrettyPrinter::Visit(ProgInit const& p){
@@ -29,11 +29,11 @@ void ASTVisitorPrettyPrinter::Visit(Block const& p) {
 void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
 
   std::cout << "if(";
-  p.GetCond()->Accept(*this);
+  p.GetCond().Accept(*this);
   std::cout << "){\n";
   IncreaseIndent();
   Indent();
-  p.GetThen()->Accept(*this);
+  p.GetThen().Accept(*this);
   DecreaseIndent();
   std::cout << "}";
 
@@ -41,7 +41,7 @@ void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
     std::cout << "\nelse{\n";
     IncreaseIndent();
     Indent();
-    p.GetElse()->Accept(*this);
+    p.GetElse().Accept(*this);
     DecreaseIndent();
     std::cout << "}";
   }
@@ -49,9 +49,9 @@ void ASTVisitorPrettyPrinter::Visit(IfStmt const& p){
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(WhileStmt const& p){
-  std::cout << "while("; p.GetCond()->Accept(*this);
+  std::cout << "while("; p.GetCond().Accept(*this);
   std::cout << "){\n";
-  IncreaseIndent(); Indent(); p.GetBody()->Accept(*this);DecreaseIndent();
+  IncreaseIndent(); Indent(); p.GetBody().Accept(*this);DecreaseIndent();
   std::cout << "}";
 }
 
@@ -63,15 +63,15 @@ void ASTVisitorPrettyPrinter::Visit(Literal const& p){
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(BinaryOp const& p){
   std::cout << "( ";
-  p.Lhs()->Accept(*this);
+  p.Lhs().Accept(*this);
   std::cout << p.OpString();
-  p.Rhs()->Accept(*this);
+  p.Rhs().Accept(*this);
   std::cout << " )";
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(DeclStmt const& p){
-  p.GetVarDeclList()->Accept(*this);
+  p.GetVarDeclList().Accept(*this);
 }
 void ASTVisitorPrettyPrinter::Visit(VarDeclList const& p){
   for(const auto it : p.GetVarDeclVector()){
@@ -84,9 +84,9 @@ void ASTVisitorPrettyPrinter::Visit(VarDecl const& p){
 }
 
 void ASTVisitorPrettyPrinter::Visit(AssignStmt const& p){
-  p.Lhs()->Accept(*this);
+  p.Lhs().Accept(*this);
   std::cout << "=";
-  p.Rhs()->Accept(*this);
+  p.Rhs().Accept(*this);
 }
 
 void ASTVisitorPrettyPrinter::Visit(Var const& p){
@@ -95,13 +95,13 @@ void ASTVisitorPrettyPrinter::Visit(Var const& p){
 
 void ASTVisitorPrettyPrinter::Visit(RefOp const& p){
   std::cout << p.str();
-  p.Rhs()->Accept(*this);
+  p.Rhs().Accept(*this);
 
 }
 
 void ASTVisitorPrettyPrinter::Visit(DerefOp const& p){
   std::cout << p.str();
-  p.Rhs()->Accept(*this);
+  p.Rhs().Accept(*this);
 }
 
 /////////////////////////////////////////////////////////////////////////////

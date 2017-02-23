@@ -15,9 +15,9 @@ public:
   ASTVisitorLvalRval(CompilationUnit& unit): unit_(unit){};
 
   virtual void Visit(ProgBody const& p){
-    p.GetProgInit()->Accept(*this);
-    p.GetBlock()->Accept(*this);
-    p.GetProgEnd()->Accept(*this);
+    p.GetProgInit().Accept(*this);
+    p.GetBlock().Accept(*this);
+    p.GetProgEnd().Accept(*this);
   }
 
   virtual void Visit(Block const& p){
@@ -25,40 +25,40 @@ public:
   }
 
   virtual void Visit(IfStmt const& p){
-    p.GetCond()->Accept(*this);
-    p.GetThen()->Accept(*this);
-    if(p.HasElse()) p.GetElse()->Accept(*this);
+    p.GetCond().Accept(*this);
+    p.GetThen().Accept(*this);
+    if(p.HasElse()) p.GetElse().Accept(*this);
   }
 
   virtual void Visit(WhileStmt const& p){
-    p.GetCond()->Accept(*this);
-    p.GetBody()->Accept(*this);
+    p.GetCond().Accept(*this);
+    p.GetBody().Accept(*this);
   }
 
   virtual void Visit(BinaryOp const& p){
-    p.Lhs()->Accept(*this);
-    p.Rhs()->Accept(*this);
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
     unit_.SetNodeAsRval(p);
   }
 
   virtual void Visit(AssignStmt const& p){
-    p.Lhs()->Accept(*this);
-    p.Rhs()->Accept(*this);
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
 
     if(not unit_.IsLValue(*p.Lhs()))
-      unit_.Error(kErr22, p.Lhs()->GetLocus());
+      unit_.Error(kErr22, p.Lhs().GetLocus());
   }
 
   virtual void Visit(RefOp const& p){
-    p.Rhs()->Accept(*this);
+    p.Rhs().Accept(*this);
     if(not unit_.IsLValue(*p.Rhs()))
-      unit_.Error(kErr23, p.Rhs()->GetLocus());
+      unit_.Error(kErr23, p.Rhs().GetLocus());
   }
 
   virtual void Visit(DerefOp const& p){
-    p.Rhs()->Accept(*this);
+    p.Rhs().Accept(*this);
     if(not unit_.IsLValue(*p.Rhs()))
-      unit_.Error(kErr24, p.Rhs()->GetLocus());
+      unit_.Error(kErr24, p.Rhs().GetLocus());
   }
 
   virtual void Visit(Literal const& p){unit_.SetNodeAsRval(p);}

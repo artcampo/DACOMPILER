@@ -49,6 +49,7 @@ private:
 
 class Expr : public Node{
 public:
+  virtual ~Expr() {}
   Expr(const ScopeId id, const Locus& locus) : Node(id, locus){};
   virtual void Accept(ASTVisitor& v) = 0;
   virtual void Accept(CodeGen& v, const Node* successor) = 0;
@@ -100,9 +101,9 @@ public:
 //   ProgEnd*  GetProgEnd()  noexcept{ return pend_.get();}
 //   Block*    GetBlock()    noexcept{ return block_.get();}
 
-  ProgInit* GetProgInit() const noexcept{ return pinit_.get();}
-  ProgEnd*  GetProgEnd()  const noexcept{ return pend_.get();}
-  Block*    GetBlock()    const noexcept{ return block_.get();}
+  ProgInit& GetProgInit() const noexcept{ return *pinit_;}
+  ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
+  Block&    GetBlock()    const noexcept{ return *block_;}
 private:
   std::unique_ptr<AST::ProgInit>  pinit_;
   std::unique_ptr<AST::ProgEnd>   pend_;

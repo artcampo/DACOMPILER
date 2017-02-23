@@ -4,9 +4,9 @@ namespace Compiler{
 namespace AST{
 
 void ASTVisitorDump::Visit(ProgBody const& p){
-  p.GetProgInit()->Accept(*this);
-  p.GetBlock()->Accept(*this);
-  p.GetProgEnd()->Accept(*this);
+  p.GetProgInit().Accept(*this);
+  p.GetBlock().Accept(*this);
+  p.GetProgEnd().Accept(*this);
 }
 
 void ASTVisitorDump::Visit(ProgInit const& p){
@@ -38,10 +38,10 @@ void ASTVisitorDump::Visit(BinaryOp const& p){
   std::cout << "Op:" << p.OpString()<<"\n";
   IncreaseIndent();
   Indent();
-  p.Lhs()->Accept(*this);
+  p.Lhs().Accept(*this);
   std::cout << "\n";
   Indent();
-  p.Rhs()->Accept(*this);
+  p.Rhs().Accept(*this);
   DecreaseIndent();
 }
 
@@ -51,29 +51,29 @@ void ASTVisitorDump::Visit(IfStmt const& p){
 
   IncreaseIndent();Indent();std::cout << "Cond: ";
 
-  p.GetCond()->Accept(*this); std::cout << "\n";
+  p.GetCond().Accept(*this); std::cout << "\n";
 
   Indent();std::cout << "Then:\n";
-  IncreaseIndent(); p.GetThen()->Accept(*this); DecreaseIndent();
+  IncreaseIndent(); p.GetThen().Accept(*this); DecreaseIndent();
 
   if(p.HasElse()){
     Indent();std::cout << "Else:\n";
-    IncreaseIndent(); p.GetElse()->Accept(*this); DecreaseIndent();
+    IncreaseIndent(); p.GetElse().Accept(*this); DecreaseIndent();
   }
   DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(WhileStmt const& p){
-  //  p.GetBody()->Accept(*this);
+  //  p.GetBody().Accept(*this);
   std::cout << "WhileStmt:\n";
   IncreaseIndent(); Indent();std::cout << "Cond: ";
-  p.GetCond()->Accept(*this); std::cout << "\n";
+  p.GetCond().Accept(*this); std::cout << "\n";
   Indent();std::cout << "Body:\n";
-  IncreaseIndent();p.GetBody()->Accept(*this);DecreaseIndent();
+  IncreaseIndent();p.GetBody().Accept(*this);DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(DeclStmt const& p){
-  p.GetVarDeclList()->Accept(*this);
+  p.GetVarDeclList().Accept(*this);
 }
 void ASTVisitorDump::Visit(VarDeclList const& p){
   for(const auto it : p.GetVarDeclVector()){
@@ -89,8 +89,8 @@ void ASTVisitorDump::Visit(VarDecl const& p){
 void ASTVisitorDump::Visit(AssignStmt const& p){
   std::cout << "Assign\n";
   IncreaseIndent();
-  Indent(); p.Lhs()->Accept(*this); std::cout << "\n";
-  Indent(); p.Rhs()->Accept(*this); std::cout ;
+  Indent(); p.Lhs().Accept(*this); std::cout << "\n";
+  Indent(); p.Rhs().Accept(*this); std::cout ;
   DecreaseIndent();
 }
 
@@ -101,14 +101,14 @@ void ASTVisitorDump::Visit(Var const& p){
 void ASTVisitorDump::Visit(RefOp const& p){
   std::cout << p.str();
   IncreaseIndent();Indent(); std::cout << "\n";
-  Indent(); p.Rhs()->Accept(*this);
+  Indent(); p.Rhs().Accept(*this);
   DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(DerefOp const& p){
   std::cout << p.str();
   IncreaseIndent();Indent(); std::cout << "\n";
-  Indent(); p.Rhs()->Accept(*this);
+  Indent(); p.Rhs().Accept(*this);
   DecreaseIndent();
 }
 

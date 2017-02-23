@@ -24,10 +24,10 @@ public:
   : IfStmt(condition, block1, nullptr, id, locus){}
   //Statement(id), condition_(condition), block1_(block1), block2_(nullptr){}
 
-  //Todo: this should be ref
-  Expr*  GetCond() const noexcept{ return condition_;};
-  Block* GetThen() const noexcept{ return block1_;};
-  Block* GetElse() const noexcept{ return block2_;};
+
+  Expr&  GetCond() const noexcept{ return *condition_;};
+  Block& GetThen() const noexcept{ return *block1_;};
+  Block& GetElse() const noexcept{ return *block2_;};
   const bool HasElse()const noexcept{ return block2_ != nullptr;};
   virtual std::string str() const;
 
@@ -46,8 +46,8 @@ public:
     , const Locus& locus)
     : Statement(id, locus), lhs_(lhs), rhs_(rhs) {}
 
-  Expr* const Lhs() const noexcept{return lhs_.get();}
-  Expr* const Rhs() const noexcept{return rhs_.get();}
+  Expr& Lhs() const noexcept{return *lhs_;}
+  Expr& Rhs() const noexcept{return *rhs_;}
 
   virtual std::string str() const{
     return lhs_->str() + "=" + rhs_->str();
@@ -66,7 +66,7 @@ public:
   DeclStmt(VarDeclList* const decl_list, const ScopeId id, const Locus& locus)
     : Statement(id, locus), decl_list_(decl_list) {}
 
-  VarDeclList* const GetVarDeclList() const noexcept{return decl_list_;}
+  VarDeclList& GetVarDeclList() const noexcept{return *decl_list_;}
 
   virtual std::string str() const;
 
@@ -84,8 +84,8 @@ public:
    : Statement(id, locus), condition_(std::move(condition))
    , body_(std::move(body)){}
 
-  Expr*  GetCond() const noexcept{ return condition_.get();};
-  Block* GetBody() const noexcept{ return body_.get();};
+  Expr&  GetCond() const noexcept{ return *condition_;};
+  Block& GetBody() const noexcept{ return *body_;};
 
 
   virtual std::string str() const;

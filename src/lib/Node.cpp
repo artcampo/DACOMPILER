@@ -76,9 +76,9 @@ std::string DeclStmt::str() const{
 
 std::string WhileStmt::str() const{
   std::string s("While (");
-  s += GetCond()->str();
+  s += GetCond().str();
   s += std::string(") {");
-  s += GetBody()->str();
+  s += GetBody().str();
   s += std::string("}");
   return s;
 };

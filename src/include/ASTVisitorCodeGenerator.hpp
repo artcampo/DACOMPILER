@@ -46,8 +46,8 @@ private:
   //Node has to backpatch inst at position VM::Addr
   std::map<const Node*, std::vector<VM::Addr>> back_patch_;
 
-  void BackPatch(const Node* n, const VM::Addr position);
-  void AddToBackPatch(const Node* n, const VM::Addr position);
+  void BackPatch(const Node& n, const VM::Addr position);
+  void AddToBackPatch(const Node& n, const VM::Addr position);
   void PrintBackPatch();
 };
 
