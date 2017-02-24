@@ -21,7 +21,7 @@ public:
   }
 
   virtual void Visit(Block const& p){
-    for (auto c : p.statements) c->Accept(*this);
+    for (auto& c : p.statements_) c->Accept(*this);
   }
 
   virtual void Visit(IfStmt const& p){

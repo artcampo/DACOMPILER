@@ -20,7 +20,7 @@ void ASTVisitorDump::Visit(ProgEnd const& p){
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorDump::Visit(Block const& p) {
 //   std::cout << "Stmts:\n";
-  for (auto c : p.statements){
+  for (auto& c : p.statements_){
       Indent();
       c->Accept(*this);
       std::cout << std::endl;
@@ -76,7 +76,7 @@ void ASTVisitorDump::Visit(DeclStmt const& p){
   p.GetVarDeclList().Accept(*this);
 }
 void ASTVisitorDump::Visit(VarDeclList const& p){
-  for(const auto it : p.GetVarDeclVector()){
+  for(const auto& it : p.GetVarDeclVector()){
 //     Indent();
     it->Accept(*this);
     std::cout << " ";

@@ -24,7 +24,7 @@ public:
 
   virtual void Visit(Block const& p){
     std::cout << unit_.GetScope(p.GetScopeId())->str() <<"\n";
-    for (auto c : p.statements) c->Accept(*this);
+    for(auto& c : p.statements_) c->Accept(*this);
   };
   virtual void Visit(IfStmt const& p){
 //     std::cout << unit_.GetScope(p.GetThen()->GetScopeId())->str() <<"\n";

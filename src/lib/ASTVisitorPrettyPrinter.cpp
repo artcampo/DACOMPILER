@@ -19,7 +19,7 @@ void ASTVisitorPrettyPrinter::Visit(ProgEnd const& p){
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Visit(Block const& p) {
-  for (auto c : p.statements){
+  for (auto& c : p.statements_){
       c->Accept(*this);
       std::cout << std::endl;Indent();
   }
@@ -74,7 +74,7 @@ void ASTVisitorPrettyPrinter::Visit(DeclStmt const& p){
   p.GetVarDeclList().Accept(*this);
 }
 void ASTVisitorPrettyPrinter::Visit(VarDeclList const& p){
-  for(const auto it : p.GetVarDeclVector()){
+  for(const auto& it : p.GetVarDeclVector()){
     it->Accept(*this);
     std::cout << " ";
   }

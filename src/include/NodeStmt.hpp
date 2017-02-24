@@ -20,12 +20,16 @@ public:
    : Statement(id, locus), condition_(std::move(condition))
    , block1_(std::move(block1)), block2_(std::move(block2)){}
 
+
    /*
   IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, ScopeId id
     , const Locus& locus)
-  : IfStmt(condition, block1, std::unique_ptr<Block>(nullptr), id, locus){}
+  : IfStmt(condition, block1, std::make_unique<Block>(nullptr), id, locus){}
 */
-
+  IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, ScopeId id
+    , const Locus& locus)
+  : Statement(id, locus), condition_(std::move(condition))
+   , block1_(std::move(block1)), block2_(nullptr){}
 
   Expr&  GetCond() const noexcept{ return *condition_;};
   Block& GetThen() const noexcept{ return *block1_;};

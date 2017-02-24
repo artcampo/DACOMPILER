@@ -73,10 +73,11 @@ void CodeGen::Visit(Block const& n, const Node* successor) {
 //   std::cout << "B" << n.str()<< " with successor: " << successor->str() << "\n";
   BackPatch(n, byte_code_.NextAddress());
 
-  for (std::vector<Statement*>::const_iterator stmt = n.statements.cbegin();
-        stmt != n.statements.cend(); ++stmt){
+  for (std::vector<std::unique_ptr<Statement>>::const_iterator stmt = n.statements_.cbegin();
+        stmt != n.statements_.cend(); ++stmt){
     const Node* actual_successor = successor;
-    if(stmt != n.statements.cend() - 1 ) actual_successor = *(stmt + 1);
+    if(stmt != n.statements_.cend() - 1 )
+      actual_successor = (stmt + 1)->get();
 
     BackPatch(**stmt, byte_code_.NextAddress());
 
@@ -95,7 +96,7 @@ void CodeGen::Visit(DeclStmt const& p, const Node* successor){
 }
 
 void CodeGen::Visit(VarDeclList const& p, const Node* successor){
-  for(const auto d : p.GetVarDeclVector()) d->Accept(*this, successor);
+  for(const auto& d : p.GetVarDeclVector()) d->Accept(*this, successor);
 }
 
 void CodeGen::Visit(VarDecl const& p, const Node* successor){

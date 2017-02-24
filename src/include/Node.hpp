@@ -131,7 +131,9 @@ public:
 
   VarDeclList(std::vector<std::unique_ptr<VarDecl>>& list, const ScopeId id
             , const Locus& locus)
-    : Node(id, locus), list_(list) {}
+    : Node(id, locus)
+    {for (const auto& it : list) list_.push_back(std::make_unique<VarDecl>(*it));}
+
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 
