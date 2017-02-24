@@ -16,6 +16,7 @@ class AssignStmt;
 /////////////////////////////////////////////////////////
 class Literal : public Expr {
 public:
+  virtual ~Literal() = default;
   Literal(const uint32_t &value, const Type& type, const ScopeId id
     , const Locus& locus)
     : Expr(id, locus), value_(value), type_(type){}
@@ -36,6 +37,7 @@ private:
 /////////////////////////////////////////////////////////
 class BinaryOp : public Expr {
 public:
+  virtual ~BinaryOp() = default;
   int op;
   //TODO change op to own type
   BinaryOp(std::unique_ptr<Expr>& lhs, const int op, std::unique_ptr<Expr>& rhs, const ScopeId id
@@ -60,7 +62,7 @@ private:
 /////////////////////////////////////////////////////////
 class Var : public Expr{
 public:
-
+  virtual ~Var() = default;
   Var(const std::string& name, const Type& type, const ScopeId id
     , const Locus& locus)
     : Expr(id, locus), name_(name),type_(type){}
@@ -79,6 +81,7 @@ private:
 class UnaryOp : public Expr {
 public:
 
+  virtual ~UnaryOp() = default;
   //TODO change op to own type
   UnaryOp(std::unique_ptr<Expr>& rhs, const ScopeId id
     , const Locus& locus)
@@ -98,6 +101,7 @@ private:
 class RefOp : public UnaryOp {
 public:
 
+  virtual ~RefOp() = default;
   //TODO change op to own type
   RefOp(std::unique_ptr<Expr>& rhs, const ScopeId id, const Locus& locus)
     : UnaryOp(rhs, id, locus){}
@@ -114,6 +118,7 @@ public:
 class DerefOp : public UnaryOp {
 public:
 
+  virtual ~DerefOp() = default;
   //TODO change op to own type
   DerefOp(std::unique_ptr<Expr>& rhs, const ScopeId id, const Locus& locus)
     : UnaryOp(rhs, id, locus){}

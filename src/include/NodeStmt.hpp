@@ -15,6 +15,7 @@ class AssignStmt;
 /////////////////////////////////////////////////////////
 class IfStmt : public Statement {
 public:
+  virtual ~IfStmt() = default;
   IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, std::unique_ptr<Block>& block2
         ,const ScopeId id, const Locus& locus)
    : Statement(id, locus), condition_(std::move(condition))
@@ -48,6 +49,7 @@ private:
 /////////////////////////////////////////////////////////
 class AssignStmt : public Statement {
 public:
+  virtual ~AssignStmt() = default;
   AssignStmt(std::unique_ptr<Expr>& lhs, std::unique_ptr<Expr>& rhs, const ScopeId id
     , const Locus& locus)
     : Statement(id, locus), lhs_(std::move(lhs)), rhs_(std::move(rhs)) {}
@@ -69,6 +71,7 @@ private:
 /////////////////////////////////////////////////////////
 class DeclStmt : public Statement {
 public:
+  virtual ~DeclStmt() = default;
   DeclStmt(std::unique_ptr<VarDeclList>& decl_list, const ScopeId id, const Locus& locus)
     : Statement(id, locus), decl_list_(std::move(decl_list)) {}
 
@@ -85,6 +88,7 @@ private:
 /////////////////////////////////////////////////////////
 class WhileStmt : public Statement {
 public:
+  virtual ~WhileStmt() = default;
   WhileStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& body
         ,const ScopeId id, const Locus& locus)
    : Statement(id, locus), condition_(std::move(condition))

@@ -33,7 +33,7 @@ class ProgEnd;
 class Node {
 public:
   Node(const ScopeId id, const Locus& locus) : scope_id_(id), locus_(locus){}
-  virtual ~Node() {}
+  virtual ~Node() = default;
 
   virtual void Accept(ASTVisitor& v) = 0;
   virtual void Accept(CodeGen& v, const Node* successor) = 0;
@@ -49,7 +49,7 @@ private:
 
 class Expr : public Node{
 public:
-  virtual ~Expr() {}
+  virtual ~Expr() = default;
   Expr(const ScopeId id, const Locus& locus) : Node(id, locus){};
   virtual void Accept(ASTVisitor& v) = 0;
   virtual void Accept(CodeGen& v, const Node* successor) = 0;
@@ -59,6 +59,7 @@ public:
 /////////////////////////////////////////////////////////
 class Statement  : public Node{
 public:
+  virtual ~Statement() = default;
   Statement(const ScopeId id, const Locus& locus) : Node(id, locus){};
   virtual void Accept(ASTVisitor& v) = 0;
   virtual void Accept(CodeGen& v, const Node* successor) = 0;
@@ -68,6 +69,7 @@ public:
 /////////////////////////////////////////////////////////
 class Block : public Node {
 public:
+  virtual ~Block() = default;
   Block(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
   void AddStatement(std::unique_ptr<Statement>& s){ statements_.push_back(std::move(s));}
@@ -83,6 +85,7 @@ public:
 /////////////////////////////////////////////////////////
 class ProgBody : public Node {
 public:
+  virtual ~ProgBody() = default;
   ProgBody(const ScopeId id, const Locus& locus
     , std::unique_ptr<AST::ProgInit>& pinit
     , std::unique_ptr<AST::ProgEnd>& pend
@@ -107,6 +110,7 @@ private:
 /////////////////////////////////////////////////////////
 class ProgInit : public Node {
 public:
+  virtual ~ProgInit() = default;
     ProgInit(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
 
@@ -118,6 +122,7 @@ public:
 /////////////////////////////////////////////////////////
 class ProgEnd : public Node {
 public:
+  virtual ~ProgEnd() = default;
     ProgEnd(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
     virtual void Accept(CodeGen& v, const Node* successor);
@@ -129,6 +134,7 @@ public:
 class VarDeclList : public Node{
 public:
 
+  virtual ~VarDeclList() = default;
   VarDeclList(std::vector<std::unique_ptr<VarDecl>>& list, const ScopeId id
             , const Locus& locus)
     : Node(id, locus)
@@ -147,7 +153,7 @@ private:
 /////////////////////////////////////////////////////////
 class VarDecl : public Node{
 public:
-
+  virtual ~VarDecl() = default;
   VarDecl(const std::string& name, const Type& type, const ScopeId id
     , const Locus& locus)
     : Node(id, locus), name_(name), type_(type){}

@@ -13,5 +13,7 @@ struct Ast{
   std::unique_ptr<AST::ProgBody> prog_;
 };
 
+using PtrProgBody = std::unique_ptr<ProgBody>;
+
 }//end namespace AST
 }//end namespace Compiler
