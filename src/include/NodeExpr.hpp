@@ -124,7 +124,7 @@ public:
     : UnaryOp(rhs, id, locus){}
 
   virtual std::string str() const noexcept{
-    return std::string("@");
+    return std::string("*");
   };
 
   virtual void Accept(ASTVisitor& v);
