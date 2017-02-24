@@ -61,14 +61,14 @@ public:
 //   const Prog* GetAstProg() const noexcept{ return *ast_.prog_;}
   ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
 
-  void SetTypeOfNode(const Node* n, const Type& t){
+  void SetTypeOfNode(const Node& n, const Type& t){
 //     std::cout << "Set: " << n->str() << ": " << t.str() << "\n";
-    type_of_node_[n]=&t;
+    type_of_node_[&n]=&t;
   }
 
-  const Type& GetTypeOfNode(const Node* n){
+  const Type& GetTypeOfNode(const Node& n){
 //     std::cout << "Get: " << n->str() << ": " << type_of_node_[n]->str() << "\n";
-    return *type_of_node_[n];
+    return *type_of_node_[&n];
   }
 
   LexicalScope* GetScope(const ScopeId id) const{

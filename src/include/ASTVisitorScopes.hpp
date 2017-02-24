@@ -14,9 +14,9 @@ public:
   ASTVisitorScopes(CompilationUnit& unit): unit_(unit){};
 
   virtual void Visit(ProgBody const& p){
-    p.GetProgInit()->Accept(*this);
-    p.GetBlock()->Accept(*this);
-    p.GetProgEnd()->Accept(*this);
+    p.GetProgInit().Accept(*this);
+    p.GetBlock().Accept(*this);
+    p.GetProgEnd().Accept(*this);
   };
 
   virtual void Visit(ProgInit const& p){};
@@ -28,16 +28,16 @@ public:
   };
   virtual void Visit(IfStmt const& p){
 //     std::cout << unit_.GetScope(p.GetThen()->GetScopeId())->str() <<"\n";
-    p.GetThen()->Accept(*this);
+    p.GetThen().Accept(*this);
 
     if(p.HasElse()){
-      p.GetElse()->Accept(*this);
+      p.GetElse().Accept(*this);
 //       std::cout << unit_.GetScope(p.GetElse()->GetScopeId())->str() <<"\n";
     }
   };
 
   virtual void Visit(WhileStmt const& p){
-    p.GetBody()->Accept(*this);
+    p.GetBody().Accept(*this);
   }
 
   virtual void Visit(BinaryOp const& p){};

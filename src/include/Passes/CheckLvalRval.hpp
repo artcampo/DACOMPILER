@@ -45,19 +45,19 @@ public:
     p.Lhs().Accept(*this);
     p.Rhs().Accept(*this);
 
-    if(not unit_.IsLValue(*p.Lhs()))
+    if(not unit_.IsLValue(p.Lhs()))
       unit_.Error(kErr22, p.Lhs().GetLocus());
   }
 
   virtual void Visit(RefOp const& p){
     p.Rhs().Accept(*this);
-    if(not unit_.IsLValue(*p.Rhs()))
+    if(not unit_.IsLValue(p.Rhs()))
       unit_.Error(kErr23, p.Rhs().GetLocus());
   }
 
   virtual void Visit(DerefOp const& p){
     p.Rhs().Accept(*this);
-    if(not unit_.IsLValue(*p.Rhs()))
+    if(not unit_.IsLValue(p.Rhs()))
       unit_.Error(kErr24, p.Rhs().GetLocus());
   }
 

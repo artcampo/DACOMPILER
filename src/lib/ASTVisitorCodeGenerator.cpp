@@ -78,7 +78,7 @@ void CodeGen::Visit(Block const& n, const Node* successor) {
     const Node* actual_successor = successor;
     if(stmt != n.statements.cend() - 1 ) actual_successor = *(stmt + 1);
 
-    BackPatch(*stmt, byte_code_.NextAddress());
+    BackPatch(**stmt, byte_code_.NextAddress());
 
     (*stmt)->Accept(*this, actual_successor);
   }

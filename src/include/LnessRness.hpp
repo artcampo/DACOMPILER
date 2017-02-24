@@ -10,9 +10,7 @@
 
 namespace Compiler{
 
-
 using AST::Node;
-
 
 class LnessRness {
 public:
@@ -38,10 +36,6 @@ public:
 
 protected:
   std::map<const Node*,bool> node_is_lval_or_rval_;
-
-public:
-
-
 };
 
 
