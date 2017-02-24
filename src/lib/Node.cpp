@@ -53,7 +53,7 @@ std::string BinaryOp::OpString() const noexcept{
 
 std::string Block::str() const{
   std::string s("Block {");
-  for(const auto& stmt : statements)
+  for(const auto& stmt : statements_)
     s += (stmt->str() +std::string(" "));
   s += std::string("}");
   return s;

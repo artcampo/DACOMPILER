@@ -13,7 +13,6 @@ class VarDeclList;
 class VarDecl;
 class AssignStmt;
 
-
 /////////////////////////////////////////////////////////
 class Literal : public Expr {
 public:
@@ -39,9 +38,9 @@ class BinaryOp : public Expr {
 public:
   int op;
   //TODO change op to own type
-  BinaryOp(Expr* const lhs, const int op, Expr* const rhs, const ScopeId id
+  BinaryOp(std::unique_ptr<Expr>& lhs, const int op, std::unique_ptr<Expr>& rhs, const ScopeId id
     , const Locus& locus)
-    : Expr(id, locus), lhs_(lhs), rhs_(rhs), op(op){}
+    : Expr(id, locus), lhs_(std::move(lhs)), rhs_(std::move(rhs)), op(op){}
 
   Expr& Lhs() const noexcept{return *lhs_;}
   Expr& Rhs() const noexcept{return *rhs_;}
@@ -53,8 +52,8 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  Expr* lhs_;
-  Expr* rhs_;
+  std::unique_ptr<Expr> lhs_;
+  std::unique_ptr<Expr> rhs_;
 };
 
 

@@ -15,14 +15,16 @@ class AssignStmt;
 /////////////////////////////////////////////////////////
 class IfStmt : public Statement {
 public:
-  IfStmt(Expr* const condition, Block* const block1, Block* const block2
+  IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, std::unique_ptr<Block>& block2
         ,const ScopeId id, const Locus& locus)
-   : Statement(id, locus), condition_(condition), block1_(block1), block2_(block2){}
+   : Statement(id, locus), condition_(std::move(condition))
+   , block1_(std::move(block1)), block2_(std::move(block2)){}
 
-  IfStmt(Expr* const condition, Block* const block1, const ScopeId id
+   /*
+  IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, ScopeId id
     , const Locus& locus)
-  : IfStmt(condition, block1, nullptr, id, locus){}
-  //Statement(id), condition_(condition), block1_(block1), block2_(nullptr){}
+  : IfStmt(condition, block1, std::unique_ptr<Block>(nullptr), id, locus){}
+*/
 
 
   Expr&  GetCond() const noexcept{ return *condition_;};
@@ -34,17 +36,17 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  Expr* condition_;
-  Block*  block1_;
-  Block*  block2_;
+  std::unique_ptr<Expr> condition_;
+  std::unique_ptr<Block>  block1_;
+  std::unique_ptr<Block>  block2_;
 };
 
 /////////////////////////////////////////////////////////
 class AssignStmt : public Statement {
 public:
-  AssignStmt(Expr* const lhs, Expr* const rhs, const ScopeId id
+  AssignStmt(std::unique_ptr<Expr>& lhs, std::unique_ptr<Expr>& rhs, const ScopeId id
     , const Locus& locus)
-    : Statement(id, locus), lhs_(lhs), rhs_(rhs) {}
+    : Statement(id, locus), lhs_(std::move(lhs)), rhs_(std::move(rhs)) {}
 
   Expr& Lhs() const noexcept{return *lhs_;}
   Expr& Rhs() const noexcept{return *rhs_;}
@@ -63,8 +65,8 @@ private:
 /////////////////////////////////////////////////////////
 class DeclStmt : public Statement {
 public:
-  DeclStmt(VarDeclList* const decl_list, const ScopeId id, const Locus& locus)
-    : Statement(id, locus), decl_list_(decl_list) {}
+  DeclStmt(std::unique_ptr<VarDeclList>& decl_list, const ScopeId id, const Locus& locus)
+    : Statement(id, locus), decl_list_(std::move(decl_list)) {}
 
   VarDeclList& GetVarDeclList() const noexcept{return *decl_list_;}
 
@@ -73,7 +75,7 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  VarDeclList* decl_list_;
+  std::unique_ptr<VarDeclList> decl_list_;
 };
 
 /////////////////////////////////////////////////////////

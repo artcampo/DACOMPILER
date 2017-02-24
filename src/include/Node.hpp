@@ -68,18 +68,16 @@ public:
 /////////////////////////////////////////////////////////
 class Block : public Node {
 public:
-    Block(const ScopeId id, const Locus& locus) : Node(id, locus){}
+  Block(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
-    void AddStatement(Statement* const s){ statements.push_back(s);}
+  void AddStatement(std::unique_ptr<Statement>& s){ statements_.push_back(std::move(s));}
 
-    Statement* FirstStatement(){return statements[0];}
-    Statement* const FirstStatement() const{return statements[0];}
 
-    virtual void Accept(CodeGen& v, const Node* successor);
-    virtual void Accept(ASTVisitor& v);
-    virtual std::string str() const;
+  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(ASTVisitor& v);
+  virtual std::string str() const;
 
-    std::vector<Statement*> statements;
+  std::vector<std::unique_ptr<Statement>> statements_;
 };
 
 /////////////////////////////////////////////////////////
@@ -96,10 +94,6 @@ public:
   virtual void Accept(CodeGen& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const{ return std::string("ProgBody");};
-
-//   ProgInit* GetProgInit() noexcept{ return pinit_.get();}
-//   ProgEnd*  GetProgEnd()  noexcept{ return pend_.get();}
-//   Block*    GetBlock()    noexcept{ return block_.get();}
 
   ProgInit& GetProgInit() const noexcept{ return *pinit_;}
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
@@ -135,17 +129,17 @@ public:
 class VarDeclList : public Node{
 public:
 
-  VarDeclList(const std::vector<VarDecl*>& list, const ScopeId id
+  VarDeclList(std::vector<std::unique_ptr<VarDecl>>& list, const ScopeId id
             , const Locus& locus)
     : Node(id, locus), list_(list) {}
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 
-  std::vector<VarDecl*>& GetVarDeclVector() noexcept{return list_;};
-  const std::vector<VarDecl*>& GetVarDeclVector() const noexcept{return list_;};
+  std::vector<std::unique_ptr<VarDecl>>& GetVarDeclVector() noexcept{return list_;};
+  const std::vector<std::unique_ptr<VarDecl>>& GetVarDeclVector() const noexcept{return list_;};
   virtual std::string str() const;
 private:
-  std::vector<VarDecl*> list_;
+  std::vector<std::unique_ptr<VarDecl>> list_;
 };
 
 /////////////////////////////////////////////////////////
