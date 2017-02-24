@@ -9,6 +9,7 @@
 #include "ScopeId.hpp"
 #include "Locus.hpp"
 
+
 namespace Compiler{
 namespace AST{
 
@@ -17,18 +18,55 @@ class Node;
 class ASTVisitor;
 class CodeGen;
 
+//subtypes of node, main components
+class ProgBody;
+class ProgInit;
+class ProgEnd;
+class Block;
+
+//subtypes of Statement
 class Statement;
 class IfStmt;
 class WhileStmt;
 class DeclStmt;
 class AssignStmt;
 
+//subtypes of node
 class Expr;
 class VarDeclList;
 class VarDecl;
-class ProgBody;
-class ProgInit;
-class ProgEnd;
+
+//subtypes of expr
+class Literal;
+class BinaryOp;
+class Var;
+class UnaryOp;
+class RefOp;
+class DerefOp;
+
+namespace Ptrs{
+
+using PtrProgBody   = std::unique_ptr<ProgBody>;
+using PtrProgInit   = std::unique_ptr<ProgInit>;
+using PtrProgEnd    = std::unique_ptr<ProgEnd>;
+using PtrBlock      = std::unique_ptr<Block>;
+using PtrStatement  = std::unique_ptr<Statement>;
+using PtrIfStmt     = std::unique_ptr<IfStmt>;
+using PtrWhileStmt  = std::unique_ptr<WhileStmt>;
+using PtrDeclStmt   = std::unique_ptr<DeclStmt>;
+using PtrAssignStmt = std::unique_ptr<AssignStmt>;
+using PtrExpr       = std::unique_ptr<Expr>;
+using PtrVarDeclList= std::unique_ptr<VarDeclList>;
+using PtrVarDecl    = std::unique_ptr<VarDecl>;
+using PtrLiteral    = std::unique_ptr<Literal>;
+using PtrBinaryOp   = std::unique_ptr<BinaryOp>;
+using PtrVar        = std::unique_ptr<Var>;
+using PtrUnaryOp    = std::unique_ptr<UnaryOp>;
+using PtrRefOp      = std::unique_ptr<RefOp>;
+using PtrDerefOp    = std::unique_ptr<DerefOp>;
+
+}//end namespace Ptrs
+using namespace Compiler::AST::Ptrs;
 
 class Node {
 public:
@@ -72,14 +110,14 @@ public:
   virtual ~Block() = default;
   Block(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
-  void AddStatement(std::unique_ptr<Statement>& s){ statements_.push_back(std::move(s));}
+  void AddStatement(PtrStatement& s){ statements_.push_back(std::move(s));}
 
 
   virtual void Accept(CodeGen& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const;
 
-  std::vector<std::unique_ptr<Statement>> statements_;
+  std::vector<PtrStatement> statements_;
 };
 
 /////////////////////////////////////////////////////////
@@ -87,9 +125,9 @@ class ProgBody : public Node {
 public:
   virtual ~ProgBody() = default;
   ProgBody(const ScopeId id, const Locus& locus
-    , std::unique_ptr<AST::ProgInit>& pinit
-    , std::unique_ptr<AST::ProgEnd>& pend
-    , std::unique_ptr<AST::Block>& block)
+    , PtrProgInit& pinit
+    , PtrProgEnd& pend
+    , PtrBlock& block)
   : Node(id, locus), pinit_(std::move(pinit)), pend_(std::move(pend))
   , block_(std::move(block)){}
 
@@ -102,9 +140,9 @@ public:
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
   Block&    GetBlock()    const noexcept{ return *block_;}
 private:
-  std::unique_ptr<AST::ProgInit>  pinit_;
-  std::unique_ptr<AST::ProgEnd>   pend_;
-  std::unique_ptr<AST::Block>     block_;
+  PtrProgInit  pinit_;
+  PtrProgEnd   pend_;
+  PtrBlock     block_;
 };
 
 /////////////////////////////////////////////////////////
@@ -135,7 +173,7 @@ class VarDeclList : public Node{
 public:
 
   virtual ~VarDeclList() = default;
-  VarDeclList(std::vector<std::unique_ptr<VarDecl>>& list, const ScopeId id
+  VarDeclList(std::vector<PtrVarDecl>& list, const ScopeId id
             , const Locus& locus)
     : Node(id, locus)
     {for (const auto& it : list) list_.push_back(std::make_unique<VarDecl>(*it));}
@@ -143,11 +181,11 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 
-  std::vector<std::unique_ptr<VarDecl>>& GetVarDeclVector() noexcept{return list_;};
-  const std::vector<std::unique_ptr<VarDecl>>& GetVarDeclVector() const noexcept{return list_;};
+  std::vector<PtrVarDecl>& GetVarDeclVector() noexcept{return list_;};
+  const std::vector<PtrVarDecl>& GetVarDeclVector() const noexcept{return list_;};
   virtual std::string str() const;
 private:
-  std::vector<std::unique_ptr<VarDecl>> list_;
+  std::vector<PtrVarDecl> list_;
 };
 
 /////////////////////////////////////////////////////////

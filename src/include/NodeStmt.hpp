@@ -16,18 +16,18 @@ class AssignStmt;
 class IfStmt : public Statement {
 public:
   virtual ~IfStmt() = default;
-  IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, std::unique_ptr<Block>& block2
+  IfStmt(PtrExpr& condition, PtrBlock& block1, PtrBlock& block2
         ,const ScopeId id, const Locus& locus)
    : Statement(id, locus), condition_(std::move(condition))
    , block1_(std::move(block1)), block2_(std::move(block2)){}
 
 
    /*
-  IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, ScopeId id
+  IfStmt(PtrExpr& condition, PtrBlock& block1, ScopeId id
     , const Locus& locus)
   : IfStmt(condition, block1, std::make_unique<Block>(nullptr), id, locus){}
 */
-  IfStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& block1, ScopeId id
+  IfStmt(PtrExpr& condition, PtrBlock& block1, ScopeId id
     , const Locus& locus)
   : Statement(id, locus), condition_(std::move(condition))
    , block1_(std::move(block1)), block2_(nullptr){}
@@ -41,16 +41,16 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  std::unique_ptr<Expr> condition_;
-  std::unique_ptr<Block>  block1_;
-  std::unique_ptr<Block>  block2_;
+  PtrExpr condition_;
+  PtrBlock  block1_;
+  PtrBlock  block2_;
 };
 
 /////////////////////////////////////////////////////////
 class AssignStmt : public Statement {
 public:
   virtual ~AssignStmt() = default;
-  AssignStmt(std::unique_ptr<Expr>& lhs, std::unique_ptr<Expr>& rhs, const ScopeId id
+  AssignStmt(PtrExpr& lhs, PtrExpr& rhs, const ScopeId id
     , const Locus& locus)
     : Statement(id, locus), lhs_(std::move(lhs)), rhs_(std::move(rhs)) {}
 
@@ -64,15 +64,15 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  std::unique_ptr<Expr> lhs_;
-  std::unique_ptr<Expr> rhs_;
+  PtrExpr lhs_;
+  PtrExpr rhs_;
 };
 
 /////////////////////////////////////////////////////////
 class DeclStmt : public Statement {
 public:
   virtual ~DeclStmt() = default;
-  DeclStmt(std::unique_ptr<VarDeclList>& decl_list, const ScopeId id, const Locus& locus)
+  DeclStmt(PtrVarDeclList& decl_list, const ScopeId id, const Locus& locus)
     : Statement(id, locus), decl_list_(std::move(decl_list)) {}
 
   VarDeclList& GetVarDeclList() const noexcept{return *decl_list_;}
@@ -82,14 +82,14 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  std::unique_ptr<VarDeclList> decl_list_;
+  PtrVarDeclList decl_list_;
 };
 
 /////////////////////////////////////////////////////////
 class WhileStmt : public Statement {
 public:
   virtual ~WhileStmt() = default;
-  WhileStmt(std::unique_ptr<Expr>& condition, std::unique_ptr<Block>& body
+  WhileStmt(PtrExpr& condition, PtrBlock& body
         ,const ScopeId id, const Locus& locus)
    : Statement(id, locus), condition_(std::move(condition))
    , body_(std::move(body)){}
@@ -103,8 +103,8 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  std::unique_ptr<Expr>   condition_;
-  std::unique_ptr<Block>  body_;
+  PtrExpr   condition_;
+  PtrBlock  body_;
 };
 
 }//end namespace AST

@@ -40,7 +40,7 @@ public:
   virtual ~BinaryOp() = default;
   int op;
   //TODO change op to own type
-  BinaryOp(std::unique_ptr<Expr>& lhs, const int op, std::unique_ptr<Expr>& rhs, const ScopeId id
+  BinaryOp(PtrExpr& lhs, const int op, PtrExpr& rhs, const ScopeId id
     , const Locus& locus)
     : Expr(id, locus), lhs_(std::move(lhs)), rhs_(std::move(rhs)), op(op){}
 
@@ -54,8 +54,8 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(CodeGen& v, const Node* successor);
 private:
-  std::unique_ptr<Expr> lhs_;
-  std::unique_ptr<Expr> rhs_;
+  PtrExpr lhs_;
+  PtrExpr rhs_;
 };
 
 
@@ -83,7 +83,7 @@ public:
 
   virtual ~UnaryOp() = default;
   //TODO change op to own type
-  UnaryOp(std::unique_ptr<Expr>& rhs, const ScopeId id
+  UnaryOp(PtrExpr& rhs, const ScopeId id
     , const Locus& locus)
     : Expr(id, locus), rhs_(std::move(rhs)){}
 
@@ -94,7 +94,7 @@ public:
   virtual void Accept(ASTVisitor& v) = 0;
   virtual void Accept(CodeGen& v, const Node* successor) = 0;
 private:
-  std::unique_ptr<Expr> rhs_;
+  PtrExpr rhs_;
 };
 
 /////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ public:
 
   virtual ~RefOp() = default;
   //TODO change op to own type
-  RefOp(std::unique_ptr<Expr>& rhs, const ScopeId id, const Locus& locus)
+  RefOp(PtrExpr& rhs, const ScopeId id, const Locus& locus)
     : UnaryOp(rhs, id, locus){}
 
   virtual std::string str() const noexcept{
@@ -120,7 +120,7 @@ public:
 
   virtual ~DerefOp() = default;
   //TODO change op to own type
-  DerefOp(std::unique_ptr<Expr>& rhs, const ScopeId id, const Locus& locus)
+  DerefOp(PtrExpr& rhs, const ScopeId id, const Locus& locus)
     : UnaryOp(rhs, id, locus){}
 
   virtual std::string str() const noexcept{

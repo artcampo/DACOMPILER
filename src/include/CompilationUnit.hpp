@@ -20,6 +20,7 @@ using AST::ProgBody;
 using AST::ScopeId;
 using AST::SymbolTable;
 using AST::DeclarationTable;
+using namespace Compiler::AST::Ptrs;
 
 class CompilationUnit : public LnessRness, public TypeTable{
 public:
@@ -54,7 +55,7 @@ public:
 
   const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
 
-  void InitAst(std::unique_ptr<ProgBody>& prog){
+  void InitAst(PtrProgBody& prog){
     ast_.prog_ = std::move(prog);
   }
 

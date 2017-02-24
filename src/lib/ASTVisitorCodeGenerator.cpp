@@ -73,7 +73,7 @@ void CodeGen::Visit(Block const& n, const Node* successor) {
 //   std::cout << "B" << n.str()<< " with successor: " << successor->str() << "\n";
   BackPatch(n, byte_code_.NextAddress());
 
-  for (std::vector<std::unique_ptr<Statement>>::const_iterator stmt = n.statements_.cbegin();
+  for (std::vector<PtrStatement>::const_iterator stmt = n.statements_.cbegin();
         stmt != n.statements_.cend(); ++stmt){
     const Node* actual_successor = successor;
     if(stmt != n.statements_.cend() - 1 )
