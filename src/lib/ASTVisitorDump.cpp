@@ -36,14 +36,14 @@ void ASTVisitorDump::Visit(Literal const& p){
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorDump::Visit(BinaryOp const& p){
-  std::cout << "Op:" << p.OpString()<<"\n";
+  std::cout << "Op:" << p.OpString(); DisplayAttributes(p); std::cout <<"\n";
   IncreaseIndent();
   Indent();
   p.Lhs().Accept(*this);
   std::cout << "\n";
   Indent();
   p.Rhs().Accept(*this);
-  DisplayAttributes(p);
+
   DecreaseIndent();
 }
 
@@ -89,29 +89,25 @@ void ASTVisitorDump::Visit(VarDecl const& p){
 }
 
 void ASTVisitorDump::Visit(AssignStmt const& p){
-  std::cout << "Assign\n";
+  std::cout << "Assign"; DisplayAttributes(p); std::cout<<"\n";
   IncreaseIndent();
   Indent(); p.Lhs().Accept(*this); std::cout << "\n";
-  Indent(); p.Rhs().Accept(*this); DisplayAttributes(p);
+  Indent(); p.Rhs().Accept(*this);
   DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(Var const& p){
-  std::cout << p.str();
+  std::cout << p.str(); DisplayAttributes(p);
 }
 
 void ASTVisitorDump::Visit(RefOp const& p){
-  std::cout << p.str();
-  IncreaseIndent();Indent(); std::cout << "\n";
-  Indent(); p.Rhs().Accept(*this); DisplayAttributes(p);
-  DecreaseIndent();
+  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(DerefOp const& p){
-  std::cout << p.str();
-  IncreaseIndent();Indent(); std::cout << "\n";
-  Indent(); p.Rhs().Accept(*this); DisplayAttributes(p);
-  DecreaseIndent();
+  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
 }
 
 
@@ -129,9 +125,12 @@ void ASTVisitorDump::DecreaseIndent(){
 void ASTVisitorDump::DisplayAttributes(Node const& p){
   if(show_attributes_){
     auto it = unit_.type_of_node_.find(&p);
-    if(it != unit_.type_of_node_.end()) std::cout << " " << it->second->str();
+    bool display = (it != unit_.type_of_node_.end()) or unit_.HasLRness(p);
+    if(display) std::cout << " [";
+    if(it != unit_.type_of_node_.end()) std::cout << it->second->str();
 
     if(unit_.HasLRness(p)) std::cout << " " << unit_.LRnessStr(p);
+    if(display) std::cout << "]";
   }
 }
 
