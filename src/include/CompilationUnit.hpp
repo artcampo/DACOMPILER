@@ -21,6 +21,9 @@ using AST::ScopeId;
 using AST::SymbolTable;
 using AST::DeclarationTable;
 using namespace Compiler::AST::Ptrs;
+// class Compiler::AST::ASTVisitorDump;
+// class ASTVisitor;
+namespace AST{ class ASTVisitorDump;};
 
 class CompilationUnit : public LnessRness, public TypeTable{
 public:
@@ -101,9 +104,10 @@ private:
   ErrorLog          error_log_;
   Ast               ast_;
 
+
 public:
-
-
+  friend class AST::ASTVisitorDump;
+//   friend class ASTVisitor;
 };
 
 // namespace CompilationUnitInfo{

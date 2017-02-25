@@ -31,6 +31,7 @@ void ASTVisitorDump::Visit(Block const& p) {
 void ASTVisitorDump::Visit(Literal const& p){
   std::cout << "Literal: ";
   std::cout << p.Value();
+  DisplayAttributes(p);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -42,6 +43,7 @@ void ASTVisitorDump::Visit(BinaryOp const& p){
   std::cout << "\n";
   Indent();
   p.Rhs().Accept(*this);
+  DisplayAttributes(p);
   DecreaseIndent();
 }
 
@@ -90,7 +92,7 @@ void ASTVisitorDump::Visit(AssignStmt const& p){
   std::cout << "Assign\n";
   IncreaseIndent();
   Indent(); p.Lhs().Accept(*this); std::cout << "\n";
-  Indent(); p.Rhs().Accept(*this); std::cout ;
+  Indent(); p.Rhs().Accept(*this); DisplayAttributes(p);
   DecreaseIndent();
 }
 
@@ -101,14 +103,14 @@ void ASTVisitorDump::Visit(Var const& p){
 void ASTVisitorDump::Visit(RefOp const& p){
   std::cout << p.str();
   IncreaseIndent();Indent(); std::cout << "\n";
-  Indent(); p.Rhs().Accept(*this);
+  Indent(); p.Rhs().Accept(*this); DisplayAttributes(p);
   DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(DerefOp const& p){
   std::cout << p.str();
   IncreaseIndent();Indent(); std::cout << "\n";
-  Indent(); p.Rhs().Accept(*this);
+  Indent(); p.Rhs().Accept(*this); DisplayAttributes(p);
   DecreaseIndent();
 }
 
@@ -122,6 +124,15 @@ void ASTVisitorDump::IncreaseIndent(){
 }
 void ASTVisitorDump::DecreaseIndent(){
   if(indent_ > 0) indent_ -= 1;
+}
+
+void ASTVisitorDump::DisplayAttributes(Node const& p){
+  if(show_attributes_){
+    auto it = unit_.type_of_node_.find(&p);
+    if(it != unit_.type_of_node_.end()) std::cout << " " << it->second->str();
+
+    if(unit_.HasLRness(p)) std::cout << " " << unit_.LRnessStr(p);
+  }
 }
 
 }//end namespace AST

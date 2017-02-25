@@ -1,6 +1,7 @@
 #pragma once
 #include "ASTVisitor.hpp"
 #include "Node.hpp"
+#include "CompilationUnit.hpp"
 
 namespace Compiler{
 namespace AST{
@@ -23,14 +24,18 @@ public:
   virtual void Visit(RefOp const& p);
   virtual void Visit(DerefOp const& p);
 
-  ASTVisitorDump(): indent_(1){};
+  ASTVisitorDump(CompilationUnit& unit, const bool show_attributes = false)
+    :  unit_(unit), indent_(1), show_attributes_(show_attributes){};
 
 private:
   void Indent();
   void IncreaseIndent();
   void DecreaseIndent();
+  void DisplayAttributes(Node const& p);
 
   int  indent_;
+  bool show_attributes_;
+  CompilationUnit&  unit_;
 };
 
 }//end namespace AST

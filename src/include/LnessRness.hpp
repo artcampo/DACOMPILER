@@ -26,6 +26,17 @@ public:
     return not node_is_lval_or_rval_.at(&n);
   }
 
+  bool HasLRness(const Node& n) const{
+    auto it = node_is_lval_or_rval_.find(&n);
+    return it != node_is_lval_or_rval_.end();
+  }
+
+  std::string LRnessStr(const Node& n) const{
+    if(not HasLRness(n))  return std::string("No LRness");
+    if(IsLValue(n))       return std::string("Lvalue");
+    if(IsRValue(n))       return std::string("Rvalue");
+  }
+
   void SetNodeAsLval(const Node& n) noexcept{
     node_is_lval_or_rval_[&n] = true;
   }
