@@ -42,7 +42,8 @@ void IRGenerator::Visit(Block const& n, const Node* successor) {
 }
 
 void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
-
+  p.Rhs().Accept(*this, successor);
+  p.Lhs().Accept(*this, successor);
 }
 
 
@@ -138,7 +139,7 @@ void IRGenerator::Visit(Var const& p, const Node* successor){}
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Print() const noexcept{
-
+  stream_.Print();
 }
 
 /////////////////////////////////////////////////////////////////////////////

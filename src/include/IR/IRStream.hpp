@@ -19,12 +19,14 @@ struct IRStream : public IRBuilder{
 
   Reg AppendLoadI(const NodeValue val);
   Reg AppendArith(const Reg src1, const Reg src2, const OpType op);
+  void Print() const noexcept;
 private:
   std::vector<PtrInst> stream_;
 
   void Append(PtrInst inst){ stream_.push_back( std::move(inst)); }
 
   Reg RegAssignedToPreviousInst() const;
+
 };
 
 

@@ -36,6 +36,10 @@ Reg IRStream::RegAssignedToPreviousInst() const{
   return i.RegDst();
 }
 
+void IRStream::Print() const noexcept{
+ Addr a = 0;
+ for(auto& it : stream_){ std::cout << a << ": "<< it->str() << "\n"; ++a;}
+}
 
 
 }//end namespace IR

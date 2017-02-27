@@ -31,6 +31,7 @@ public:
   virtual void Visit(VarDeclList const& p, const Node* successor);
   virtual void Visit(VarDecl const& p, const Node* successor);
 
+  void EndOfProgram();
 private:
   CompilationUnit&  unit_;
   IR::IRStream      stream_;
@@ -43,7 +44,7 @@ private:
   void PrintBackPatch();
   void Print() const noexcept;
 
-  void EndOfProgram();
+
 };
 
 

@@ -108,8 +108,8 @@ struct LoadI : public InstExpr{
   virtual ~LoadI() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("LoadI of") + std::to_string(val_)
-         + std::string(" to:")  + std::to_string(reg_dst_);
+    return std::string("r")  + std::to_string(reg_dst_)
+         + std::string(" = LoadI of ") + std::to_string(val_);
   };
 protected:
   NodeValue val_;
@@ -121,9 +121,9 @@ struct Arith : public InstExpr{
   virtual ~Arith() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("Arith ") + std::to_string(reg_src1_)
-         + Compiler::str(op_) + std::to_string(reg_src2_)
-         + std::string(" to:")  + std::to_string(reg_dst_);
+    return std::string("r")  + std::to_string(reg_dst_)
+         + std::string(" = Arith r") + std::to_string(reg_src1_) + std::string(" ")
+         + Compiler::str(op_) + std::string(" r")+ std::to_string(reg_src2_);
   };
 protected:
   Reg reg_src1_;
