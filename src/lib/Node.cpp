@@ -1,6 +1,6 @@
 #include "Node.hpp"
 #include "ASTVisitor.hpp"
-#include "ASTVisitorCodeGenerator.hpp"
+#include "IR/IRGenerator.hpp"
 #include "IRDefinition.hpp"
 #include <cstddef>
 
@@ -25,22 +25,22 @@ void DerefOp::Accept     (ASTVisitor& v){ v.Visit(*this); }
 // void UnaryOp::Accept     (ASTVisitor& v){ v.Visit(*this); }
 
 
-void ProgBody::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void ProgInit::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void ProgEnd::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void Block::Accept       (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void IfStmt::Accept      (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void WhileStmt::Accept   (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void AssignStmt::Accept  (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void DeclStmt::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void Literal::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void VarDeclList::Accept (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void VarDecl::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void Var::Accept         (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void BinaryOp::Accept    (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void RefOp::Accept       (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-void DerefOp::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
-// void UnaryOp::Accept     (CodeGen& v, const Node* successor){ return v.Visit(*this, successor); }
+void ProgBody::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void ProgInit::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void ProgEnd::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void Block::Accept       (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void IfStmt::Accept      (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void WhileStmt::Accept   (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void AssignStmt::Accept  (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void DeclStmt::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void Literal::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void VarDeclList::Accept (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void VarDecl::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void Var::Accept         (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void BinaryOp::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void RefOp::Accept       (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void DerefOp::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+// void UnaryOp::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 
 std::string BinaryOp::OpString() const noexcept{
   using namespace IRDefinition;

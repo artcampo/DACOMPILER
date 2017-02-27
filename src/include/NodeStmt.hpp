@@ -39,7 +39,7 @@ public:
   virtual std::string str() const;
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 private:
   PtrExpr condition_;
   PtrBlock  block1_;
@@ -62,7 +62,7 @@ public:
   };
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 private:
   PtrExpr lhs_;
   PtrExpr rhs_;
@@ -80,7 +80,7 @@ public:
   virtual std::string str() const;
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 private:
   PtrVarDeclList decl_list_;
 };
@@ -101,7 +101,7 @@ public:
   virtual std::string str() const;
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 private:
   PtrExpr   condition_;
   PtrBlock  body_;

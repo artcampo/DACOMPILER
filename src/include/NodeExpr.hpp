@@ -25,7 +25,7 @@ public:
   uint32_t Value() const noexcept{ return value_;};
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
   std::string str() const noexcept{return std::to_string(value_);}
 
 private:
@@ -52,7 +52,7 @@ public:
   std::string str() const noexcept{return OpString();}
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 private:
   PtrExpr lhs_;
   PtrExpr rhs_;
@@ -71,7 +71,7 @@ public:
   std::string str() const noexcept{return name_;}
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 private:
   const std::string name_;
   const Type&  type_;
@@ -92,7 +92,7 @@ public:
   virtual std::string str() const noexcept = 0;
 
   virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(CodeGen& v, const Node* successor) = 0;
+  virtual void Accept(IRGenerator& v, const Node* successor) = 0;
 private:
   PtrExpr rhs_;
 };
@@ -111,7 +111,7 @@ public:
   };
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 };
 
 /////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ public:
   };
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 };
 
 }//end namespace AST

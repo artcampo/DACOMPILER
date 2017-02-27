@@ -4,13 +4,12 @@
 namespace Compiler{
 namespace IR{
 
+struct IRStream{
+  Addr NextAddress() const noexcept{ return stream_.size(); }
 
-
-
-
-class IRStream{
-
-
+  Inst& GetInst(const Addr addr) const noexcept{ return *stream_[addr];}
+private:
+  std::vector<PtrInst> stream_;
 };
 
 

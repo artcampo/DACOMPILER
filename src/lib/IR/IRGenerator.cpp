@@ -2,8 +2,8 @@
 
 
 namespace Compiler{
-namespace IR{
-/*
+namespace AST{
+
 void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 //   std::cout << "P\n";
   p.GetProgInit().Accept (*this, &p.GetBlock());
@@ -16,56 +16,17 @@ void IRGenerator::Visit(ProgInit const& p, const Node* successor){
 
 }
 void IRGenerator::Visit(ProgEnd const& p, const Node* successor){
-  EndOfProgram();
 }
 
-void IRGenerator::BackPatch(const Node& n, const VM::Addr position){
-//   std::cout << "**Backpatch try ["<< n->str()<< "]:" <<"("<<(void*)n<<")";
-  std::map<const Node*, std::vector<VM::Addr>>::iterator it = back_patch_.find(&n);
-  if(it != back_patch_.end()){
-    for(const auto& address : it->second){
-      uint32_t& inst = byte_code_.GetInst(address);
-//       std::cout << "Backpatch: "
-//         << IRBuilder::PrintInstruction(inst)
-//         << " with node: " << n->str() << "\n";
-      IRBuilder::PatchJump(inst, position);
-    }
-    back_patch_.erase(it);
-  }
-//   else std::cout << " no entries";
-
-//   std::cout << "\n";
-
-//   PrintBackPatch();
-}
-
-
-void IRGenerator::AddToBackPatch(const Node& n, const VM::Addr position){
-//   std::cout << "**Backpatch insert ["<< n->str()<< "] has to patch:"
-//             << IRBuilder::PrintInstruction(byte_code_.GetInst(position))
-//             << "\n";
-  //<<"("<<(void*)n<<")\n";
-  back_patch_[&n].push_back(position);
-}
-
-void IRGenerator::PrintBackPatch() {
-  std::cout << "-----------------------------------\n";
-  for(auto e : back_patch_){
-    std::cout << "** entry: ";
-    std::cout << e.first->str()<<": ";
-    for(const auto& address : e.second) std::cout << address<<" ";
-    std::cout << "\n";
-  }
-  std::cout << "-----------------------------------\n";
-}
 
 /////////////////////////////////////////////////////////////////////////////
 // Sucessor for an statement is either:
 // - next statetement in current block
 // - first node of block following enclosing block
 void IRGenerator::Visit(Block const& n, const Node* successor) {
+  /*
 //   std::cout << "B" << n.str()<< " with successor: " << successor->str() << "\n";
-  BackPatch(n, byte_code_.NextAddress());
+  BackPatch(n, stream_.NextAddress());
 
   for (std::vector<PtrStatement>::const_iterator stmt = n.statements_.cbegin();
         stmt != n.statements_.cend(); ++stmt){
@@ -73,10 +34,11 @@ void IRGenerator::Visit(Block const& n, const Node* successor) {
     if(stmt != n.statements_.cend() - 1 )
       actual_successor = (stmt + 1)->get();
 
-    BackPatch(**stmt, byte_code_.NextAddress());
+    BackPatch(**stmt, stream_.NextAddress());
 
     (*stmt)->Accept(*this, actual_successor);
   }
+  */
 }
 
 void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
@@ -86,22 +48,24 @@ void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
 
 void IRGenerator::Visit(DeclStmt const& p, const Node* successor){
 //   std::cout << "D"<< p.str()<<" with successor: " << successor->str() << "\n";
-  p.GetVarDeclList().Accept(*this, successor);
+//   p.GetVarDeclList().Accept(*this, successor);
 }
 
 void IRGenerator::Visit(VarDeclList const& p, const Node* successor){
-  for(const auto& d : p.GetVarDeclVector()) d->Accept(*this, successor);
+//   for(const auto& d : p.GetVarDeclVector()) d->Accept(*this, successor);
 }
 
 void IRGenerator::Visit(VarDecl const& p, const Node* successor){
-  byte_code_.Append( NewVar(0) );
+//   byte_code_.Append( NewVar(0) );
 }
 
 void IRGenerator::Visit(IfStmt const& p, const Node* successor){
+  /*
 //   std::cout << "If"<< p.str()<< " with successor: " << successor->str() << "\n";
+
   p.GetCond().Accept(*this, successor);
 
-  const VM::Addr current_addr = byte_code_.NextAddress();
+  const IR::Addr current_addr = byte_code_.NextAddress();
   const VM::Reg reg_src       = reg_of_Expr_[&p.GetCond()];
 
   byte_code_.Append( JumpIfTrue (reg_src, 0) );
@@ -125,13 +89,15 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
 //   std::cout << "-Store backp to: " << successor->str()<<"\n";
 //   std::cout <<"\n";
 //   PrintBackPatch();
+*/
 }
 
 void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
+  /*
   //
-  const VM::Addr reentry_addr = byte_code_.NextAddress();
+  const IR::Addr reentry_addr = byte_code_.NextAddress();
   p.GetCond().Accept(*this, successor);
-  const VM::Addr current_addr = byte_code_.NextAddress();
+  const IR::Addr current_addr = byte_code_.NextAddress();
   const VM::Reg reg_src       = reg_of_Expr_[&p.GetCond()];
 
   byte_code_.Append( JumpIfTrue (reg_src, 0) );
@@ -141,18 +107,22 @@ void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
 
   p.GetBody().Accept(*this, successor);
   byte_code_.Append( JumpIfFalse(reg_src, reentry_addr) );
+  */
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(Literal const& n, const Node* successor){
+  /*
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
   reg_of_Expr_[&n]      = reg_assigned;
   byte_code_.stream.push_back( IRBuilder::Load(reg_assigned, n.Value()) );
+  */
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
+  /*
   n.Lhs().Accept(*this, successor);
   n.Rhs().Accept(*this, successor);
 
@@ -164,19 +134,65 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
   byte_code_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2,
                                                 reg_assigned, op));
 //   std::cout << "OP: " << op << "\n";
+*/
 }
 
+void IRGenerator::Visit(RefOp const& p, const Node* successor){}
+void IRGenerator::Visit(DerefOp const& p, const Node* successor){}
+void IRGenerator::Visit(Var const& p, const Node* successor){}
+
 /////////////////////////////////////////////////////////////////////////////
-void IRGenerator::Print() const{
-  VMUtils::print(byte_code_, true);
+void IRGenerator::Print() const noexcept{
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::EndOfProgram(){
-  byte_code_.stream.push_back( IRBuilder::Stop());
+//   byte_code_.stream.push_back( IRBuilder::Stop());
   Print();
 }
-*/
 
-}//end namespace IR
+
+
+void IRGenerator::BackPatch(const Node& n, const IR::Addr position){
+//   std::cout << "**Backpatch try ["<< n->str()<< "]:" <<"("<<(void*)n<<")";
+  std::map<const Node*, std::vector<IR::Addr>>::iterator it = back_patch_.find(&n);
+  if(it != back_patch_.end()){
+    for(const auto& address : it->second){
+      IR::Jump& inst = dynamic_cast<IR::Jump&>(stream_.GetInst(address));
+//       std::cout << "Backpatch: "
+//         << IRBuilder::PrintInstruction(inst)
+//         << " with node: " << n->str() << "\n";
+      inst.PatchJump(position);
+    }
+    back_patch_.erase(it);
+  }
+//   else std::cout << " no entries";
+
+//   std::cout << "\n";
+
+//   PrintBackPatch();
+}
+
+
+void IRGenerator::AddToBackPatch(const Node& n, const IR::Addr position){
+//   std::cout << "**Backpatch insert ["<< n->str()<< "] has to patch:"
+//             << IRBuilder::PrintInstruction(byte_code_.GetInst(position))
+//             << "\n";
+  //<<"("<<(void*)n<<")\n";
+  back_patch_[&n].push_back(position);
+}
+
+void IRGenerator::PrintBackPatch() {
+  std::cout << "-----------------------------------\n";
+  for(auto e : back_patch_){
+    std::cout << "** entry: ";
+    std::cout << e.first->str()<<": ";
+    for(const auto& address : e.second) std::cout << address<<" ";
+    std::cout << "\n";
+  }
+  std::cout << "-----------------------------------\n";
+}
+
+}//end namespace AST
 }//end namespace Compiler

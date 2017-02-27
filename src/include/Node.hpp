@@ -16,7 +16,7 @@ namespace AST{
 class Node;
 
 class ASTVisitor;
-class CodeGen;
+class IRGenerator;
 
 //subtypes of node, main components
 class ProgBody;
@@ -74,7 +74,7 @@ public:
   virtual ~Node() = default;
 
   virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(CodeGen& v, const Node* successor) = 0;
+  virtual void Accept(IRGenerator& v, const Node* successor) = 0;
   virtual std::string str() const = 0;
 
   ScopeId GetScopeId() const noexcept{return scope_id_;};
@@ -90,7 +90,7 @@ public:
   virtual ~Expr() = default;
   Expr(const ScopeId id, const Locus& locus) : Node(id, locus){};
   virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(CodeGen& v, const Node* successor) = 0;
+  virtual void Accept(IRGenerator& v, const Node* successor) = 0;
   virtual std::string str() const = 0;
 };
 
@@ -100,7 +100,7 @@ public:
   virtual ~Statement() = default;
   Statement(const ScopeId id, const Locus& locus) : Node(id, locus){};
   virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(CodeGen& v, const Node* successor) = 0;
+  virtual void Accept(IRGenerator& v, const Node* successor) = 0;
   virtual std::string str() const = 0;
 };
 
@@ -113,7 +113,7 @@ public:
   void AddStatement(PtrStatement& s){ statements_.push_back(std::move(s));}
 
 
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const;
 
@@ -132,7 +132,7 @@ public:
   , block_(std::move(block)){}
 
 
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const{ return std::string("ProgBody");};
 
@@ -152,7 +152,7 @@ public:
     ProgInit(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
 
-    virtual void Accept(CodeGen& v, const Node* successor);
+    virtual void Accept(IRGenerator& v, const Node* successor);
     virtual void Accept(ASTVisitor& v);
     virtual std::string str() const{ return std::string("ProgInit");};
 };
@@ -163,7 +163,7 @@ public:
   virtual ~ProgEnd() = default;
     ProgEnd(const ScopeId id, const Locus& locus) : Node(id, locus){}
 
-    virtual void Accept(CodeGen& v, const Node* successor);
+    virtual void Accept(IRGenerator& v, const Node* successor);
     virtual void Accept(ASTVisitor& v);
     virtual std::string str() const{ return std::string("ProgEnd");};
 };
@@ -179,7 +179,7 @@ public:
     {for (const auto& it : list) list_.push_back(std::make_unique<VarDecl>(*it));}
 
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 
   std::vector<PtrVarDecl>& GetVarDeclVector() noexcept{return list_;};
   const std::vector<PtrVarDecl>& GetVarDeclVector() const noexcept{return list_;};
@@ -196,7 +196,7 @@ public:
     , const Locus& locus)
     : Node(id, locus), name_(name), type_(type){}
   virtual void Accept(ASTVisitor& v);
-  virtual void Accept(CodeGen& v, const Node* successor);
+  virtual void Accept(IRGenerator& v, const Node* successor);
 
   std::string str() const noexcept{
     std::string s;
