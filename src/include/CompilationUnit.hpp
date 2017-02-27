@@ -115,6 +115,7 @@ public:
       kAst = 0
     , kTypeOfNode = 1
     , kLnessRnessOfNode = 2
+    , kIR = 3
   };
 // }
 
