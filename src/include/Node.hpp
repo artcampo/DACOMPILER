@@ -11,6 +11,9 @@
 
 
 namespace Compiler{
+
+using NodeValue = uint32_t;
+
 namespace AST{
 
 class Node;

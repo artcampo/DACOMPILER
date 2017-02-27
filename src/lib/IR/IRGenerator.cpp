@@ -83,7 +83,7 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
   p.GetThen().Accept(*this, successor);
 
   //exit from then stmt
-  stream_.AppendJumpIncond();
+  stream_.AppendJumpInconditional();
   AddToBackPatch(*successor, stream_.NextAddress() - 1);
 
 //   std::cout << "-Store backp to: " << successor->str()<<"\n";
@@ -93,30 +93,27 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
 }
 
 void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
-  /*
+
   //
   const IR::Addr reentry_addr = stream_.NextAddress();
   p.GetCond().Accept(*this, successor);
   const IR::Addr current_addr = stream_.NextAddress();
-  const VM::Reg reg_src       = reg_of_Expr_[&p.GetCond()];
+  const IR::Reg reg_src       = reg_of_expr_[&p.GetCond()];
 
-  stream_.Append( JumpIfTrue (reg_src, 0) );
-  stream_.Append( JumpIfFalse(reg_src, 0) );
+  stream_.AppendJumpIfTrue(reg_src);
+  stream_.AppendJumpIfFalse(reg_src);
   AddToBackPatch(p.GetBody(), current_addr + 0);
   AddToBackPatch(*successor,   current_addr + 1);
 
   p.GetBody().Accept(*this, successor);
-  stream_.Append( JumpIfFalse(reg_src, reentry_addr) );
-  */
+  stream_.AppendJumpIfFalse(reg_src, reentry_addr);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(Literal const& n, const Node* successor){
-  /*
-  const uint32_t reg_assigned = reg_allocator_.freeRegister();
-  reg_of_Expr_[&n]      = reg_assigned;
-  stream_.stream.push_back( IRBuilder::Load(reg_assigned, n.Value()) );
-  */
+  const IR::Reg r  = stream_.AppendLoadI( n.Value() );
+  reg_of_expr_[&n] = r;
 }
 
 
@@ -126,11 +123,11 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
   n.Lhs().Accept(*this, successor);
   n.Rhs().Accept(*this, successor);
 
-  const VM::Reg reg_assigned = reg_allocator_.freeRegister();
+  const IR::Reg reg_assigned = reg_allocator_.freeRegister();
   reg_of_Expr_[&n]      = reg_assigned;
-  const VM::Reg reg_src1     = reg_of_Expr_[&n.Lhs()];
-  const VM::Reg reg_src2     = reg_of_Expr_[&n.Rhs()];
-  const VM::Reg op           = n.op;
+  const IR::Reg reg_src1     = reg_of_Expr_[&n.Lhs()];
+  const IR::Reg reg_src2     = reg_of_Expr_[&n.Rhs()];
+  const IR::Reg op           = n.op;
   stream_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2,
                                                 reg_assigned, op));
 //   std::cout << "OP: " << op << "\n";

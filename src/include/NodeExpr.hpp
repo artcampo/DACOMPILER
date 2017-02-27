@@ -30,6 +30,7 @@ public:
 
 private:
   const Type&  type_;
+  //todo: uint32_t->NodeValue
   uint32_t  value_;
 };
 
