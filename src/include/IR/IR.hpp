@@ -11,9 +11,12 @@ using Reg   = size_t;
 
 struct Inst;
 struct JumpCond;
-struct Jump;
+struct JumpIncond;
 
-using PtrInst = std::unique_ptr<Inst>;
+using PtrInst       = std::unique_ptr<Inst>;
+using PtrJumpIncond = std::unique_ptr<JumpIncond>;
+using PtrJumpCond   = std::unique_ptr<JumpCond>;
+
 
 struct Inst{
   Inst(){};
@@ -27,27 +30,32 @@ struct Inst{
 struct Jump: Inst{
   Jump() : target_(0){};
   Jump(const Addr target) : target_(target){};
-  virtual ~Jump() = default;
-  virtual std::string str() = 0;
+  ~Jump() = default;
 
   void PatchJump(const Addr target){ target_ = target;}
+
+  virtual std::string str() const noexcept{
+    return std::string("Jump to ") + std::to_string(target_);
+  };
 private:
   Addr target_;
 };
 
 struct JumpCond : Jump{
-  JumpCond(){};
-  JumpCond(const Addr target) : Jump(target){};
-  virtual ~JumpCond() = default;
+  JumpCond(const Reg cond) : JumpCond(cond, 0){};
+  JumpCond(const Reg cond, const Addr target) : Jump(target), cond_(cond){};
+  ~JumpCond() = default;
 
   virtual std::string str() const noexcept{
     return std::string("JumpCond ");
   };
+private:
+  Reg cond_;
 };
 
 struct JumpIncond: Jump{
   JumpIncond(){};
-  virtual ~JumpIncond() = default;
+  ~JumpIncond() = default;
 
   virtual std::string str() const noexcept{
     return std::string("JumpIncond");

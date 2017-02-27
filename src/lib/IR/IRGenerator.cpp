@@ -24,7 +24,7 @@ void IRGenerator::Visit(ProgEnd const& p, const Node* successor){
 // - next statetement in current block
 // - first node of block following enclosing block
 void IRGenerator::Visit(Block const& n, const Node* successor) {
-  /*
+
 //   std::cout << "B" << n.str()<< " with successor: " << successor->str() << "\n";
   BackPatch(n, stream_.NextAddress());
 
@@ -38,7 +38,7 @@ void IRGenerator::Visit(Block const& n, const Node* successor) {
 
     (*stmt)->Accept(*this, actual_successor);
   }
-  */
+
 }
 
 void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
@@ -48,33 +48,33 @@ void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
 
 void IRGenerator::Visit(DeclStmt const& p, const Node* successor){
 //   std::cout << "D"<< p.str()<<" with successor: " << successor->str() << "\n";
-//   p.GetVarDeclList().Accept(*this, successor);
+  p.GetVarDeclList().Accept(*this, successor);
 }
 
 void IRGenerator::Visit(VarDeclList const& p, const Node* successor){
-//   for(const auto& d : p.GetVarDeclVector()) d->Accept(*this, successor);
+  for(const auto& d : p.GetVarDeclVector()) d->Accept(*this, successor);
 }
 
 void IRGenerator::Visit(VarDecl const& p, const Node* successor){
-//   byte_code_.Append( NewVar(0) );
+//   stream_.Append( NewVar(0) );
 }
 
 void IRGenerator::Visit(IfStmt const& p, const Node* successor){
-  /*
+
 //   std::cout << "If"<< p.str()<< " with successor: " << successor->str() << "\n";
 
   p.GetCond().Accept(*this, successor);
 
-  const IR::Addr current_addr = byte_code_.NextAddress();
-  const VM::Reg reg_src       = reg_of_Expr_[&p.GetCond()];
+  const IR::Addr current_addr = stream_.NextAddress();
+  const IR::Reg  reg_src       = reg_of_expr_[&p.GetCond()];
 
-  byte_code_.Append( JumpIfTrue (reg_src, 0) );
-  byte_code_.Append( JumpIfFalse(reg_src, 0) );
+  stream_.AppendJumpIfTrue (reg_src);
+  stream_.AppendJumpIfFalse(reg_src);
 
   AddToBackPatch(p.GetThen(), current_addr + 0);
 
   if(p.HasElse()) AddToBackPatch(p.GetElse(), current_addr + 1);
-  else            AddToBackPatch(*successor,   current_addr + 1);
+  else            AddToBackPatch(*successor,  current_addr + 1);
 
 
 //   std::cout << "-Store backp to: " << p.GetThen().str()<<"("<<(void*)p.GetThen()<<")"<<"\n";
@@ -83,30 +83,30 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
   p.GetThen().Accept(*this, successor);
 
   //exit from then stmt
-  byte_code_.Append( Jump(0) );
-  AddToBackPatch(*successor, byte_code_.NextAddress() - 1);
+  stream_.AppendJumpIncond();
+  AddToBackPatch(*successor, stream_.NextAddress() - 1);
 
 //   std::cout << "-Store backp to: " << successor->str()<<"\n";
 //   std::cout <<"\n";
 //   PrintBackPatch();
-*/
+
 }
 
 void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
   /*
   //
-  const IR::Addr reentry_addr = byte_code_.NextAddress();
+  const IR::Addr reentry_addr = stream_.NextAddress();
   p.GetCond().Accept(*this, successor);
-  const IR::Addr current_addr = byte_code_.NextAddress();
+  const IR::Addr current_addr = stream_.NextAddress();
   const VM::Reg reg_src       = reg_of_Expr_[&p.GetCond()];
 
-  byte_code_.Append( JumpIfTrue (reg_src, 0) );
-  byte_code_.Append( JumpIfFalse(reg_src, 0) );
+  stream_.Append( JumpIfTrue (reg_src, 0) );
+  stream_.Append( JumpIfFalse(reg_src, 0) );
   AddToBackPatch(p.GetBody(), current_addr + 0);
   AddToBackPatch(*successor,   current_addr + 1);
 
   p.GetBody().Accept(*this, successor);
-  byte_code_.Append( JumpIfFalse(reg_src, reentry_addr) );
+  stream_.Append( JumpIfFalse(reg_src, reentry_addr) );
   */
 }
 
@@ -115,7 +115,7 @@ void IRGenerator::Visit(Literal const& n, const Node* successor){
   /*
   const uint32_t reg_assigned = reg_allocator_.freeRegister();
   reg_of_Expr_[&n]      = reg_assigned;
-  byte_code_.stream.push_back( IRBuilder::Load(reg_assigned, n.Value()) );
+  stream_.stream.push_back( IRBuilder::Load(reg_assigned, n.Value()) );
   */
 }
 
@@ -131,7 +131,7 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
   const VM::Reg reg_src1     = reg_of_Expr_[&n.Lhs()];
   const VM::Reg reg_src2     = reg_of_Expr_[&n.Rhs()];
   const VM::Reg op           = n.op;
-  byte_code_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2,
+  stream_.stream.push_back( IRBuilder::Arith(reg_src1, reg_src2,
                                                 reg_assigned, op));
 //   std::cout << "OP: " << op << "\n";
 */
@@ -148,7 +148,7 @@ void IRGenerator::Print() const noexcept{
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::EndOfProgram(){
-//   byte_code_.stream.push_back( IRBuilder::Stop());
+//   stream_.stream.push_back( IRBuilder::Stop());
   Print();
 }
 
@@ -177,7 +177,7 @@ void IRGenerator::BackPatch(const Node& n, const IR::Addr position){
 
 void IRGenerator::AddToBackPatch(const Node& n, const IR::Addr position){
 //   std::cout << "**Backpatch insert ["<< n->str()<< "] has to patch:"
-//             << IRBuilder::PrintInstruction(byte_code_.GetInst(position))
+//             << IRBuilder::PrintInstruction(stream_.GetInst(position))
 //             << "\n";
   //<<"("<<(void*)n<<")\n";
   back_patch_[&n].push_back(position);
