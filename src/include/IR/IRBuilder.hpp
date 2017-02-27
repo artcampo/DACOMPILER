@@ -29,13 +29,23 @@ protected:
   };
 
   PtrLoadI LoadInmediate(const NodeValue val){
-    Reg assigned_reg = next_free_reg_;
-    next_free_reg_++;
+    Reg assigned_reg = FreeReg();
     return std::make_unique<LoadI>(assigned_reg, val);
   }
 
+  PtrArith Arithmetic(const Reg src1, const Reg src2, const OpType op){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Arith>(assigned_reg, src1, src2, op);
+  }
+
+
 private:
   Reg   next_free_reg_;
+
+  Reg   FreeReg(){
+    next_free_reg_++;
+    return next_free_reg_ - 1;
+  }
 };
 
 }//end namespace IR

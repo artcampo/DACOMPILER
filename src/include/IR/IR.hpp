@@ -5,6 +5,9 @@
 #include "Node.hpp"
 
 namespace Compiler{
+
+std::string str(const OpType op) noexcept;
+
 namespace IR{
 
 using Addr  = size_t;
@@ -15,11 +18,13 @@ struct JumpCond;
 struct JumpIncond;
 struct InstExpr;    //expression with a dest register
 struct LoadI;
+struct Arith;
 
 using PtrInst       = std::unique_ptr<Inst>;
 using PtrJumpIncond = std::unique_ptr<JumpIncond>;
 using PtrJumpCond   = std::unique_ptr<JumpCond>;
 using PtrLoadI      = std::unique_ptr<LoadI>;
+using PtrArith      = std::unique_ptr<Arith>;
 
 
 struct Inst{
@@ -109,6 +114,25 @@ struct LoadI : public InstExpr{
 protected:
   NodeValue val_;
 };
+
+struct Arith : public InstExpr{
+  Arith(const Reg reg_dst, const Reg src1, const Reg src2, const OpType op)
+  : InstExpr(reg_dst), reg_src1_(src1), reg_src2_(src2), op_(op){};
+  virtual ~Arith() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("Arith ") + std::to_string(reg_src1_)
+         + Compiler::str(op_) + std::to_string(reg_src2_)
+         + std::string(" to:")  + std::to_string(reg_dst_);
+  };
+protected:
+  Reg reg_src1_;
+  Reg reg_src2_;
+  OpType op_;
+
+};
+
+
 
 }//end namespace IR
 }//end namespace Compiler

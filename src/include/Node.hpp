@@ -13,6 +13,7 @@
 namespace Compiler{
 
 using NodeValue = uint32_t;
+using OpType    = uint32_t; //TODO: USE THESE!!
 
 namespace AST{
 
@@ -216,6 +217,7 @@ private:
 
 
 }//end namespace AST
+
 }//end namespace Compiler
 
 #include "NodeExpr.hpp"
