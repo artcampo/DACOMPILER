@@ -1,4 +1,4 @@
-#include "ASTVisitorPrettyPrinter.hpp"
+#include "ASTVisitors/ASTVisitorPrettyPrinter.hpp"
 
 namespace Compiler{
 namespace AST{

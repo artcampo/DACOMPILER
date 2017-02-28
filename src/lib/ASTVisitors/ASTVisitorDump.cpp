@@ -1,4 +1,4 @@
-#include "ASTVisitorDump.hpp"
+#include "ASTVisitors/ASTVisitorDump.hpp"
 
 namespace Compiler{
 namespace AST{

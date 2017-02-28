@@ -1,0 +1,16 @@
+Using register-register model.
+SSA registers (phy-nodes not implemented yet!)
+
+Instructions that always have a destination register:
+reg_dst = LoadI(value)
+reg_dst = Load(MemAddr)
+reg_dst = BinaryOp(reg_src1, reg_src2)
+reg_dst = UnaryOp(reg_src1, reg_src2)
+
+Instructions that always have a source register:
+store(reg_src, MemAddr)
+
+Instructions that do not fit in the previous categories
+call(Label)
+
+Where MemAddr = {Label, Offset}
