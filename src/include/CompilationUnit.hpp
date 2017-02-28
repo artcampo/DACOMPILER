@@ -7,6 +7,7 @@
 #include "TypeTable.hpp"
 #include "ErrorLog.hpp"
 #include "LnessRness.hpp"
+#include "LabelManager.hpp"
 #include <map>
 #include <memory>
 
@@ -25,7 +26,8 @@ using namespace Compiler::AST::Ptrs;
 // class ASTVisitor;
 namespace AST{ class ASTVisitorDump;};
 
-class CompilationUnit : public LnessRness, public TypeTable{
+class CompilationUnit : public LnessRness, public TypeTable
+  , public LabelManager{
 public:
 
   CompilationUnit(): ast_(), main_scope_(nullptr), current_scope_(nullptr),
