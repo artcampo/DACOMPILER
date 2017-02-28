@@ -8,7 +8,8 @@ namespace AST{
 // returns:
 // - false if same symbol on same scope was already defined
 // - true otherwise
-bool LexicalScope::RegDecl(const std::string& name, const Type& type){
+bool LexicalScope::RegisterDecl(const std::string& name, const Type& type
+  ,  const Node& n){
   auto it = symbol_table_.find(name);
   Symbols::SymbolId previous_id = -1;
   if(it != symbol_table_.end()){
@@ -23,6 +24,7 @@ bool LexicalScope::RegDecl(const std::string& name, const Type& type){
   symbol_table_[name] = id;
   declaration_table_[id] = std::make_unique<Symbols::Symbol>
                               (name, type, GetScopeId());
+  symbolid_of_node_[&n] = id;
 
   //store for deletion when scope is exited
   symbols_.push_back( InsertedSymbol(name, previous_id));
@@ -42,7 +44,8 @@ const Type& LexicalScope::GetType(const std::string& name){
 }
 
 LexicalScope* LexicalScope::NewNestedScope(const ScopeId id){
-  LexicalScope* n = new LexicalScope(id, this, symbol_table_, declaration_table_);
+  LexicalScope* n = new LexicalScope(id, this, symbol_table_
+            , declaration_table_, symbolid_of_node_);
   nested_scopes_.push_back( std::unique_ptr<LexicalScope>(n) );
   return n;
 }

@@ -2,6 +2,7 @@
 #include "CompilationUnit.hpp"
 #include "TypeInference.hpp"
 #include "CheckLvalRval.hpp"
+#include "ComputeLocalVarOffsets.hpp"
 #include <memory>
 
 namespace Compiler{
@@ -12,9 +13,9 @@ public:
     : unit_(unit)
     , check_lval_rval_(unit_)
     , type_inference_(unit_)
-    , passes_{&check_lval_rval_, &type_inference_}{
-      defined_[CompUnitInfo::kAst] = true;
-    };
+    , compute_local_var_offsets_(unit_)
+    , passes_{&check_lval_rval_, &type_inference_, &compute_local_var_offsets_}
+  { defined_[CompUnitInfo::kAst] = true;};
 
   void Run(){
     for(auto& pass: passes_) Run(*pass);
@@ -24,6 +25,7 @@ private:
   CompilationUnit&  unit_;
   CheckLvalRval check_lval_rval_;
   TypeInference type_inference_;
+  ComputeLocalVarOffsets compute_local_var_offsets_;
   std::vector<Pass*> passes_;
   std::map<CompUnitInfo, bool> defined_;
 
@@ -45,6 +47,7 @@ private:
     if(info == CompUnitInfo::kAst) return std::string("Ast");
     if(info == CompUnitInfo::kTypeOfNode) return std::string("Type of node");
     if(info == CompUnitInfo::kLnessRnessOfNode) return std::string("Lness/Rness of node");
+    if(info == CompUnitInfo::kLocalVarOffsets ) return std::string("Offsets of local vars");
     return std::string("CompUnitInfo string missing");
   }
 

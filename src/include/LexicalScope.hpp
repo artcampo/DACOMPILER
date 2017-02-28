@@ -28,23 +28,28 @@ using ScopeId = size_t;
 //pair of name and symbol that was shadowed (or -1 if none)
 using InsertedSymbol = std::pair<Symbols::SymbolString, Symbols::SymbolId>;
 using InsertedDeclarations = std::pair<Symbols::SymbolId, Symbols::Symbol&>;
+using SymbolIdOfNode = std::map<const Node*, Symbols::SymbolId>;
 
 class LexicalScope {
 public:
   LexicalScope(const ScopeId id, LexicalScope* const parent
     , SymbolTable& symbol_table
-    , DeclarationTable& declaration_table)
+    , DeclarationTable& declaration_table
+    , SymbolIdOfNode& symbolid_of_node)
   : id_(id), parent_(parent), free_symbol_id_(0)
-  , symbol_table_(symbol_table), declaration_table_(declaration_table){}
+  , symbol_table_(symbol_table), declaration_table_(declaration_table)
+  , symbolid_of_node_(symbolid_of_node){}
 
   LexicalScope(const ScopeId id, LexicalScope* const parent
     , Node* const generator
     , SymbolTable& symbol_table
-    , DeclarationTable& declaration_table)
+    , DeclarationTable& declaration_table
+    , SymbolIdOfNode& symbolid_of_node)
   : id_(id), parent_(parent), generator_(generator), free_symbol_id_(0)
-  , symbol_table_(symbol_table), declaration_table_(declaration_table){}
+  , symbol_table_(symbol_table), declaration_table_(declaration_table)
+  , symbolid_of_node_(symbolid_of_node){}
 
-  bool RegDecl(const std::string& name, const Type& type);
+  bool RegisterDecl(const std::string& name, const Type& type,  const Node& n);
   bool IsDecl(const std::string& name);
   const Type& GetType(const std::string& name);
   const ScopeId GetScopeId() const noexcept{return id_;};
@@ -70,14 +75,17 @@ private:
   ScopeId       id_;
   LexicalScope* parent_;
   Node*         generator_;
-
-  SymbolTable&      symbol_table_;
-  DeclarationTable& declaration_table_;
   std::vector<std::unique_ptr<LexicalScope> >        nested_scopes_;
 
   std::vector<InsertedSymbol> symbols_;
   std::vector<InsertedDeclarations> declarations_;
-  Symbols::SymbolId free_symbol_id_;
+  Symbols::SymbolId free_symbol_id_;  //TODO: move to module
+
+
+  //these are refence to function
+  SymbolTable&      symbol_table_;
+  DeclarationTable& declaration_table_;
+  SymbolIdOfNode&   symbolid_of_node_;
 
 };
 

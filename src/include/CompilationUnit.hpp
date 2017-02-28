@@ -11,6 +11,7 @@
 #include "Function.hpp"
 #include <map>
 #include <memory>
+#include <iterator>
 
 namespace Compiler{
 
@@ -25,7 +26,11 @@ using AST::DeclarationTable;
 using namespace Compiler::AST::Ptrs;
 // class Compiler::AST::ASTVisitorDump;
 // class ASTVisitor;
+// namespace AST{ class ASTVisitorDump; class Function;};
 namespace AST{ class ASTVisitorDump;};
+using AST::FuncDecl;
+using AST::PtrFunction;
+using AST::Function;
 
 class CompilationUnit : public LnessRness, public TypeTable
   , public LabelManager{
@@ -38,8 +43,8 @@ public:
   LexicalScope& Scope() noexcept{return curr_func_->Scope();}
   const LexicalScope& Scope() const noexcept{return curr_func_->Scope();}
 
-  void NewFunction(std::string& name){
-    functions_.push_back( std::move( std::make_unique<Function>(name)));
+  void NewFunction(std::string& name, FuncDecl& origin_node){
+    functions_.push_back( std::move( std::make_unique<Function>(name, origin_node)));
     curr_func_ = functions_[ functions_.size() - 1].get();
   }
 
@@ -104,14 +109,24 @@ private:
   ErrorLog          error_log_;
   Ast               ast_;
 
-  std::vector<PtrFunction> functions_;
-  Function*         curr_func_;
+  std::vector<AST::PtrFunction> functions_;
+  AST::Function*         curr_func_;
 
   const ScopeId FreeScopeId() noexcept{ ++free_scope_id_; return free_scope_id_ - 1;}
 
 
 public:
   friend class AST::ASTVisitorDump;
+
+  using iterator = std::vector<PtrFunction>::iterator;
+  using const_iterator = std::vector<PtrFunction>::const_iterator;
+
+  iterator begin() { return functions_.begin(); }
+  iterator end()   { return functions_.end(); }
+  const_iterator begin()  const { return functions_.begin(); }
+  const_iterator end()    const { return functions_.end(); }
+  const_iterator cbegin() const { return functions_.cbegin(); }
+  const_iterator cend()   const { return functions_.cend(); }
 //   friend class ASTVisitor;
 };
 
@@ -120,7 +135,8 @@ public:
       kAst = 0
     , kTypeOfNode = 1
     , kLnessRnessOfNode = 2
-    , kIR = 3
+    , kLocalVarOffsets = 3
+    , kIR
   };
 // }
 
