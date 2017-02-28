@@ -8,6 +8,7 @@
 #include "ErrorLog.hpp"
 #include "LnessRness.hpp"
 #include "LabelManager.hpp"
+#include "Function.hpp"
 #include <map>
 #include <memory>
 
@@ -30,33 +31,32 @@ class CompilationUnit : public LnessRness, public TypeTable
   , public LabelManager{
 public:
 
-  CompilationUnit(): ast_(), main_scope_(nullptr), current_scope_(nullptr),
-    free_scope_id_(0), TypeTable(error_log_){}
+  CompilationUnit(): ast_(), free_scope_id_(0), TypeTable(error_log_)
+    , curr_func_(nullptr){}
 
-  LexicalScope& Scope() noexcept{return *current_scope_;}
-  const LexicalScope& Scope() const noexcept{return *current_scope_;}
+
+  LexicalScope& Scope() noexcept{return curr_func_->Scope();}
+  const LexicalScope& Scope() const noexcept{return curr_func_->Scope();}
+
+  void NewFunction(std::string& name){
+    functions_.push_back( std::move( std::make_unique<Function>(name)));
+    curr_func_ = functions_[ functions_.size() - 1].get();
+  }
 
   ScopeId NewFirstScope(){
-    const ScopeId id = free_scope_id_;
-    main_scope_ = new LexicalScope(id, nullptr, symbol_table_, declaration_table_);
-    scope_by_id_[id] = main_scope_;
-    ++free_scope_id_;
-    current_scope_ = main_scope_;
+    const ScopeId id = FreeScopeId();
+    scope_by_id_[id] = curr_func_->NewFirstScope(id);
     return id;
   }
 
   const ScopeId NewNestedScope(){
-    LexicalScope* new_scope = current_scope_->NewNestedScope(free_scope_id_);
-    scope_by_id_[free_scope_id_] = new_scope;
-    ++free_scope_id_;
-    current_scope_ = new_scope;
+    const ScopeId id = FreeScopeId();
+    LexicalScope* new_scope = curr_func_->NewNestedScope(id);
+    scope_by_id_[id] = new_scope;
     return new_scope->GetScopeId();
   }
 
-  void RestoreScope(){
-    current_scope_->UndoTables();
-    current_scope_ = current_scope_->GetParentScope();
-  }
+  void RestoreScope(){ curr_func_->RestoreScope();}
 
   const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
 
@@ -98,13 +98,16 @@ public:
 private:
   std::map<const Node*, const Type* > type_of_node_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
-  SymbolTable       symbol_table_;
-  DeclarationTable  declaration_table_;
-  LexicalScope*     main_scope_;
-  LexicalScope*     current_scope_;
+
+
   ScopeId           free_scope_id_;
   ErrorLog          error_log_;
   Ast               ast_;
+
+  std::vector<PtrFunction> functions_;
+  Function*         curr_func_;
+
+  const ScopeId FreeScopeId() noexcept{ ++free_scope_id_; return free_scope_id_ - 1;}
 
 
 public:
