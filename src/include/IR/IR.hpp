@@ -2,16 +2,11 @@
 #include <string>
 #include <memory>
 #include <cstddef>
+#include "IR/IRSubtypes.hpp"
 #include "Node.hpp"
 
 namespace Compiler{
-
-std::string str(const OpType op) noexcept;
-
 namespace IR{
-
-using Addr  = size_t;
-using Reg   = size_t;
 
 struct Inst;
 struct JumpCond;
@@ -19,12 +14,14 @@ struct JumpIncond;
 struct InstExpr;    //expression with a dest register
 struct LoadI;
 struct Arith;
+struct Comparison;
 
 using PtrInst       = std::unique_ptr<Inst>;
 using PtrJumpIncond = std::unique_ptr<JumpIncond>;
 using PtrJumpCond   = std::unique_ptr<JumpCond>;
 using PtrLoadI      = std::unique_ptr<LoadI>;
 using PtrArith      = std::unique_ptr<Arith>;
+using PtrComparison = std::unique_ptr<Comparison>;
 
 
 struct Inst{
@@ -33,8 +30,6 @@ struct Inst{
 
   virtual std::string str() const noexcept = 0;
 };
-
-
 
 struct Jump: public  Inst{
   Jump() : target_(0){};
@@ -115,22 +110,71 @@ protected:
   NodeValue val_;
 };
 
-struct Arith : public InstExpr{
-  Arith(const Reg reg_dst, const Reg src1, const Reg src2, const OpType op)
-  : InstExpr(reg_dst), reg_src1_(src1), reg_src2_(src2), op_(op){};
+struct BinaryOp : public InstExpr{
+  BinaryOp(const Reg reg_dst, const Reg src1, const Reg src2)
+  : InstExpr(reg_dst), reg_src1_(src1), reg_src2_(src2){};
+  virtual ~BinaryOp() = default;
+
+  virtual std::string str() const noexcept = 0;
+
+protected:
+  Reg reg_src1_;
+  Reg reg_src2_;
+};
+
+struct UnaryOp : public InstExpr{
+  UnaryOp(const Reg reg_dst, const Reg src1)
+  : InstExpr(reg_dst), reg_src1_(src1){};
+  virtual ~UnaryOp() = default;
+
+  virtual std::string str() const noexcept = 0;
+
+protected:
+  Reg reg_src1_;
+};
+
+struct Arith : public BinaryOp{
+  Arith(const Reg reg_dst, const Reg src1, const Reg src2, const ArithType op)
+  : BinaryOp(reg_dst, src1, src2), op_(op){};
   virtual ~Arith() = default;
 
   virtual std::string str() const noexcept{
     return std::string("r")  + std::to_string(reg_dst_)
          + std::string(" = Arith r") + std::to_string(reg_src1_) + std::string(" ")
-         + Compiler::str(op_) + std::string(" r")+ std::to_string(reg_src2_);
+         + Compiler::IR::str(op_) + std::string(" r")+ std::to_string(reg_src2_);
   };
 protected:
-  Reg reg_src1_;
-  Reg reg_src2_;
-  OpType op_;
-
+  ArithType op_;
 };
+
+struct Comparison : public BinaryOp{
+  Comparison(const Reg reg_dst, const Reg src1, const Reg src2, const CompType op)
+  : BinaryOp(reg_dst, src1, src2), op_(op){};
+  virtual ~Comparison() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("r")  + std::to_string(reg_dst_)
+         + std::string(" = Comp r") + std::to_string(reg_src1_) + std::string(" ")
+         + Compiler::IR::str(op_) + std::string(" r")+ std::to_string(reg_src2_);
+  };
+protected:
+  CompType op_;
+};
+
+struct AddrUnaryOp : public UnaryOp{
+  AddrUnaryOp(const Reg reg_dst, const Reg src1, const Reg src2, const AddrUnaryType op)
+  : UnaryOp(reg_dst, src1), op_(op){};
+  virtual ~AddrUnaryOp() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("r")  + std::to_string(reg_dst_)
+         + std::string(" = AddrUnaryOp ") + Compiler::IR::str(op_)
+         + std::string("r") + std::to_string(reg_src1_);
+  };
+protected:
+  AddrUnaryType op_;
+};
+
 
 
 

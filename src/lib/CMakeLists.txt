@@ -9,6 +9,7 @@ set(files
     ASTVisitorDump.cpp
     ASTVisitorPrettyPrinter.cpp
     CodeGenerator/RegisterAllocator.cpp
+    IR/IR.cpp
     IR/IRStream.cpp
     IR/IRGenerator.cpp
 )

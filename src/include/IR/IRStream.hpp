@@ -18,7 +18,7 @@ struct IRStream : public IRBuilder{
   void AppendJumpInconditional();
 
   Reg AppendLoadI(const NodeValue val);
-  Reg AppendArith(const Reg src1, const Reg src2, const OpType op);
+  Reg AppendArith(const Reg src1, const Reg src2, const ArithType op);
   void Print() const noexcept;
 private:
   std::vector<PtrInst> stream_;

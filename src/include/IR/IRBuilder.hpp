@@ -33,7 +33,7 @@ protected:
     return std::make_unique<LoadI>(assigned_reg, val);
   }
 
-  PtrArith Arithmetic(const Reg src1, const Reg src2, const OpType op){
+  PtrArith Arithmetic(const Reg src1, const Reg src2, const ArithType op){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Arith>(assigned_reg, src1, src2, op);
   }
