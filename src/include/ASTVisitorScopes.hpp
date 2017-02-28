@@ -15,9 +15,13 @@ public:
 
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    p.GetBlock().Accept(*this);
+    p.GetMainFunc().Accept(*this);
     p.GetProgEnd().Accept(*this);
   };
+
+  virtual void Visit(FuncDecl const& p){
+    p.GetBody().Accept(*this);
+  }
 
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};

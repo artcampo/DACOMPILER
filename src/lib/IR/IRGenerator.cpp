@@ -6,17 +6,17 @@ namespace AST{
 
 void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 //   std::cout << "P\n";
-  p.GetProgInit().Accept (*this, &p.GetBlock());
-  p.GetBlock().Accept    (*this, &p.GetProgEnd() );
+  p.GetProgInit().Accept (*this, &p.GetMainFunc());
+  p.GetMainFunc().Accept (*this, &p.GetProgEnd() );
   p.GetProgEnd().Accept  (*this, nullptr );
 }
 
-void IRGenerator::Visit(ProgInit const& p, const Node* successor){
-
-
+void IRGenerator::Visit(FuncDecl const& p, const Node* successor){
+  p.GetBody().Accept(*this, successor);
 }
-void IRGenerator::Visit(ProgEnd const& p, const Node* successor){
-}
+
+void IRGenerator::Visit(ProgInit const& p, const Node* successor){}
+void IRGenerator::Visit(ProgEnd const& p, const Node* successor){}
 
 
 /////////////////////////////////////////////////////////////////////////////

@@ -39,7 +39,6 @@ public:
     return base_scope_;
   }
 
-
   LexicalScope* NewNestedScope(const ScopeId free_scope_id){
     //TODO: store in unique!!
     LexicalScope* new_scope = current_scope_->NewNestedScope(free_scope_id);

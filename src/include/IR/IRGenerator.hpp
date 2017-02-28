@@ -18,6 +18,7 @@ public:
   virtual void Visit(ProgBody const& p, const Node* successor);
   virtual void Visit(ProgInit const& p, const Node* successor);
   virtual void Visit(ProgEnd const& p, const Node* successor);
+  virtual void Visit(FuncDecl const& p, const Node* successor);
   virtual void Visit(Block const& p, const Node* successor);
   virtual void Visit(IfStmt const& p, const Node* successor);
   virtual void Visit(WhileStmt const& p, const Node* successor);

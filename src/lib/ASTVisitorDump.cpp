@@ -5,14 +5,18 @@ namespace AST{
 
 void ASTVisitorDump::Visit(ProgBody const& p){
   p.GetProgInit().Accept(*this);
-  p.GetBlock().Accept(*this);
+  p.GetMainFunc().Accept(*this);
   p.GetProgEnd().Accept(*this);
+}
+
+void ASTVisitorDump::Visit(FuncDecl const& p){
+  p.GetBody().Accept(*this);
 }
 
 void ASTVisitorDump::Visit(ProgInit const& p){
 
-
 }
+
 void ASTVisitorDump::Visit(ProgEnd const& p){
 
 }

@@ -27,6 +27,7 @@ class ProgBody;
 class ProgInit;
 class ProgEnd;
 class Block;
+class FuncDecl;
 
 //subtypes of Statement
 class Statement;
@@ -54,6 +55,9 @@ using PtrProgBody   = std::unique_ptr<ProgBody>;
 using PtrProgInit   = std::unique_ptr<ProgInit>;
 using PtrProgEnd    = std::unique_ptr<ProgEnd>;
 using PtrBlock      = std::unique_ptr<Block>;
+using PtrFuncDecl   = std::unique_ptr<FuncDecl>;
+
+
 using PtrStatement  = std::unique_ptr<Statement>;
 using PtrIfStmt     = std::unique_ptr<IfStmt>;
 using PtrWhileStmt  = std::unique_ptr<WhileStmt>;
@@ -125,15 +129,35 @@ public:
 };
 
 /////////////////////////////////////////////////////////
+class FuncDecl : public Node {
+public:
+  virtual ~FuncDecl() = default;
+  FuncDecl(const ScopeId id, const Locus& locus
+    , std::string& name
+    , PtrBlock& block)
+  : Node(id, locus), block_(std::move(block)), name_(name){}
+
+  virtual void Accept(IRGenerator& v, const Node* successor);
+  virtual void Accept(ASTVisitor& v);
+  virtual std::string str() const noexcept { return std::string("FuncDecl: ") + name_;}
+
+  Block&    GetBody() const noexcept{ return *block_;}
+private:
+//   PtrArg
+  PtrBlock      block_;
+  std::string   name_;
+};
+
+/////////////////////////////////////////////////////////
 class ProgBody : public Node {
 public:
   virtual ~ProgBody() = default;
   ProgBody(const ScopeId id, const Locus& locus
     , PtrProgInit& pinit
     , PtrProgEnd& pend
-    , PtrBlock& block)
+    , PtrFuncDecl& main)
   : Node(id, locus), pinit_(std::move(pinit)), pend_(std::move(pend))
-  , block_(std::move(block)){}
+  , main_(std::move(main)){}
 
 
   virtual void Accept(IRGenerator& v, const Node* successor);
@@ -142,11 +166,11 @@ public:
 
   ProgInit& GetProgInit() const noexcept{ return *pinit_;}
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
-  Block&    GetBlock()    const noexcept{ return *block_;}
+  FuncDecl& GetMainFunc()    const noexcept{ return *main_;}
 private:
   PtrProgInit  pinit_;
   PtrProgEnd   pend_;
-  PtrBlock     block_;
+  PtrFuncDecl  main_;
 };
 
 /////////////////////////////////////////////////////////
