@@ -3,6 +3,8 @@
 
 namespace Compiler{
 
+const static std::string kErr16("[error:16] Var used before declaration");
+
 const static std::string kErr20("[err:20] while's condition is not a bool");
 const static std::string kErr21("[err:21] if's condition is not a bool");
 const static std::string kErr22("[err:22] left of assignment is not an Lval");

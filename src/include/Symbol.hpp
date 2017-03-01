@@ -17,7 +17,7 @@ using SymbolId     = int;
 class Symbol {
 public:
 //   Symbol(){}
-  Symbol(const SymbolString& name, const Type& type, const ScopeId scope_id)
+  Symbol(const SymbolString name, const Type& type, const ScopeId scope_id)
     :name_(name), type_(type), scope_id_(scope_id){}
 
   const bool operator< ( const Symbol &s ) const{
@@ -36,6 +36,11 @@ public:
 //   Type& GetType() noexcept{return type_;}
   ScopeId GetScopeId() const noexcept{return scope_id_;}
   size_t Size() const noexcept{ return type_.Size();}
+
+  std::string str() const noexcept{
+    return std::string("Symbol: [") + name_ + std::string("]");
+
+  }
 private:
   SymbolString  name_;
   const Type&   type_;

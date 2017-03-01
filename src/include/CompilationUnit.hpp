@@ -31,44 +31,63 @@ namespace AST{ class ASTVisitorDump;};
 using AST::FuncDecl;
 using AST::PtrFunction;
 using AST::Function;
+using AST::PtrLexicalScope;
+using AST::SymbolIdOfNode;
 
 class CompilationUnit : public LnessRness, public TypeTable
   , public LabelManager{
 public:
 
-  CompilationUnit(): ast_(), free_scope_id_(0), TypeTable(error_log_)
-    , curr_func_(nullptr){}
+  CompilationUnit(): ast_(), free_scope_id_(0), free_symbol_id_(0), TypeTable(error_log_)
+    , curr_func_(nullptr)
+    , module_scope_(std::move(std::make_unique<LexicalScope>
+        (FreeScopeId(), nullptr, symbol_table_, module_declaration_table_
+        , symbolid_of_node_)))
+    , current_scope_(module_scope_.get())
+    {}
 
+  LexicalScope& Scope() noexcept{return *current_scope_;}
+  const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
-  LexicalScope& Scope() noexcept{return curr_func_->Scope();}
-  const LexicalScope& Scope() const noexcept{return curr_func_->Scope();}
-
-  void NewFunction(std::string name, FuncDecl& origin_node){
+  const ScopeId NewFunction(std::string name, FuncDecl& origin_node){
     functions_.push_back( std::move( std::make_unique<Function>(name, &origin_node)));
     curr_func_ = functions_[ functions_.size() - 1].get();
-//     function_by_name_[name] = *curr_func_;
+    function_by_name_[name] = curr_func_;
+    return NewNestedScope();
   }
 
-  void NewFunction(std::string& name){
+  const ScopeId NewFunction(std::string& name){
     functions_.push_back( std::move( std::make_unique<Function>(name)));
     curr_func_ = functions_[ functions_.size() - 1].get();
-//     function_by_name_[name] = curr_func_;
+    function_by_name_[name] = curr_func_;
+    return NewNestedScope();
+  }
+
+  void ExitFunctionDefinition(){
+    curr_func_ = nullptr;
+    RestoreScope();
   }
 
   ScopeId NewFirstScope(){
-    const ScopeId id = FreeScopeId();
-    scope_by_id_[id] = curr_func_->NewFirstScope(id);
-    return id;
+    return module_scope_->GetScopeId();
   }
 
   const ScopeId NewNestedScope(){
     const ScopeId id = FreeScopeId();
-    LexicalScope* new_scope = curr_func_->NewNestedScope(id);
+    LexicalScope* new_scope;
+    new_scope = current_scope_->NewNestedScope(id);
     scope_by_id_[id] = new_scope;
+    current_scope_   = new_scope;
+
     return new_scope->GetScopeId();
   }
 
-  void RestoreScope(){ curr_func_->RestoreScope();}
+  void RestoreScope(){
+//     std::cout << "*** restoring: " << current_scope_->str()<< "\n";
+    current_scope_->UndoTables();
+    current_scope_ = current_scope_->GetParentScope();
+//     std::cout << "*** to: " << current_scope_->str()<< "\n";
+  }
 
   const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
 
@@ -110,18 +129,37 @@ public:
   Function& GetFunc(std::string name){ return *function_by_name_.at(name);}
   const Function& GetFunc(std::string name) const { return *function_by_name_.at(name);}
 
+  bool RegisterDecl(const std::string name, const Type& type,  const Node& n){
+    bool registered = Scope().RegisterDecl(name, type, n, free_symbol_id_);
+    if(registered) ++free_symbol_id_;
+    return registered;
+  }
+
 private:
-  std::map<const Node*, const Type* > type_of_node_;
-  std::map<ScopeId,LexicalScope*> scope_by_id_;
-  std::map<std::string, Function*> function_by_name_;
+  ScopeId                 free_scope_id_;
+  AST::Symbols::SymbolId  free_symbol_id_;
+
+  SymbolTable       symbol_table_;
+  DeclarationTable  module_declaration_table_;
 
 
-  ScopeId           free_scope_id_;
+
   ErrorLog          error_log_;
   Ast               ast_;
 
   std::vector<AST::PtrFunction> functions_;
   AST::Function*         curr_func_;
+  PtrLexicalScope   module_scope_;
+  LexicalScope*     current_scope_;
+
+
+  //Referencing structures
+  std::map<ScopeId,LexicalScope*>   scope_by_id_;
+  std::map<std::string, Function*>  function_by_name_;
+  SymbolIdOfNode                    symbolid_of_node_;
+
+  //Attributes computed by visitors
+  std::map<const Node*, const Type*>  type_of_node_;
 
   const ScopeId FreeScopeId() noexcept{ ++free_scope_id_; return free_scope_id_ - 1;}
 

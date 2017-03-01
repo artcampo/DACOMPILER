@@ -1,4 +1,5 @@
 #include "LexicalScope.hpp"
+ #include <iostream>
 
 namespace Compiler{
 namespace AST{
@@ -8,8 +9,8 @@ namespace AST{
 // returns:
 // - false if same symbol on same scope was already defined
 // - true otherwise
-bool LexicalScope::RegisterDecl(const std::string& name, const Type& type
-  ,  const Node& n){
+bool LexicalScope::RegisterDecl(const std::string name, const Type& type
+  ,  const Node& n, AST::Symbols::SymbolId symbol_id){
   auto it = symbol_table_.find(name);
   Symbols::SymbolId previous_id = -1;
   if(it != symbol_table_.end()){
@@ -18,17 +19,24 @@ bool LexicalScope::RegisterDecl(const std::string& name, const Type& type
       return false;
   }
 
-  Symbols::SymbolId id = free_symbol_id_;
-  ++free_symbol_id_;
-
-  symbol_table_[name] = id;
-  declaration_table_[id] = std::make_unique<Symbols::Symbol>
+  symbol_table_[name] = symbol_id;
+  declaration_table_[symbol_id] = std::make_unique<Symbols::Symbol>
                               (name, type, GetScopeId());
-  symbolid_of_node_[&n] = id;
+  symbolid_of_node_[&n] = symbol_id;
 
   //store for deletion when scope is exited
   symbols_.push_back( InsertedSymbol(name, previous_id));
-  declarations_.push_back( InsertedDeclarations(id, *declaration_table_[id]));
+  declarations_.push_back( InsertedDeclarations(symbol_id, *declaration_table_[symbol_id]));
+
+  /*
+  std::cout << "symbol table:";
+  for(const auto& it : symbol_table_)
+    std::cout << it.first<< " : "<<it.second << "\n";
+  std::cout << "decl table:";
+  for(const auto& it : declaration_table_)
+    std::cout << it.first<< " : "<<it.second->str() << "\n";
+  std::cout<< "\n";
+  */
   return true;
 }
 
@@ -44,6 +52,7 @@ const Type& LexicalScope::GetType(const std::string& name){
 }
 
 LexicalScope* LexicalScope::NewNestedScope(const ScopeId id){
+
   LexicalScope* n = new LexicalScope(id, this, symbol_table_
             , declaration_table_, symbolid_of_node_);
   nested_scopes_.push_back( std::unique_ptr<LexicalScope>(n) );
@@ -51,7 +60,18 @@ LexicalScope* LexicalScope::NewNestedScope(const ScopeId id){
 }
 
 void LexicalScope::UndoTables(){
+  /*
+  std::cout << "symbol table:";
+  for(const auto& it : symbol_table_)
+    std::cout << it.first<< " : "<<it.second << "\n";
+  std::cout << "decl table:";
+  for(const auto& it : declaration_table_)
+    std::cout << it.first<< " : "<<it.second->str() << "\n";
+  std::cout<< "\n";
+*/
+//   std::cout << "Undo: " << symbols_.size() << std::endl;
   for(const auto& it : symbols_){
+//     std::cout << it.first;
     if(it.second == -1){
       //there was no old symbol name, just delete current one
       symbol_table_.erase( symbol_table_.find(it.first));
@@ -60,9 +80,17 @@ void LexicalScope::UndoTables(){
       symbol_table_[it.first] = it.second;
     }
   }
-  for(const auto& it : declarations_)
-    declaration_table_.erase( declaration_table_.find(it.first));
 
+//   std::cout << "Undo: " << declarations_.size() << std::endl;
+  for(const auto& it : declarations_){
+//     std::cout << it.second.str();
+    auto itdec = declaration_table_.find(it.first);
+    if(itdec == declaration_table_.end()){
+      std::cout << "not found";
+    }
+    declaration_table_.erase(itdec);
+  }
+  std::cout << "Undo end" << std::endl;
 }
 
 }//end namespace AST
