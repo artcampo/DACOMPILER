@@ -25,6 +25,8 @@ public:
     else                  return name_ < s.name_;
   }
 
+  Symbol& operator= ( const Symbol &s ) = delete;
+  Symbol( const Symbol &s ) = delete;
   /*
   Symbol& operator= ( const Symbol &s ){
     name_     = s.name_;

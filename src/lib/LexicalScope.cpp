@@ -81,15 +81,16 @@ void LexicalScope::UndoTables(){
     }
   }
 
-//   std::cout << "Undo: " << declarations_.size() << std::endl;
-  for(const auto& it : declarations_){
-//     std::cout << it.second.str();
-    auto itdec = declaration_table_.find(it.first);
-    if(itdec == declaration_table_.end()){
-      std::cout << "not found";
-    }
-    declaration_table_.erase(itdec);
-  }
+
+//  Declarations are always kept
+//   for(const auto& it : declarations_){
+//
+//     auto itdec = declaration_table_.find(it.first);
+//     if(itdec == declaration_table_.end()){
+//       std::cout << "not found";
+//     }
+//     declaration_table_.erase(itdec);
+//   }
 
 }
 

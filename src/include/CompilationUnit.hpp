@@ -136,10 +136,10 @@ public:
       ++free_symbol_id_;
       if(curr_func_ != nullptr){
         curr_func_->StoreDecl( *module_declaration_table_[symbol_id], n);
-        std::cout << "Reg: n:"<< &n << " s: " <<module_declaration_table_[symbol_id].get()
-        << " symbol: " << module_declaration_table_[symbol_id]->str()
-        << " " << n.str()
-        << std::endl;
+//         std::cout << "Reg: n:"<< &n << " s: " <<module_declaration_table_[symbol_id].get()
+//         << " symbol: " << module_declaration_table_[symbol_id]->str()
+//         << " " << n.str()
+//         << std::endl;
       }
     }
     return registered;
@@ -151,8 +151,6 @@ private:
 
   SymbolTable       symbol_table_;
   DeclarationTable  module_declaration_table_;
-
-
 
   ErrorLog          error_log_;
   Ast               ast_;

@@ -199,10 +199,15 @@ class VarDeclList : public Node{
 public:
 
   virtual ~VarDeclList() = default;
+  /*
   VarDeclList(std::vector<PtrVarDecl>& list, const ScopeId id
             , const Locus& locus)
     : Node(id, locus)
-    {for (const auto& it : list) list_.push_back(std::make_unique<VarDecl>(*it));}
+    {for (auto& it : list) list_.push_back(std::move(it));}
+    */
+  VarDeclList(std::vector<PtrVarDecl>& list, const ScopeId id
+            , const Locus& locus)
+    : Node(id, locus), list_(std::move(list)){}
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);
