@@ -53,6 +53,7 @@ public:
   , symbol_table_(symbol_table), declaration_table_(declaration_table)
   , symbolid_of_node_(symbolid_of_node){}
 
+  bool IsDeclValid(const std::string name, const Type& type);
   bool RegisterDecl(const std::string name, const Type& type, const Node& n
       , AST::Symbols::SymbolId symbol_id);
   bool IsDecl(const std::string& name);

@@ -41,7 +41,7 @@ public:
 
 
   Symbols::Symbol& GetSymbolDecl(const Node& n) const{
-//     std::cout << "Asking n: " << &n << " " << n.str() << std::endl;
+    std::cout << "Asking n: " << &n << " " << n.str() << std::endl;
     return *symbol_decl_of_node_.at(&n);
   }
 

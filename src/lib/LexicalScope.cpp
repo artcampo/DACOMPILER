@@ -40,6 +40,17 @@ bool LexicalScope::RegisterDecl(const std::string name, const Type& type
   return true;
 }
 
+bool LexicalScope::IsDeclValid(const std::string name, const Type& type){
+  auto it = symbol_table_.find(name);
+  Symbols::SymbolId previous_id = -1;
+  if(it != symbol_table_.end()){
+    previous_id = it->second;
+    if(declaration_table_[previous_id]->GetScopeId() == GetScopeId())
+      return false;
+  }
+  return true;
+}
+
 bool LexicalScope::IsDecl(const std::string& name){
   auto it = symbol_table_.find(name);
   if(it == symbol_table_.end()) return false;

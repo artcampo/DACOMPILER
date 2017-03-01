@@ -129,6 +129,9 @@ public:
   Function& GetFunc(std::string name){ return *function_by_name_.at(name);}
   const Function& GetFunc(std::string name) const { return *function_by_name_.at(name);}
 
+  bool IsDeclValid(const std::string name, const Type& type){
+    return Scope().IsDeclValid(name, type);
+  }
   bool RegisterDecl(const std::string name, const Type& type,  const Node& n){
     AST::Symbols::SymbolId symbol_id = free_symbol_id_;
     bool registered = Scope().RegisterDecl(name, type, n, free_symbol_id_);
@@ -136,10 +139,10 @@ public:
       ++free_symbol_id_;
       if(curr_func_ != nullptr){
         curr_func_->StoreDecl( *module_declaration_table_[symbol_id], n);
-//         std::cout << "Reg: n:"<< &n << " s: " <<module_declaration_table_[symbol_id].get()
-//         << " symbol: " << module_declaration_table_[symbol_id]->str()
-//         << " " << n.str()
-//         << std::endl;
+        std::cout << "Reg: n:"<< &n << " s: " <<module_declaration_table_[symbol_id].get()
+        << " symbol: " << module_declaration_table_[symbol_id]->str()
+        << " " << n.str()
+        << std::endl;
       }
     }
     return registered;
