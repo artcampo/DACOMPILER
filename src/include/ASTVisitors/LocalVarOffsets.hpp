@@ -28,7 +28,7 @@ public:
 
   virtual void Visit(VarDecl const& p){
     std::cout << p.str() << " to offset: " << offset_;
-    offset_ += func_.GetSymbolDecl(p).GetSize();
+    offset_ += func_.GetSymbolDecl(p).Size();
 //     offset_
 
   };

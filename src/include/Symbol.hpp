@@ -35,7 +35,7 @@ public:
   const Type& GetType() const noexcept{return type_;}
 //   Type& GetType() noexcept{return type_;}
   ScopeId GetScopeId() const noexcept{return scope_id_;}
-
+  size_t Size() const noexcept{ return type_.Size();}
 private:
   SymbolString  name_;
   const Type&   type_;

@@ -57,7 +57,6 @@ using PtrProgEnd    = std::unique_ptr<ProgEnd>;
 using PtrBlock      = std::unique_ptr<Block>;
 using PtrFuncDecl   = std::unique_ptr<FuncDecl>;
 
-
 using PtrStatement  = std::unique_ptr<Statement>;
 using PtrIfStmt     = std::unique_ptr<IfStmt>;
 using PtrWhileStmt  = std::unique_ptr<WhileStmt>;
@@ -132,9 +131,8 @@ public:
 class FuncDecl : public Node {
 public:
   virtual ~FuncDecl() = default;
-  FuncDecl(const ScopeId id, const Locus& locus
-    , std::string& name
-    , PtrBlock& block)
+  FuncDecl(std::string name, PtrBlock& block,const ScopeId id
+    , const Locus& locus)
   : Node(id, locus), block_(std::move(block)), name_(name){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);

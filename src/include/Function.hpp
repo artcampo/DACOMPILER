@@ -34,11 +34,13 @@ using OffsetTable = std::map<Symbols::SymbolId, IR::Offset>;
 class Function{
 public:
 
-  Function(std::string& name, FuncDecl& origin_node): base_scope_(nullptr)
+  Function(std::string& name, FuncDecl* origin_node): base_scope_(nullptr)
     , current_scope_(nullptr), name_(name), origin_node_(origin_node){}
 
-  FuncDecl& GetFuncDeclNode() { return origin_node_; }
-  const FuncDecl& GetFuncDeclNode() const { return origin_node_; }
+  Function(std::string& name): Function(name, nullptr){}
+
+  FuncDecl& GetFuncDeclNode() { return *origin_node_; }
+  const FuncDecl& GetFuncDeclNode() const { return *origin_node_; }
 
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
@@ -65,21 +67,20 @@ public:
   Symbols::Symbol& GetSymbolDecl(const Node& n){
 
   }
+  void SetOriginNode(FuncDecl& n){
+    origin_node_ = &n;
+  }
 
 private:
-
+  std::string&      name_;
+  FuncDecl*         origin_node_;
+  LexicalScope*     base_scope_;
+  LexicalScope*     current_scope_;
 
   SymbolTable       symbol_table_;
   DeclarationTable  declaration_table_;
-  LexicalScope*     base_scope_;
-  LexicalScope*     current_scope_;
-  FuncDecl&         origin_node_;
   OffsetTable       offset_table_;
   SymbolIdOfNode    symbolid_of_node_;
-
-  std::string& name_;
-
-
 };
 
 

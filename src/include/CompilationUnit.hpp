@@ -43,9 +43,16 @@ public:
   LexicalScope& Scope() noexcept{return curr_func_->Scope();}
   const LexicalScope& Scope() const noexcept{return curr_func_->Scope();}
 
-  void NewFunction(std::string& name, FuncDecl& origin_node){
-    functions_.push_back( std::move( std::make_unique<Function>(name, origin_node)));
+  void NewFunction(std::string name, FuncDecl& origin_node){
+    functions_.push_back( std::move( std::make_unique<Function>(name, &origin_node)));
     curr_func_ = functions_[ functions_.size() - 1].get();
+//     function_by_name_[name] = *curr_func_;
+  }
+
+  void NewFunction(std::string& name){
+    functions_.push_back( std::move( std::make_unique<Function>(name)));
+    curr_func_ = functions_[ functions_.size() - 1].get();
+//     function_by_name_[name] = curr_func_;
   }
 
   ScopeId NewFirstScope(){
@@ -100,9 +107,13 @@ public:
     std::cout << message << "\n";
   }
 
+  Function& GetFunc(std::string name){ return *function_by_name_.at(name);}
+  const Function& GetFunc(std::string name) const { return *function_by_name_.at(name);}
+
 private:
   std::map<const Node*, const Type* > type_of_node_;
   std::map<ScopeId,LexicalScope*> scope_by_id_;
+  std::map<std::string, Function*> function_by_name_;
 
 
   ScopeId           free_scope_id_;

@@ -10,4 +10,12 @@ const static std::string kErr23("[err:23] referencing not an lvalue");
 const static std::string kErr24("[err:24] dereferencing not an lvalue");
 const static std::string kErr25("[err:25] dereferencing not a pointer");
 
+const static std::string kErr26("[err:26] function declaration name missing");
+const static std::string kErr27("[err:27] function declaration not followed by '('");
+const static std::string kErr28("[err:28] function declaration's arguments not closed with ')'");
+const static std::string kErr29("[err:29] function declaration's body not started with '{'");
+const static std::string kErr30("[err:30] function declaration's body not closed with '}'");
+const static std::string kErr31("[err:31] function body empty");
+
+
 }//end namespace Compiler
