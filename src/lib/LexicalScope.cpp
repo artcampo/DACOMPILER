@@ -90,7 +90,7 @@ void LexicalScope::UndoTables(){
     }
     declaration_table_.erase(itdec);
   }
-  std::cout << "Undo end" << std::endl;
+
 }
 
 }//end namespace AST

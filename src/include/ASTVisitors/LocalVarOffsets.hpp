@@ -19,6 +19,7 @@ public:
 
 
   virtual void Visit(FuncDecl const& p){
+    std::cout << "Local offset\n";
     p.GetBody().Accept(*this);
   }
 
@@ -27,25 +28,43 @@ public:
   };
 
   virtual void Visit(VarDecl const& p){
-    std::cout << p.str() << " to offset: " << offset_;
+
+    std::cout << p.str() << " to offset: " << offset_ << std::endl;
+    Symbols::Symbol& s = func_.GetSymbolDecl(p);
+    std::cout << s.str() << std::endl;
     offset_ += func_.GetSymbolDecl(p).Size();
 //     offset_
-
-  };
-
-  virtual void Visit(IfStmt const& p){
-//     std::cout << unit_.GetScope(p.GetThen()->GetScopeId())->str() <<"\n";
-    p.GetThen().Accept(*this);
-
-    if(p.HasElse()){
-      p.GetElse().Accept(*this);
-//       std::cout << unit_.GetScope(p.GetElse()->GetScopeId())->str() <<"\n";
-    }
   };
 
   virtual void Visit(WhileStmt const& p){
     p.GetBody().Accept(*this);
   }
+  virtual void Visit(DeclStmt const& p){
+    p.GetVarDeclList().Accept(*this);
+  }
+
+  virtual void Visit(VarDeclList const& p){
+    for(auto& it : p) it->Accept(*this);
+  }
+
+  virtual void Visit(IfStmt const& p){
+//     std::cout << unit_.GetScope(p.GetThen()->GetScopeId())->str() <<"\n";
+
+    IR::Addr start_offset = offset_;
+    p.GetThen().Accept(*this);
+
+    if(p.HasElse()){
+      IR::Addr then_offset = offset_;
+      offset_              = start_offset;
+      p.GetElse().Accept(*this);
+      IR::Addr else_offset = offset_;
+      offset_ = std::max<IR::Addr>(then_offset, else_offset);
+//       std::cout << unit_.GetScope(p.GetElse()->GetScopeId())->str() <<"\n";
+    }
+  };
+
+
+
 
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
@@ -53,12 +72,8 @@ public:
 
   virtual void Visit(BinaryOp const& p){};
   virtual void Visit(AssignStmt const& p){};
-
   virtual void Visit(Literal const& p){};
   virtual void Visit(Var const& p)    {};
-  virtual void Visit(DeclStmt const& p){};
-  virtual void Visit(VarDeclList const& p){};
-
   virtual void Visit(RefOp const& p){};
   virtual void Visit(DerefOp const& p){};
 

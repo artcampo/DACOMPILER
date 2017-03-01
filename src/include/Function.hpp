@@ -40,9 +40,15 @@ public:
   const FuncDecl& GetFuncDeclNode() const { return *origin_node_; }
 
 
-  Symbols::Symbol& GetSymbolDecl(const Node& n){
-
+  Symbols::Symbol& GetSymbolDecl(const Node& n) const{
+    std::cout << "Asking n: " << &n << " " << n.str() << std::endl;
+    return *symbol_decl_of_node_.at(&n);
   }
+
+  void StoreDecl(Symbols::Symbol& s, const Node& n){
+    symbol_decl_of_node_[&n] = &s;
+  }
+
   void SetOriginNode(FuncDecl& n){
     origin_node_ = &n;
   }
@@ -52,6 +58,7 @@ private:
   std::string&      name_;
   FuncDecl*         origin_node_;
   OffsetTable       offset_table_;
+  std::map<const Node*, Symbols::Symbol*> symbol_decl_of_node_;
 
 };
 

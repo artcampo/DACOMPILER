@@ -75,6 +75,9 @@ public:
   DeclStmt(PtrVarDeclList& decl_list, const ScopeId id, const Locus& locus)
     : Statement(id, locus), decl_list_(std::move(decl_list)) {}
 
+
+//   VarDeclList& GetVarDeclList() noexcept{return *decl_list_;}
+//   const VarDeclList& GetVarDeclList() const noexcept{return *decl_list_;}
   VarDeclList& GetVarDeclList() const noexcept{return *decl_list_;}
 
   virtual std::string str() const;

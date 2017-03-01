@@ -210,6 +210,15 @@ public:
   std::vector<PtrVarDecl>& GetVarDeclVector() noexcept{return list_;};
   const std::vector<PtrVarDecl>& GetVarDeclVector() const noexcept{return list_;};
   virtual std::string str() const;
+
+  using iterator       = std::vector<PtrVarDecl>::iterator;
+  using const_iterator = std::vector<PtrVarDecl>::const_iterator;
+  iterator begin() { return list_.begin(); }
+  iterator end()   { return list_.end(); }
+  const_iterator begin()  const { return list_.begin(); }
+  const_iterator end()    const { return list_.end(); }
+  const_iterator cbegin() const { return list_.cbegin(); }
+  const_iterator cend()   const { return list_.cend(); }
 private:
   std::vector<PtrVarDecl> list_;
 };
