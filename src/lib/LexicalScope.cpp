@@ -21,7 +21,7 @@ bool LexicalScope::RegisterDecl(const std::string name, const Type& type
 
   symbol_table_[name] = symbol_id;
   declaration_table_[symbol_id] = std::make_unique<Symbols::Symbol>
-                              (name, type, GetScopeId());
+                              (name, type, GetScopeId(), symbol_id);
   symbolid_of_node_[&n] = symbol_id;
 
   //store for deletion when scope is exited
@@ -55,6 +55,11 @@ bool LexicalScope::IsDecl(const std::string& name){
   auto it = symbol_table_.find(name);
   if(it == symbol_table_.end()) return false;
   return true;
+}
+
+const Symbols::SymbolId LexicalScope::DeclId(const std::string& name) const{
+  auto it = symbol_table_.find(name);
+  return it->second;
 }
 
 const Type& LexicalScope::GetType(const std::string& name){

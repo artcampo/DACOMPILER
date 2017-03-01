@@ -3,6 +3,8 @@
 #include <memory>
 #include <cstddef>
 #include "IR/IRSubtypes.hpp"
+#include "IR/Label.hpp"
+#include "IR/Offset.hpp"
 #include "Node.hpp"
 
 namespace Compiler{
@@ -13,6 +15,8 @@ struct JumpCond;
 struct JumpIncond;
 struct InstExpr;    //expression with a dest register
 struct LoadI;
+struct Load;
+struct Store;
 struct Arith;
 struct Comparison;
 
@@ -20,6 +24,8 @@ using PtrInst       = std::unique_ptr<Inst>;
 using PtrJumpIncond = std::unique_ptr<JumpIncond>;
 using PtrJumpCond   = std::unique_ptr<JumpCond>;
 using PtrLoadI      = std::unique_ptr<LoadI>;
+using PtrLoad       = std::unique_ptr<Load>;
+using PtrStore      = std::unique_ptr<Store>;
 using PtrArith      = std::unique_ptr<Arith>;
 using PtrComparison = std::unique_ptr<Comparison>;
 
@@ -29,6 +35,22 @@ struct Inst{
   virtual ~Inst() = default;
 
   virtual std::string str() const noexcept = 0;
+};
+
+
+struct Store : public Inst{
+  Store(const Reg src, const Label& l, const Offset o)
+    : src_(src), label_( std::move(l.Clone())), offset_(o){};
+  virtual ~Store() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("store r")  + std::to_string(src_)
+         + std::string(" to ") + label_->str() + offset_.str();
+  };
+protected:
+  Reg src_;
+  PtrLabel label_;
+  Offset offset_;
 };
 
 struct Jump: public  Inst{
@@ -108,6 +130,20 @@ struct LoadI : public InstExpr{
   };
 protected:
   NodeValue val_;
+};
+
+struct Load : public InstExpr{
+  Load(const Reg reg_dst, const Label& l, const Offset o)
+    : InstExpr(reg_dst), label_( std::move(l.Clone())), offset_(o){};
+  virtual ~Load() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("r")  + std::to_string(reg_dst_)
+         + std::string(" = Load of ") + label_->str() + offset_.str();
+  };
+protected:
+  PtrLabel label_;
+  Offset offset_;
 };
 
 struct BinaryOp : public InstExpr{

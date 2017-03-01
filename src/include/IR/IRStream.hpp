@@ -17,7 +17,11 @@ struct IRStream : public IRBuilder{
   void AppendJumpIfFalse(const Reg cond, const Addr target);
   void AppendJumpInconditional();
 
+
+
   Reg AppendLoadI(const NodeValue val);
+  Reg AppendLoad(const Label& l, const Offset o);
+  void AppendStore(const Reg src, const Label& l, const Offset o);
   Reg AppendArith(const Reg src1, const Reg src2, const ArithType op);
   void Print() const noexcept;
 private:

@@ -9,7 +9,7 @@ namespace AST{
 class ASTVisitorLvalRval : public ASTVisitor{
 public:
 
-  ASTVisitorLvalRval(CompilationUnit& unit): unit_(unit){};
+  ASTVisitorLvalRval(CompilationUnit& unit): unit_(unit), is_read_inht_(true){};
 
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
@@ -43,8 +43,8 @@ public:
   }
 
   virtual void Visit(AssignStmt const& p){
-    p.Lhs().Accept(*this);
-    p.Rhs().Accept(*this);
+    is_read_inht_ = false; p.Lhs().Accept(*this);
+    is_read_inht_ = true;  p.Rhs().Accept(*this);
 
     if(not unit_.IsLValue(p.Lhs()))
       unit_.Error(kErr22, p.Lhs().GetLocus());
@@ -63,7 +63,12 @@ public:
   }
 
   virtual void Visit(Literal const& p){unit_.SetNodeAsRval(p);}
-  virtual void Visit(Var const& p)    {unit_.SetNodeAsLval(p);}
+
+  virtual void Visit(Var const& p){
+    unit_.SetNodeAsLval(p);
+    if(is_read_inht_) unit_.SetVarAsRead(p);
+    else              unit_.SetVarAsWrite(p);
+  }
 
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
@@ -75,6 +80,7 @@ public:
 
 private:
   CompilationUnit&  unit_;
+  bool              is_read_inht_;
 };
 
 

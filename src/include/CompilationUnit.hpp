@@ -19,6 +19,7 @@ using AST::Ast;
 using AST::LexicalScope;
 using AST::Type;
 using AST::Node;
+using AST::Var;
 using AST::ProgBody;
 using AST::ScopeId;
 using AST::SymbolTable;
@@ -33,6 +34,7 @@ using AST::PtrFunction;
 using AST::Function;
 using AST::PtrLexicalScope;
 using AST::SymbolIdOfNode;
+using AST::OffsetTable;
 
 class CompilationUnit : public LnessRness, public TypeTable
   , public LabelManager{
@@ -44,20 +46,23 @@ public:
         (FreeScopeId(), nullptr, symbol_table_, module_declaration_table_
         , symbolid_of_node_)))
     , current_scope_(module_scope_.get())
+    , module_declaration_table_()
     {}
 
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
   const ScopeId NewFunction(std::string name, FuncDecl& origin_node){
-    functions_.push_back( std::move( std::make_unique<Function>(name, &origin_node)));
+    functions_.push_back( std::move(
+      std::make_unique<Function>(name, &origin_node, module_offset_table_)));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
     return NewNestedScope();
   }
 
   const ScopeId NewFunction(std::string& name){
-    functions_.push_back( std::move( std::make_unique<Function>(name)));
+    functions_.push_back( std::move(
+      std::make_unique<Function>(name, module_offset_table_)));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
     return NewNestedScope();
@@ -136,16 +141,21 @@ public:
     AST::Symbols::SymbolId symbol_id = free_symbol_id_;
     bool registered = Scope().RegisterDecl(name, type, n, free_symbol_id_);
     if(registered){
+      symbolid_of_node_[&n] = symbol_id;
       ++free_symbol_id_;
       if(curr_func_ != nullptr){
         curr_func_->StoreDecl( *module_declaration_table_[symbol_id], n);
-        std::cout << "Reg: n:"<< &n << " s: " <<module_declaration_table_[symbol_id].get()
-        << " symbol: " << module_declaration_table_[symbol_id]->str()
-        << " " << n.str()
-        << std::endl;
+//         std::cout << "Reg: n:"<< &n << " s: " <<module_declaration_table_[symbol_id].get()
+//         << " symbol: " << module_declaration_table_[symbol_id]->str()
+//         << " " << n.str()
+//         << std::endl;
       }
     }
     return registered;
+  }
+
+  IR::Offset LocalVarOffset(const Var& n) const{
+    return module_offset_table_.at(n.Id());
   }
 
 private:
@@ -171,6 +181,7 @@ private:
 
   //Attributes computed by visitors
   std::map<const Node*, const Type*>  type_of_node_;
+  OffsetTable       module_offset_table_;
 
   const ScopeId FreeScopeId() noexcept{ ++free_scope_id_; return free_scope_id_ - 1;}
 
@@ -196,6 +207,7 @@ public:
     , kTypeOfNode = 1
     , kLnessRnessOfNode = 2
     , kLocalVarOffsets = 3
+    , kVarAccessIsReadOrWrite = 4
     , kIR
   };
 // }

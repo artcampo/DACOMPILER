@@ -38,6 +38,16 @@ protected:
     return std::make_unique<Arith>(assigned_reg, src1, src2, op);
   }
 
+  PtrLoad LoadMem(const Label& l, const Offset o){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Load>(assigned_reg, l, o);
+  }
+
+  PtrStore StoreMem(const Reg src, const Label& l, const Offset o){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Store>(src, l, o);
+  }
+
 
 private:
   Reg   next_free_reg_;

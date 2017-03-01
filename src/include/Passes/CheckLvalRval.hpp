@@ -14,7 +14,9 @@ using namespace AST;
 class CheckLvalRval : public Pass{
 public:
   CheckLvalRval(CompilationUnit& unit)
-    : Pass(unit, {CompUnitInfo::kAst}, {CompUnitInfo::kLnessRnessOfNode}) {};
+    : Pass(unit, {CompUnitInfo::kAst},
+        {CompUnitInfo::kLnessRnessOfNode
+        , CompUnitInfo::kVarAccessIsReadOrWrite }) {};
 
   virtual void Run(){
     if(unit_.ValidAst()){

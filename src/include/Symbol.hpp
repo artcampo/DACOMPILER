@@ -17,8 +17,9 @@ using SymbolId     = int;
 class Symbol {
 public:
 //   Symbol(){}
-  Symbol(const SymbolString name, const Type& type, const ScopeId scope_id)
-    :name_(name), type_(type), scope_id_(scope_id){}
+  Symbol(const SymbolString name, const Type& type, const ScopeId scope_id
+    , const SymbolId id)
+    :name_(name), type_(type), scope_id_(scope_id), id_(id){}
 
   const bool operator< ( const Symbol &s ) const{
     if( name_ == s.name_) return type_ < s.type_;
@@ -34,6 +35,8 @@ public:
     scope_id_ = s.scope_id_;
   }*/
 
+  const SymbolId Id() const noexcept {return id_;}
+
   const Type& GetType() const noexcept{return type_;}
 //   Type& GetType() noexcept{return type_;}
   ScopeId GetScopeId() const noexcept{return scope_id_;}
@@ -47,6 +50,7 @@ private:
   SymbolString  name_;
   const Type&   type_;
   ScopeId       scope_id_;
+  SymbolId      id_;
 };
 
 

@@ -58,6 +58,7 @@ public:
       , AST::Symbols::SymbolId symbol_id);
   bool IsDecl(const std::string& name);
   const Type& GetType(const std::string& name);
+  const Symbols::SymbolId DeclId(const std::string& name) const;
   const ScopeId GetScopeId() const noexcept{return id_;};
 
   LexicalScope* NewNestedScope(const ScopeId id);

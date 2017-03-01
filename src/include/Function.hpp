@@ -31,17 +31,19 @@ using OffsetTable = std::map<Symbols::SymbolId, IR::Offset>;
 class Function{
 public:
 
-  Function(std::string& name, FuncDecl* origin_node): name_(name)
-    , origin_node_(origin_node){}
+  Function(std::string& name, FuncDecl* origin_node
+    , OffsetTable& module_offset_table): name_(name)
+      , origin_node_(origin_node), module_offset_table_(module_offset_table){}
 
-  Function(std::string& name): Function(name, nullptr){}
+  Function(std::string& name, OffsetTable& module_offset_table)
+    : Function(name, nullptr, module_offset_table){}
 
   FuncDecl& GetFuncDeclNode() { return *origin_node_; }
   const FuncDecl& GetFuncDeclNode() const { return *origin_node_; }
 
 
   Symbols::Symbol& GetSymbolDecl(const Node& n) const{
-    std::cout << "Asking n: " << &n << " " << n.str() << std::endl;
+//     std::cout << "Asking n: " << &n << " " << n.str() << std::endl;
     return *symbol_decl_of_node_.at(&n);
   }
 
@@ -53,10 +55,21 @@ public:
     origin_node_ = &n;
   }
 
+  void StoreSymbolOffset(Symbols::SymbolId id, IR::Offset o){
+//     std::cout << "Store: " << id << " o: " << o.str() << std::endl;
+    offset_table_[id] = o;
+    module_offset_table_[id] = o;
+  }
+
+  IR::Offset LocalVarOffset(Symbols::SymbolId id)const{
+    return offset_table_.at(id);
+  }
 
 private:
   std::string&      name_;
   FuncDecl*         origin_node_;
+
+  OffsetTable&      module_offset_table_;
   OffsetTable       offset_table_;
   std::map<const Node*, Symbols::Symbol*> symbol_decl_of_node_;
 

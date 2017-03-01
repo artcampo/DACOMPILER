@@ -8,6 +8,7 @@
 #include "Types.hpp"
 #include "ScopeId.hpp"
 #include "Locus.hpp"
+#include "Symbol.hpp"
 
 
 namespace Compiler{

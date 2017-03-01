@@ -1,7 +1,12 @@
 #include "IR/IRGenerator.hpp"
-
+#include "IR/Offset.hpp"
+#include "IR/Label.hpp"
 
 namespace Compiler{
+
+using Compiler::IR::Offset;
+using Compiler::IR::Label;
+
 namespace AST{
 
 void IRGenerator::Visit(ProgBody const& p, const Node* successor){
@@ -43,6 +48,7 @@ void IRGenerator::Visit(Block const& n, const Node* successor) {
 
 void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
   p.Rhs().Accept(*this, successor);
+  reg_src_of_expr_[&p.Lhs()] = reg_dst_of_expr_[&p.Rhs()];
   p.Lhs().Accept(*this, successor);
 }
 
@@ -67,7 +73,7 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
   p.GetCond().Accept(*this, successor);
 
   const IR::Addr current_addr = stream_.NextAddress();
-  const IR::Reg  reg_src       = reg_of_expr_[&p.GetCond()];
+  const IR::Reg  reg_src       = reg_dst_of_expr_[&p.GetCond()];
 
   stream_.AppendJumpIfTrue (reg_src);
   stream_.AppendJumpIfFalse(reg_src);
@@ -99,7 +105,7 @@ void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
   const IR::Addr reentry_addr = stream_.NextAddress();
   p.GetCond().Accept(*this, successor);
   const IR::Addr current_addr = stream_.NextAddress();
-  const IR::Reg reg_src       = reg_of_expr_[&p.GetCond()];
+  const IR::Reg reg_src       = reg_dst_of_expr_[&p.GetCond()];
 
   stream_.AppendJumpIfTrue(reg_src);
   stream_.AppendJumpIfFalse(reg_src);
@@ -114,7 +120,7 @@ void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(Literal const& n, const Node* successor){
   const IR::Reg r  = stream_.AppendLoadI( n.Value() );
-  reg_of_expr_[&n] = r;
+  reg_dst_of_expr_[&n] = r;
 }
 
 
@@ -124,18 +130,30 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
   n.Lhs().Accept(*this, successor);
   n.Rhs().Accept(*this, successor);
 
-  const IR::Reg reg_src1 = reg_of_expr_[&n.Lhs()];
-  const IR::Reg reg_src2 = reg_of_expr_[&n.Rhs()];
+  const IR::Reg reg_src1 = reg_dst_of_expr_[&n.Lhs()];
+  const IR::Reg reg_src2 = reg_dst_of_expr_[&n.Rhs()];
   const IR::ArithType op = IR::ArithType(n.op);
   const IR::Reg r  = stream_.AppendArith(reg_src1, reg_src2, op);
-  reg_of_expr_[&n]      = r;
+  reg_dst_of_expr_[&n]      = r;
 //   std::cout << "OP: " << op << "\n";
 
 }
 
 void IRGenerator::Visit(RefOp const& p, const Node* successor){}
 void IRGenerator::Visit(DerefOp const& p, const Node* successor){}
-void IRGenerator::Visit(Var const& p, const Node* successor){}
+
+void IRGenerator::Visit(Var const& p, const Node* successor){
+  Offset o = unit_.LocalVarOffset(p);
+  const Label& l  = unit_.GetLabelMainDataSegment();
+
+  if(unit_.IsRead(p)){
+    const IR::Reg r  = stream_.AppendLoad(l, o);
+    reg_dst_of_expr_[&p] = r;
+  }else{
+    const IR::Reg r_src = reg_src_of_expr_[&p];
+    stream_.AppendStore(r_src, l, o);
+  }
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Print() const noexcept{

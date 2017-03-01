@@ -5,6 +5,7 @@
 #include "Utils.hpp"
 #include "Function.hpp"
 #include "IR/IRSubtypes.hpp"
+#include "IR/Offset.hpp"
 #include <map>
 
 namespace Compiler{
@@ -32,6 +33,7 @@ public:
     std::cout << p.str() << " to offset: " << offset_ << std::endl;
     Symbols::Symbol& s = func_.GetSymbolDecl(p);
     std::cout << s.str() << std::endl;
+    func_.StoreSymbolOffset( s.Id(), IR::Offset(offset_, s.str()));
     offset_ += func_.GetSymbolDecl(p).Size();
 //     offset_
   };

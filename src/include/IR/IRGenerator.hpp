@@ -37,7 +37,10 @@ private:
   CompilationUnit&  unit_;
   IR::IRStream      stream_;
 
-  std::map<const Node*, IR::Reg>    reg_of_expr_;
+  //reg destination of Node
+  std::map<const Node*, IR::Reg>    reg_dst_of_expr_;
+  //reg source of Node (not sparsingly used)
+  std::map<const Node*, IR::Reg>    reg_src_of_expr_;
   std::map<const Node*, std::vector<IR::Addr>> back_patch_;
 
   void BackPatch(const Node& n, const IR::Addr position);

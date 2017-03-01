@@ -11,6 +11,7 @@
 namespace Compiler{
 
 using AST::Node;
+using AST::Var;
 
 class LnessRness {
 public:
@@ -25,6 +26,15 @@ public:
   bool IsRValue(const Node& n) const{
     return not node_is_lval_or_rval_.at(&n);
   }
+
+  bool IsRead(const Var& n) const{
+    return var_is_read_or_write_.at(&n);
+  }
+
+  bool IsWrite(const Var& n) const{
+    return not var_is_read_or_write_.at(&n);
+  }
+
 
   bool HasLRness(const Node& n) const{
     auto it = node_is_lval_or_rval_.find(&n);
@@ -45,8 +55,17 @@ public:
     node_is_lval_or_rval_[&n] = false;
   }
 
+  void SetVarAsRead(const Var& n) noexcept{
+    var_is_read_or_write_[&n] = true;
+  }
+
+  void SetVarAsWrite(const Var& n) noexcept{
+    var_is_read_or_write_[&n] = false;
+  }
+
 protected:
   std::map<const Node*,bool> node_is_lval_or_rval_;
+  std::map<const Node*,bool> var_is_read_or_write_;
 };
 
 

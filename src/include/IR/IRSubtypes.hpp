@@ -4,6 +4,7 @@
 namespace Compiler{
 namespace IR{
 
+using AddrOffset  = int;
 using Addr  = size_t;
 using Reg   = size_t;
 
