@@ -15,23 +15,24 @@ struct LabelLT;
 using PtrLabel = std::unique_ptr<Label>;
 
 struct Label{
-  Label(const LabelId id) : id_(id){};
+  Label(const LabelId id, std::string name) : id_(id), name_(name){};
   virtual ~Label() = default;
 
-  virtual std::string str() const noexcept = 0;
   virtual PtrLabel Clone() const noexcept = 0;
+  virtual std::string str() const noexcept = 0;
 protected:
   LabelId id_;
+  std::string name_;
 };
 
 struct LabelRT: public  Label{
-  LabelRT(const LabelId id) : Label(id){};
-  LabelRT(const LabelRT& l) : Label(l.id_){};
+  LabelRT(const LabelId id, std::string name) : Label(id, name){};
+  LabelRT(const LabelRT& l) : Label(l.id_, l.name_){};
 
   ~LabelRT() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("LabelRT: ") + std::to_string(0);
+    return name_;
   };
   virtual PtrLabel Clone() const noexcept{
     return std::unique_ptr<LabelRT>(new LabelRT(*this));
@@ -40,13 +41,13 @@ protected:
 };
 
 struct LabelLT: public  Label{
-  LabelLT(const LabelId id) : Label(id){};
-  LabelLT(const LabelLT& l) : Label(l.id_){};
+  LabelLT(const LabelId id, std::string name) : Label(id, name){};
+  LabelLT(const LabelLT& l) : Label(l.id_, l.name_){};
 
   ~LabelLT() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("LabelLT: ") + std::to_string(0);
+    return name_;
   };
 
   virtual PtrLabel Clone() const noexcept{

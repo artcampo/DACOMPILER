@@ -38,21 +38,6 @@ struct Inst{
 };
 
 
-struct Store : public Inst{
-  Store(const Reg src, const Label& l, const Offset o)
-    : src_(src), label_( std::move(l.Clone())), offset_(o){};
-  virtual ~Store() = default;
-
-  virtual std::string str() const noexcept{
-    return std::string("store r")  + std::to_string(src_)
-         + std::string(" to ") + label_->str() + offset_.str();
-  };
-protected:
-  Reg src_;
-  PtrLabel label_;
-  Offset offset_;
-};
-
 struct Jump: public  Inst{
   Jump() : target_(0){};
   Jump(const Addr target) : target_(target){};
@@ -85,7 +70,7 @@ struct JumpCondFalse : public JumpCond{
   ~JumpCondFalse() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("JumpCondFalse reg:") + std::to_string(cond_)
+    return std::string("JumpCondFalse %") + std::to_string(cond_)
          + std::string(" to:")  + std::to_string(target_);
   };
 };
@@ -96,7 +81,7 @@ struct JumpCondTrue : public JumpCond{
   ~JumpCondTrue() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("JumpCondTrue reg:") + std::to_string(cond_)
+    return std::string("JumpCondTrue %") + std::to_string(cond_)
          + std::string(" to:")  + std::to_string(target_);
   };
 };
@@ -125,8 +110,9 @@ struct LoadI : public InstExpr{
   virtual ~LoadI() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("r")  + std::to_string(reg_dst_)
-         + std::string(" = LoadI of ") + std::to_string(val_);
+    return std::string("%")  + std::to_string(reg_dst_)
+         + std::string(" = LoadI(") + std::to_string(val_)
+         + std::string(")") ;
   };
 protected:
   NodeValue val_;
@@ -138,13 +124,32 @@ struct Load : public InstExpr{
   virtual ~Load() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("r")  + std::to_string(reg_dst_)
-         + std::string(" = Load of ") + label_->str() + offset_.str();
+    return std::string("%")  + std::to_string(reg_dst_)
+         + std::string(" = Load [") + label_->str() + std::string(":") + offset_.str()
+         + std::string("]");
   };
 protected:
   PtrLabel label_;
   Offset offset_;
 };
+
+
+struct Store : public Inst{
+  Store(const Reg src, const Label& l, const Offset o)
+    : src_(src), label_( std::move(l.Clone())), offset_(o){};
+  virtual ~Store() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("store %")  + std::to_string(src_)
+         + std::string(" to [") + label_->str() + std::string(":") + offset_.str()
+         + std::string("]") ;
+  };
+protected:
+  Reg src_;
+  PtrLabel label_;
+  Offset offset_;
+};
+
 
 struct BinaryOp : public InstExpr{
   BinaryOp(const Reg reg_dst, const Reg src1, const Reg src2)
@@ -175,9 +180,9 @@ struct Arith : public BinaryOp{
   virtual ~Arith() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("r")  + std::to_string(reg_dst_)
-         + std::string(" = Arith r") + std::to_string(reg_src1_) + std::string(" ")
-         + Compiler::IR::str(op_) + std::string(" r")+ std::to_string(reg_src2_);
+    return std::string("%")  + std::to_string(reg_dst_)
+         + std::string(" = %") + std::to_string(reg_src1_) + std::string(" ")
+         + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(reg_src2_);
   };
 protected:
   ArithType op_;
@@ -189,9 +194,9 @@ struct Comparison : public BinaryOp{
   virtual ~Comparison() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("r")  + std::to_string(reg_dst_)
-         + std::string(" = Comp r") + std::to_string(reg_src1_) + std::string(" ")
-         + Compiler::IR::str(op_) + std::string(" r")+ std::to_string(reg_src2_);
+    return std::string("%")  + std::to_string(reg_dst_)
+         + std::string(" = %") + std::to_string(reg_src1_) + std::string(" ")
+         + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(reg_src2_);
   };
 protected:
   CompType op_;
@@ -203,9 +208,9 @@ struct AddrUnaryOp : public UnaryOp{
   virtual ~AddrUnaryOp() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("r")  + std::to_string(reg_dst_)
-         + std::string(" = AddrUnaryOp ") + Compiler::IR::str(op_)
-         + std::string("r") + std::to_string(reg_src1_);
+    return std::string("%")  + std::to_string(reg_dst_)
+         + std::string(" = ") + Compiler::IR::str(op_)
+         + std::string("%") + std::to_string(reg_src1_);
   };
 protected:
   AddrUnaryType op_;

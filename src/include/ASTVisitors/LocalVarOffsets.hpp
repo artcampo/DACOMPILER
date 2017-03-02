@@ -20,7 +20,7 @@ public:
 
 
   virtual void Visit(FuncDecl const& p){
-    std::cout << "Local offset\n";
+//     std::cout << "Local offset\n";
     p.GetBody().Accept(*this);
   }
 
@@ -30,10 +30,10 @@ public:
 
   virtual void Visit(VarDecl const& p){
 
-    std::cout << p.str() << " to offset: " << offset_ << std::endl;
+//     std::cout << p.str() << " to offset: " << offset_ << std::endl;
     Symbols::Symbol& s = func_.GetSymbolDecl(p);
-    std::cout << s.str() << std::endl;
-    func_.StoreSymbolOffset( s.Id(), IR::Offset(offset_, s.str()));
+//     std::cout << s.str() << std::endl;
+    func_.StoreSymbolOffset( s.Id(), IR::Offset(offset_, s.BareName()));
     offset_ += func_.GetSymbolDecl(p).Size();
 //     offset_
   };

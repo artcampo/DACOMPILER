@@ -44,8 +44,10 @@ public:
 
   std::string str() const noexcept{
     return std::string("Symbol: [") + name_ + std::string("]");
-
   }
+
+  std::string BareName() const noexcept{ return name_; }
+
 private:
   SymbolString  name_;
   const Type&   type_;

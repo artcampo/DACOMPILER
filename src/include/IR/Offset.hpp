@@ -17,7 +17,8 @@ struct Offset{
   Offset& operator= ( const Offset &o ){ addr_ = o.addr_; name_ = o.name_; }
 
   virtual std::string str() const noexcept{
-    return std::to_string(addr_) + std::string(" ") + name_;
+    //return std::to_string(addr_) + std::string(" ") + name_;
+    return name_;
   }
 
   const bool operator<  ( const Offset &o )const noexcept

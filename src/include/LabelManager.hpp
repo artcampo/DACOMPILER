@@ -8,12 +8,17 @@ namespace Compiler{
 class LabelManager{
 public:
   LabelManager() : free_id_(0){
-    labels_.push_back( std::move( std::make_unique<IR::LabelLT>(FreeId())));
-    name_of_label_[0] = std::string("Main Data Segment");
+    name_of_label_[0] = std::string("Main");
+    labels_.push_back( std::move(
+      std::make_unique<IR::LabelLT>(FreeId(), name_of_label_[0])));
   }
 
   const IR::Label& GetLabelMainDataSegment() const noexcept{
     return *(labels_.at(0));
+  }
+
+  std::string LabelStr(IR::LabelId id) const{
+    return name_of_label_.at(id);
   }
 
 private:
