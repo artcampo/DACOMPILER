@@ -28,22 +28,22 @@ protected:
     return std::make_unique<Inst::JumpIncond>();
   };
 
-  Inst::PtrLoadI LoadInmediate(const NodeValue val){
+  Inst::PtrLoadI LoadI(const NodeValue val){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::LoadI>(assigned_reg, val);
   }
 
-  Inst::PtrArith Arithmetic(const Reg src1, const Reg src2, const ArithType op){
+  Inst::PtrArith Arith(const Reg src1, const Reg src2, const ArithType op){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::Arith>(assigned_reg, src1, src2, op);
   }
 
-  Inst::PtrLoad LoadMem(const Label& l, const Offset o){
+  Inst::PtrLoad Load(const Label& l, const Offset o){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::Load>(assigned_reg, l, o);
   }
 
-  Inst::PtrStore StoreMem(const Reg src, const Label& l, const Offset o){
+  Inst::PtrStore Store(const Reg src, const Label& l, const Offset o){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::Store>(src, l, o);
   }
