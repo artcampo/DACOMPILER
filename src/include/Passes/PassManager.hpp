@@ -4,6 +4,7 @@
 #include "CheckLvalRval.hpp"
 #include "ComputeLocalVarOffsets.hpp"
 #include "VarIsValueOrAddress.hpp"
+#include "VarIsReadOrWrite.hpp"
 #include <memory>
 
 namespace Compiler{
@@ -13,10 +14,12 @@ public:
   PassManager(CompilationUnit& unit)
     : unit_(unit)
     , check_lval_rval_(unit_)
+    , var_is_read_or_write_(unit_)
     , var_is_val_or_addr_(unit_)
     , type_inference_(unit_)
     , compute_local_var_offsets_(unit_)
     , passes_ { &check_lval_rval_
+              , &var_is_read_or_write_
               , &var_is_val_or_addr_
               , &type_inference_
               , &compute_local_var_offsets_}
@@ -29,6 +32,7 @@ public:
 private:
   CompilationUnit&        unit_;
   CheckLvalRval           check_lval_rval_;
+  VarIsReadOrWrite        var_is_read_or_write_;
   VarIsValueOrAddress     var_is_val_or_addr_;
   TypeInference           type_inference_;
   ComputeLocalVarOffsets  compute_local_var_offsets_;

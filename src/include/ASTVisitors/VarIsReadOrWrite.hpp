@@ -7,28 +7,30 @@ namespace Compiler{
 namespace AST{
 namespace Visitor{
 
-class VarIsValueOrAddress : public ASTVisitor{
+class VarIsReadOrWrite : public ASTVisitor{
 public:
 
-  VarIsValueOrAddress(CompilationUnit& unit)
+  VarIsReadOrWrite(CompilationUnit& unit)
     : unit_(unit)
-    , is_val_or_addr_inht_(true){};
+    , is_read_or_write_inht_(true){};
 
-  //SDD
-  virtual void Visit(RefOp const& p){
-    is_val_or_addr_inht_ = false;
+
+
+  virtual void Visit(AssignStmt const& p){
+    is_read_or_write_inht_ = false; p.Lhs().Accept(*this);
+    is_read_or_write_inht_ = true;  p.Rhs().Accept(*this);
+  }
+
+  virtual void Visit(DerefOp const& p){
     p.Rhs().Accept(*this);
-    is_val_or_addr_inht_ = true;
+    is_read_or_write_inht_ = true;
   }
 
   virtual void Visit(Var const& p){
-    if(is_val_or_addr_inht_)
-      unit_.SetVarUsageAsValue(p);
-    else{
-      unit_.SetVarUsageAsAddress(p);
-      is_val_or_addr_inht_ = true;
-    }
+    if(is_read_or_write_inht_)  unit_.SetVarAsRead(p);
+    else                        unit_.SetVarAsWrite(p);
   }
+  //SDD
 
   //Traversal
   virtual void Visit(ProgBody const& p){
@@ -56,33 +58,27 @@ public:
     p.GetBody().Accept(*this);
   }
 
-  virtual void Visit(AssignStmt const& p){
-    p.Lhs().Accept(*this);
-    p.Rhs().Accept(*this);
-  }
-
   virtual void Visit(BinaryOp const& p){
     p.Lhs().Accept(*this);
     p.Rhs().Accept(*this);
   }
 
-  virtual void Visit(DerefOp const& p){
+  virtual void Visit(RefOp const& p){
     p.Rhs().Accept(*this);
   }
 
   //Nothing to do
-  virtual void Visit(Literal const& p){}
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
+  virtual void Visit(Literal const& p){}
 
 private:
   CompilationUnit&  unit_;
-  bool              is_val_or_addr_inht_;
+  bool              is_read_or_write_inht_;
 };
-
 
 
 }//end namespace Visitor

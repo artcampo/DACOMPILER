@@ -6,7 +6,7 @@
 #include "SymbolTable.hpp"
 #include "TypeTable.hpp"
 #include "ErrorLog.hpp"
-#include "LnessRness.hpp"
+#include "TreeDecoration.hpp"
 #include "LabelManager.hpp"
 #include "Function.hpp"
 #include <map>
@@ -36,7 +36,7 @@ using AST::PtrLexicalScope;
 using AST::SymbolIdOfNode;
 using AST::OffsetTable;
 
-class CompilationUnit : public LnessRness, public TypeTable
+class CompilationUnit : public TreeDecoration, public TypeTable
   , public LabelManager{
 public:
 
@@ -54,7 +54,7 @@ public:
 
   const ScopeId NewFunction(std::string name, FuncDecl& origin_node){
     functions_.push_back( std::move(
-      std::make_unique<Function>(name, &origin_node, module_offset_table_)));
+      std::make_unique<Function>(name, &origin_node, ModuleOffsetTable())));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
     return NewNestedScope();
@@ -62,7 +62,7 @@ public:
 
   const ScopeId NewFunction(std::string& name){
     functions_.push_back( std::move(
-      std::make_unique<Function>(name, module_offset_table_)));
+      std::make_unique<Function>(name, ModuleOffsetTable())));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
     return NewNestedScope();
@@ -102,16 +102,6 @@ public:
 
 //   const Prog* GetAstProg() const noexcept{ return *ast_.prog_;}
   ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
-
-  void SetTypeOfNode(const Node& n, const Type& t){
-//     std::cout << "Set: " << n->str() << ": " << t.str() << "\n";
-    type_of_node_[&n]=&t;
-  }
-
-  const Type& GetTypeOfNode(const Node& n){
-//     std::cout << "Get: " << n->str() << ": " << type_of_node_[n]->str() << "\n";
-    return *type_of_node_[&n];
-  }
 
   LexicalScope* GetScope(const ScopeId id) const{
 //     std::cout << "asking: " << id<<std::endl;
@@ -154,9 +144,7 @@ public:
     return registered;
   }
 
-  IR::Offset LocalVarOffset(const Var& n) const{
-    return module_offset_table_.at(n.Id());
-  }
+
 
 private:
   ScopeId                 free_scope_id_;
@@ -180,8 +168,7 @@ private:
   SymbolIdOfNode                    symbolid_of_node_;
 
   //Attributes computed by visitors
-  std::map<const Node*, const Type*>  type_of_node_;
-  OffsetTable       module_offset_table_;
+
 
   const ScopeId FreeScopeId() noexcept{ ++free_scope_id_; return free_scope_id_ - 1;}
 
