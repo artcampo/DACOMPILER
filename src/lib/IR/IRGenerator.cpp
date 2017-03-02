@@ -93,6 +93,12 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
   stream_.AppendJumpInconditional();
   AddToBackPatch(*successor, stream_.NextAddress() - 1);
 
+  p.GetElse().Accept(*this, successor);
+
+  //exit from else stmt
+  stream_.AppendJumpInconditional();
+  AddToBackPatch(*successor, stream_.NextAddress() - 1);
+
 //   std::cout << "-Store backp to: " << successor->str()<<"\n";
 //   std::cout <<"\n";
 //   PrintBackPatch();
