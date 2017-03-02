@@ -11,22 +11,22 @@ namespace Compiler{
 using namespace AST;
 
 
-class ComputeVarIsValueOrAddress : public Pass{
+class VarIsValueOrAddress : public Pass{
 public:
-  ComputeVarIsValueOrAddress(CompilationUnit& unit)
+  VarIsValueOrAddress(CompilationUnit& unit)
     : Pass(unit
       , {CompUnitInfo::kAst}
       , {CompUnitInfo::kVarAccessIsValOrAddress}) {};
 
   virtual void Run(){
     if(unit_.ValidAst()){
-      VarIsValueOrAddress v(unit_);
+      Visitor::VarIsValueOrAddress v(unit_);
       v.Visit(*unit_.GetAstProg());
     }
   };
 
   virtual std::string str() const noexcept{
-    return std::string("Compute VarIsValueOrAddress");
+    return std::string("VarIsValueOrAddress");
   };
 };
 

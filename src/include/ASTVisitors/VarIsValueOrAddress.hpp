@@ -5,6 +5,7 @@
 
 namespace Compiler{
 namespace AST{
+namespace Visitor{
 
 class VarIsValueOrAddress : public ASTVisitor{
 public:
@@ -14,19 +15,20 @@ public:
     , is_val_or_addr_inht_(true){};
 
 
-
+  //SDD
   virtual void Visit(RefOp const& p){
     is_val_or_addr_inht_ = false;
     p.Rhs().Accept(*this);
     is_val_or_addr_inht_ = true;
   }
 
-
-
-
   virtual void Visit(Var const& p){
-    if(is_val_or_addr_inht_)  unit_.SetVarUsageAsValue(p);
-    else                      unit_.SetVarUsageAsAddress(p);
+    if(is_val_or_addr_inht_)
+      unit_.SetVarUsageAsValue(p);
+    else{
+      unit_.SetVarUsageAsAddress(p);
+      is_val_or_addr_inht_ = true;
+    }
   }
 
   //Traversal
@@ -77,14 +79,13 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
 
-//   virtual void Visit(UnaryOp const& p){}
-
-
 private:
   CompilationUnit&  unit_;
   bool              is_val_or_addr_inht_;
 };
 
 
+
+}//end namespace Visitor
 }//end namespace AST
 }//end namespace Compiler

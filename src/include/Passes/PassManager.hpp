@@ -3,7 +3,7 @@
 #include "TypeInference.hpp"
 #include "CheckLvalRval.hpp"
 #include "ComputeLocalVarOffsets.hpp"
-#include "ComputeVarIsValueOrAddress.hpp"
+#include "VarIsValueOrAddress.hpp"
 #include <memory>
 
 namespace Compiler{
@@ -27,11 +27,12 @@ public:
   };
 
 private:
-  CompilationUnit&  unit_;
-  CheckLvalRval check_lval_rval_;
-  ComputeVarIsValueOrAddress var_is_val_or_addr_;
-  TypeInference type_inference_;
-  ComputeLocalVarOffsets compute_local_var_offsets_;
+  CompilationUnit&        unit_;
+  CheckLvalRval           check_lval_rval_;
+  VarIsValueOrAddress     var_is_val_or_addr_;
+  TypeInference           type_inference_;
+  ComputeLocalVarOffsets  compute_local_var_offsets_;
+
   std::vector<Pass*> passes_;
   std::map<CompUnitInfo, bool> defined_;
 
