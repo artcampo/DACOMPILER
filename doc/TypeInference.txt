@@ -1,0 +1,2 @@
+op@: T-> T*, T lval, T* lval
+op*: T*-> T, T lval, T* lval

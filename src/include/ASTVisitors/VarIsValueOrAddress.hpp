@@ -6,13 +6,30 @@
 namespace Compiler{
 namespace AST{
 
-class ASTVisitorLvalRval : public ASTVisitor{
+class VarIsValueOrAddress : public ASTVisitor{
 public:
 
-  ASTVisitorLvalRval(CompilationUnit& unit)
+  VarIsValueOrAddress(CompilationUnit& unit)
     : unit_(unit)
-    , is_read_inht_(true){};
+    , is_val_or_addr_inht_(true){};
 
+
+
+  virtual void Visit(RefOp const& p){
+    is_val_or_addr_inht_ = false;
+    p.Rhs().Accept(*this);
+    is_val_or_addr_inht_ = true;
+  }
+
+
+
+
+  virtual void Visit(Var const& p){
+    if(is_val_or_addr_inht_)  unit_.SetVarUsageAsValue(p);
+    else                      unit_.SetVarUsageAsAddress(p);
+  }
+
+  //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
     p.GetMainFunc().Accept(*this);
@@ -38,54 +55,34 @@ public:
     p.GetBody().Accept(*this);
   }
 
+  virtual void Visit(AssignStmt const& p){
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
+  }
+
   virtual void Visit(BinaryOp const& p){
     p.Lhs().Accept(*this);
     p.Rhs().Accept(*this);
-    unit_.SetNodeAsRval(p);
-  }
-
-  virtual void Visit(AssignStmt const& p){
-    is_read_inht_ = false; p.Lhs().Accept(*this);
-    is_read_inht_ = true;  p.Rhs().Accept(*this);
-
-    if(not unit_.IsLValue(p.Lhs()))
-      unit_.Error(kErr22, p.Lhs().GetLocus());
-  }
-
-  virtual void Visit(RefOp const& p){
-    p.Rhs().Accept(*this);
-
-    if(not unit_.IsLValue(p.Rhs()))
-      unit_.Error(kErr23, p.Rhs().GetLocus());
-    unit_.SetNodeAsLval(p);
   }
 
   virtual void Visit(DerefOp const& p){
     p.Rhs().Accept(*this);
-    if(not unit_.IsLValue(p.Rhs()))
-      unit_.Error(kErr24, p.Rhs().GetLocus());
-    unit_.SetNodeAsLval(p);
   }
 
-  virtual void Visit(Literal const& p){unit_.SetNodeAsRval(p);}
-
-  virtual void Visit(Var const& p){
-    unit_.SetNodeAsLval(p);
-    if(is_read_inht_) unit_.SetVarAsRead(p);
-    else              unit_.SetVarAsWrite(p);
-  }
-
+  //Nothing to do
+  virtual void Visit(Literal const& p){}
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
+
 //   virtual void Visit(UnaryOp const& p){}
 
 
 private:
   CompilationUnit&  unit_;
-  bool              is_read_inht_;
+  bool              is_val_or_addr_inht_;
 };
 
 

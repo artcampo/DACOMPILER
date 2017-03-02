@@ -3,6 +3,7 @@
 #include "TypeInference.hpp"
 #include "CheckLvalRval.hpp"
 #include "ComputeLocalVarOffsets.hpp"
+#include "ComputeVarIsValueOrAddress.hpp"
 #include <memory>
 
 namespace Compiler{
@@ -12,9 +13,13 @@ public:
   PassManager(CompilationUnit& unit)
     : unit_(unit)
     , check_lval_rval_(unit_)
+    , var_is_val_or_addr_(unit_)
     , type_inference_(unit_)
     , compute_local_var_offsets_(unit_)
-    , passes_{&check_lval_rval_, &type_inference_, &compute_local_var_offsets_}
+    , passes_ { &check_lval_rval_
+              , &var_is_val_or_addr_
+              , &type_inference_
+              , &compute_local_var_offsets_}
   { defined_[CompUnitInfo::kAst] = true;};
 
   void Run(){
@@ -24,6 +29,7 @@ public:
 private:
   CompilationUnit&  unit_;
   CheckLvalRval check_lval_rval_;
+  ComputeVarIsValueOrAddress var_is_val_or_addr_;
   TypeInference type_inference_;
   ComputeLocalVarOffsets compute_local_var_offsets_;
   std::vector<Pass*> passes_;

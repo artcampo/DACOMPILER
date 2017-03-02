@@ -17,12 +17,14 @@ struct IRStream : public IRBuilder{
   void AppendJumpIfFalse(const Reg cond, const Addr target);
   void AppendJumpInconditional();
 
+  void AppendStore(const Reg src, const Label& l, const Offset o);
 
 
   Reg AppendLoadI(const NodeValue val);
   Reg AppendLoad(const Label& l, const Offset o);
-  void AppendStore(const Reg src, const Label& l, const Offset o);
   Reg AppendArith(const Reg src1, const Reg src2, const ArithType op);
+  Reg AppendAddrUnary(const Reg src, const AddrUnaryType op);
+
   void Print() const noexcept;
 private:
   std::vector<PtrInst> stream_;

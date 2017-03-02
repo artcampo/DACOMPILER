@@ -15,26 +15,16 @@ using AST::Var;
 
 class LnessRness {
 public:
-
   LnessRness(){}
 
+  bool IsLValue(const Node& n) const{return node_is_lval_or_rval_.at(&n);}
+  bool IsRValue(const Node& n) const{return not node_is_lval_or_rval_.at(&n);}
 
-  bool IsLValue(const Node& n) const{
-    return node_is_lval_or_rval_.at(&n);
-  }
+  bool IsRead(const Var& n) const{return var_is_read_or_write_.at(&n);}
+  bool IsWrite(const Var& n) const{return not var_is_read_or_write_.at(&n);}
 
-  bool IsRValue(const Node& n) const{
-    return not node_is_lval_or_rval_.at(&n);
-  }
-
-  bool IsRead(const Var& n) const{
-    return var_is_read_or_write_.at(&n);
-  }
-
-  bool IsWrite(const Var& n) const{
-    return not var_is_read_or_write_.at(&n);
-  }
-
+  bool IsValueAccess(const Var& n) const{return var_is_val_or_addr_.at(&n);}
+  bool IsAddressAccess(const Var& n) const{return not var_is_val_or_addr_.at(&n);}
 
   bool HasLRness(const Node& n) const{
     auto it = node_is_lval_or_rval_.find(&n);
@@ -63,9 +53,18 @@ public:
     var_is_read_or_write_[&n] = false;
   }
 
+  void SetVarUsageAsValue(const Var& n) noexcept{
+    var_is_val_or_addr_[&n] = true;
+  }
+
+  void SetVarUsageAsAddress(const Var& n) noexcept{
+    var_is_val_or_addr_[&n] = false;
+  }
+
 protected:
   std::map<const Node*,bool> node_is_lval_or_rval_;
   std::map<const Node*,bool> var_is_read_or_write_;
+  std::map<const Node*,bool> var_is_val_or_addr_;
 };
 
 

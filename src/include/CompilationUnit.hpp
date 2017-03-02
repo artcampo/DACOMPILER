@@ -208,6 +208,7 @@ public:
     , kLnessRnessOfNode = 2
     , kLocalVarOffsets = 3
     , kVarAccessIsReadOrWrite = 4
+    , kVarAccessIsValOrAddress = 5
     , kIR
   };
 // }

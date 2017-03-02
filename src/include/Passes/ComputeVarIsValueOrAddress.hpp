@@ -4,30 +4,29 @@
 #include "CompilationUnit.hpp"
 #include "Types.hpp"
 #include "ErrorLog/Messages.hpp"
-#include "ASTVisitors/ASTVisitorLvalRval.hpp"
+#include "ASTVisitors/VarIsValueOrAddress.hpp"
 
 namespace Compiler{
 
 using namespace AST;
 
 
-class CheckLvalRval : public Pass{
+class ComputeVarIsValueOrAddress : public Pass{
 public:
-  CheckLvalRval(CompilationUnit& unit)
+  ComputeVarIsValueOrAddress(CompilationUnit& unit)
     : Pass(unit
       , {CompUnitInfo::kAst}
-      , { CompUnitInfo::kLnessRnessOfNode
-        , CompUnitInfo::kVarAccessIsReadOrWrite}) {};
+      , {CompUnitInfo::kVarAccessIsValOrAddress}) {};
 
   virtual void Run(){
     if(unit_.ValidAst()){
-      ASTVisitorLvalRval v(unit_);
+      VarIsValueOrAddress v(unit_);
       v.Visit(*unit_.GetAstProg());
     }
   };
 
   virtual std::string str() const noexcept{
-    return std::string("Check Lval/Rval");
+    return std::string("Compute VarIsValueOrAddress");
   };
 };
 

@@ -19,15 +19,18 @@ struct Load;
 struct Store;
 struct Arith;
 struct Comparison;
+struct AddrUnaryOp;
 
-using PtrInst       = std::unique_ptr<Inst>;
-using PtrJumpIncond = std::unique_ptr<JumpIncond>;
-using PtrJumpCond   = std::unique_ptr<JumpCond>;
-using PtrLoadI      = std::unique_ptr<LoadI>;
-using PtrLoad       = std::unique_ptr<Load>;
-using PtrStore      = std::unique_ptr<Store>;
-using PtrArith      = std::unique_ptr<Arith>;
-using PtrComparison = std::unique_ptr<Comparison>;
+using PtrInst         = std::unique_ptr<Inst>;
+using PtrJumpIncond   = std::unique_ptr<JumpIncond>;
+using PtrJumpCond     = std::unique_ptr<JumpCond>;
+using PtrLoadI        = std::unique_ptr<LoadI>;
+using PtrLoad         = std::unique_ptr<Load>;
+using PtrStore        = std::unique_ptr<Store>;
+using PtrArith        = std::unique_ptr<Arith>;
+using PtrComparison   = std::unique_ptr<Comparison>;
+using PtrAddrUnaryOp  = std::unique_ptr<AddrUnaryOp>;
+
 
 
 struct Inst{
@@ -203,14 +206,14 @@ protected:
 };
 
 struct AddrUnaryOp : public UnaryOp{
-  AddrUnaryOp(const Reg reg_dst, const Reg src1, const Reg src2, const AddrUnaryType op)
+  AddrUnaryOp(const Reg reg_dst, const Reg src1, const AddrUnaryType op)
   : UnaryOp(reg_dst, src1), op_(op){};
   virtual ~AddrUnaryOp() = default;
 
   virtual std::string str() const noexcept{
     return std::string("%")  + std::to_string(reg_dst_)
          + std::string(" = ") + Compiler::IR::str(op_)
-         + std::string("%") + std::to_string(reg_src1_);
+         + std::string(" %") + std::to_string(reg_src1_);
   };
 protected:
   AddrUnaryType op_;

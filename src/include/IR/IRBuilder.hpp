@@ -48,6 +48,12 @@ protected:
     return std::make_unique<Store>(src, l, o);
   }
 
+  PtrAddrUnaryOp AddrUnary(const Reg src1, const AddrUnaryType op){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<AddrUnaryOp>(assigned_reg, src1, op);
+  }
+
+
 
 private:
   Reg   next_free_reg_;

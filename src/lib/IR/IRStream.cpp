@@ -1,5 +1,6 @@
 #include "IR/IRStream.hpp"
 #include "IR/IR.hpp"
+#include "IR/IRSubtypes.hpp"
 
 namespace Compiler{
 namespace IR{
@@ -40,6 +41,13 @@ Reg IRStream::AppendArith(const Reg src1, const Reg src2, const ArithType op){
   return RegAssignedToPreviousInst();
 }
 
+Reg IRStream::AppendAddrUnary(const Reg src, const AddrUnaryType op){
+  Append( AddrUnary(src, op) );
+  return RegAssignedToPreviousInst();
+}
+
+
+
 Reg IRStream::RegAssignedToPreviousInst() const{
   InstExpr& i = dynamic_cast<InstExpr&>(*(stream_[ stream_.size() - 1 ]));
   return i.RegDst();
@@ -49,7 +57,6 @@ void IRStream::Print() const noexcept{
  Addr a = 0;
  for(auto& it : stream_){ std::cout << a << ": "<< it->str() << "\n"; ++a;}
 }
-
 
 }//end namespace IR
 

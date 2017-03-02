@@ -9,8 +9,10 @@ class IRGenerator : public Pass{
 public:
   IRGenerator(CompilationUnit& unit)
     : Pass(unit
-        , { CompUnitInfo::kAst, CompUnitInfo::kLnessRnessOfNode
-          , CompUnitInfo::kTypeOfNode}
+        , { CompUnitInfo::kAst
+          , CompUnitInfo::kLnessRnessOfNode
+          , CompUnitInfo::kTypeOfNode
+          , CompUnitInfo::kVarAccessIsValOrAddress}
         , { CompUnitInfo::kIR}){};
 
   virtual void Run(){

@@ -1,11 +1,13 @@
 #include "IR/IRGenerator.hpp"
 #include "IR/Offset.hpp"
 #include "IR/Label.hpp"
+#include "IR/IRSubtypes.hpp"
 
 namespace Compiler{
 
 using Compiler::IR::Offset;
 using Compiler::IR::Label;
+using Compiler::IR::AddrUnaryType;
 
 namespace AST{
 
@@ -45,13 +47,6 @@ void IRGenerator::Visit(Block const& n, const Node* successor) {
   }
 
 }
-
-void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
-  p.Rhs().Accept(*this, successor);
-  reg_src_of_expr_[&p.Lhs()] = reg_dst_of_expr_[&p.Rhs()];
-  p.Lhs().Accept(*this, successor);
-}
-
 
 void IRGenerator::Visit(DeclStmt const& p, const Node* successor){
 //   std::cout << "D"<< p.str()<<" with successor: " << successor->str() << "\n";
@@ -123,6 +118,14 @@ void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
 
 }
 
+
+void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
+  p.Rhs().Accept(*this, successor);
+  reg_src_of_expr_[&p.Lhs()] = reg_dst_of_expr_[&p.Rhs()];
+  p.Lhs().Accept(*this, successor);
+}
+
+
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(Literal const& n, const Node* successor){
   const IR::Reg r  = stream_.AppendLoadI( n.Value() );
@@ -132,21 +135,30 @@ void IRGenerator::Visit(Literal const& n, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
-
-  n.Lhs().Accept(*this, successor);
   n.Rhs().Accept(*this, successor);
 
   const IR::Reg reg_src1 = reg_dst_of_expr_[&n.Lhs()];
   const IR::Reg reg_src2 = reg_dst_of_expr_[&n.Rhs()];
   const IR::ArithType op = IR::ArithType(n.op);
-  const IR::Reg r  = stream_.AppendArith(reg_src1, reg_src2, op);
-  reg_dst_of_expr_[&n]      = r;
+  const IR::Reg r        = stream_.AppendArith(reg_src1, reg_src2, op);
+  reg_dst_of_expr_[&n]   = r;
 //   std::cout << "OP: " << op << "\n";
 
 }
 
-void IRGenerator::Visit(RefOp const& p, const Node* successor){}
-void IRGenerator::Visit(DerefOp const& p, const Node* successor){}
+void IRGenerator::Visit(RefOp const& n, const Node* successor){
+  n.Rhs().Accept(*this, successor);
+  const IR::Reg reg_src = reg_dst_of_expr_[&n.Rhs()];
+  const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kReference);
+  reg_dst_of_expr_[&n]  = r;
+}
+
+void IRGenerator::Visit(DerefOp const& n, const Node* successor){
+  n.Rhs().Accept(*this, successor);
+  const IR::Reg reg_src = reg_dst_of_expr_[&n.Rhs()];
+  const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kDereference);
+  reg_dst_of_expr_[&n]  = r;
+}
 
 void IRGenerator::Visit(Var const& p, const Node* successor){
   Offset o = unit_.LocalVarOffset(p);
