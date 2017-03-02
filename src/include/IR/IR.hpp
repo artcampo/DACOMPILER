@@ -9,11 +9,11 @@
 
 namespace Compiler{
 namespace IR{
+namespace Inst{
 
 struct Inst;
 struct JumpCond;
 struct JumpIncond;
-struct InstExpr;    //expression with a dest register
 struct LoadI;
 struct Load;
 struct Store;
@@ -32,7 +32,43 @@ using PtrComparison   = std::unique_ptr<Comparison>;
 using PtrAddrUnaryOp  = std::unique_ptr<AddrUnaryOp>;
 
 
+struct InstAddress{
+  InstAddress(const Label& l, const Offset o)
+    :label_( std::move(l.Clone())), offset_(o){}
+  ~InstAddress() = default;
+protected:
+  PtrLabel label_;
+  Offset offset_;
+};
 
+struct InstSrc{
+  InstSrc(const Reg src) : src_(src){}
+  ~InstSrc() = default;
+  Reg RegSrc() const noexcept { return src_;};
+protected:
+  Reg src_;
+};
+
+struct InstDst {
+  InstDst(const Reg reg_dst) : dst_(reg_dst){};
+  ~InstDst() = default;
+
+  Reg RegDst() const noexcept { return dst_;};
+protected:
+  Reg dst_;
+};
+
+struct InstVal {
+  InstVal( const NodeValue val) : val_(val){};
+  ~InstVal() = default;
+
+  NodeValue Value() const noexcept { return val_;};
+protected:
+  NodeValue val_;
+};
+
+
+//Interface
 struct Inst{
   Inst(){};
   virtual ~Inst() = default;
@@ -41,7 +77,7 @@ struct Inst{
 };
 
 
-struct Jump: public  Inst{
+struct Jump: public Inst{
   Jump() : target_(0){};
   Jump(const Addr target) : target_(target){};
   ~Jump() = default;
@@ -98,48 +134,53 @@ struct JumpIncond : public Jump{
   };
 };
 
-struct InstExpr : public Inst{
-  InstExpr(const Reg reg_dst) : reg_dst_(reg_dst){};
-  virtual ~InstExpr() = default;
 
-  virtual std::string str() const noexcept = 0;
-  Reg RegDst() const noexcept { return reg_dst_;};
-protected:
-  Reg reg_dst_;
-};
-
-struct LoadI : public InstExpr{
-  LoadI(const Reg reg_dst, const NodeValue val) : InstExpr(reg_dst), val_(val){};
+struct LoadI : public Inst, public InstDst, public InstVal{
+  LoadI(const Reg reg_dst, const NodeValue val)
+    : InstDst(reg_dst), InstVal(val){};
   virtual ~LoadI() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("%")  + std::to_string(reg_dst_)
+    return std::string("%")  + std::to_string(dst_)
          + std::string(" = LoadI(") + std::to_string(val_)
          + std::string(")") ;
   };
 protected:
-  NodeValue val_;
+
 };
 
-struct Load : public InstExpr{
+struct Load : public Inst, public InstDst, public InstAddress{
   Load(const Reg reg_dst, const Label& l, const Offset o)
-    : InstExpr(reg_dst), label_( std::move(l.Clone())), offset_(o){};
+    : InstDst(reg_dst), InstAddress(l, o){};
   virtual ~Load() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("%")  + std::to_string(reg_dst_)
+    return std::string("%")  + std::to_string(dst_)
          + std::string(" = Load [") + label_->str() + std::string(":") + offset_.str()
          + std::string("]");
   };
 protected:
-  PtrLabel label_;
-  Offset offset_;
 };
 
 
-struct Store : public Inst{
+struct LoadReg : public Inst, public InstDst, public InstSrc{
+  LoadReg(const Reg reg_dst, const Reg reg_src)
+    : InstDst(reg_dst), InstSrc(reg_src){};
+  virtual ~LoadReg() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("%")  + std::to_string(dst_)
+         + std::string(" = Load [ %") + std::to_string(src_)
+         + std::string("]");
+  };
+protected:
+};
+
+
+
+struct Store : public Inst, public InstSrc, public InstAddress{
   Store(const Reg src, const Label& l, const Offset o)
-    : src_(src), label_( std::move(l.Clone())), offset_(o){};
+    : InstSrc(src), InstAddress(l, o){};
   virtual ~Store() = default;
 
   virtual std::string str() const noexcept{
@@ -148,15 +189,12 @@ struct Store : public Inst{
          + std::string("]") ;
   };
 protected:
-  Reg src_;
-  PtrLabel label_;
-  Offset offset_;
 };
 
 
-struct BinaryOp : public InstExpr{
+struct BinaryOp : public Inst, public InstDst{
   BinaryOp(const Reg reg_dst, const Reg src1, const Reg src2)
-  : InstExpr(reg_dst), reg_src1_(src1), reg_src2_(src2){};
+  : InstDst(reg_dst), reg_src1_(src1), reg_src2_(src2){};
   virtual ~BinaryOp() = default;
 
   virtual std::string str() const noexcept = 0;
@@ -166,15 +204,14 @@ protected:
   Reg reg_src2_;
 };
 
-struct UnaryOp : public InstExpr{
+struct UnaryOp : public Inst, public InstDst, public InstSrc{
   UnaryOp(const Reg reg_dst, const Reg src1)
-  : InstExpr(reg_dst), reg_src1_(src1){};
+  : InstDst(reg_dst), InstSrc(src1){};
   virtual ~UnaryOp() = default;
 
   virtual std::string str() const noexcept = 0;
-
 protected:
-  Reg reg_src1_;
+
 };
 
 struct Arith : public BinaryOp{
@@ -183,7 +220,7 @@ struct Arith : public BinaryOp{
   virtual ~Arith() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("%")  + std::to_string(reg_dst_)
+    return std::string("%")  + std::to_string(dst_)
          + std::string(" = %") + std::to_string(reg_src1_) + std::string(" ")
          + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(reg_src2_);
   };
@@ -197,7 +234,7 @@ struct Comparison : public BinaryOp{
   virtual ~Comparison() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("%")  + std::to_string(reg_dst_)
+    return std::string("%")  + std::to_string(dst_)
          + std::string(" = %") + std::to_string(reg_src1_) + std::string(" ")
          + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(reg_src2_);
   };
@@ -211,9 +248,9 @@ struct AddrUnaryOp : public UnaryOp{
   virtual ~AddrUnaryOp() = default;
 
   virtual std::string str() const noexcept{
-    return std::string("%")  + std::to_string(reg_dst_)
+    return std::string("%")  + std::to_string(dst_)
          + std::string(" = ") + Compiler::IR::str(op_)
-         + std::string(" %") + std::to_string(reg_src1_);
+         + std::string(" %") + std::to_string(src_);
   };
 protected:
   AddrUnaryType op_;
@@ -222,5 +259,6 @@ protected:
 
 
 
+}//end namespace Inst
 }//end namespace IR
 }//end namespace Compiler

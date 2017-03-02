@@ -7,10 +7,11 @@
 namespace Compiler{
 namespace IR{
 
+
 struct IRStream : public IRBuilder{
   Addr NextAddress() const noexcept{ return stream_.size(); }
 
-  Inst& GetInst(const Addr addr) const noexcept{ return *stream_[addr];}
+  Inst::Inst& GetInst(const Addr addr) const noexcept{ return *stream_[addr];}
 
   void AppendJumpIfTrue(const Reg cond);
   void AppendJumpIfFalse(const Reg cond);
@@ -27,9 +28,9 @@ struct IRStream : public IRBuilder{
 
   void Print() const noexcept;
 private:
-  std::vector<PtrInst> stream_;
+  std::vector<Inst::PtrInst> stream_;
 
-  void Append(PtrInst inst){ stream_.push_back( std::move(inst)); }
+  void Append(Inst::PtrInst inst){ stream_.push_back( std::move(inst)); }
 
   Reg RegAssignedToPreviousInst() const;
 

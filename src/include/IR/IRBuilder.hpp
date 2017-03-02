@@ -12,45 +12,45 @@ class IRBuilder{
 protected:
   IRBuilder() : next_free_reg_(0){};
 
-  PtrJumpCond JumpIfTrue(const Reg cond){
-    return std::make_unique<JumpCondTrue>(cond);
+  Inst::PtrJumpCond JumpIfTrue(const Reg cond){
+    return std::make_unique<Inst::JumpCondTrue>(cond);
   };
 
-  PtrJumpCond JumpIfFalse(const Reg cond){
-    return std::make_unique<JumpCondFalse>(cond);
+  Inst::PtrJumpCond JumpIfFalse(const Reg cond){
+    return std::make_unique<Inst::JumpCondFalse>(cond);
   };
 
-  PtrJumpCond JumpIfFalse(const Reg cond, const Addr target){
-    return std::make_unique<JumpCondFalse>(cond, target);
+  Inst::PtrJumpCond JumpIfFalse(const Reg cond, const Addr target){
+    return std::make_unique<Inst::JumpCondFalse>(cond, target);
   };
 
-  PtrJumpIncond JumpInconditional(){
-    return std::make_unique<JumpIncond>();
+  Inst::PtrJumpIncond JumpInconditional(){
+    return std::make_unique<Inst::JumpIncond>();
   };
 
-  PtrLoadI LoadInmediate(const NodeValue val){
+  Inst::PtrLoadI LoadInmediate(const NodeValue val){
     Reg assigned_reg = FreeReg();
-    return std::make_unique<LoadI>(assigned_reg, val);
+    return std::make_unique<Inst::LoadI>(assigned_reg, val);
   }
 
-  PtrArith Arithmetic(const Reg src1, const Reg src2, const ArithType op){
+  Inst::PtrArith Arithmetic(const Reg src1, const Reg src2, const ArithType op){
     Reg assigned_reg = FreeReg();
-    return std::make_unique<Arith>(assigned_reg, src1, src2, op);
+    return std::make_unique<Inst::Arith>(assigned_reg, src1, src2, op);
   }
 
-  PtrLoad LoadMem(const Label& l, const Offset o){
+  Inst::PtrLoad LoadMem(const Label& l, const Offset o){
     Reg assigned_reg = FreeReg();
-    return std::make_unique<Load>(assigned_reg, l, o);
+    return std::make_unique<Inst::Load>(assigned_reg, l, o);
   }
 
-  PtrStore StoreMem(const Reg src, const Label& l, const Offset o){
+  Inst::PtrStore StoreMem(const Reg src, const Label& l, const Offset o){
     Reg assigned_reg = FreeReg();
-    return std::make_unique<Store>(src, l, o);
+    return std::make_unique<Inst::Store>(src, l, o);
   }
 
-  PtrAddrUnaryOp AddrUnary(const Reg src1, const AddrUnaryType op){
+  Inst::PtrAddrUnaryOp AddrUnary(const Reg src1, const AddrUnaryType op){
     Reg assigned_reg = FreeReg();
-    return std::make_unique<AddrUnaryOp>(assigned_reg, src1, op);
+    return std::make_unique<Inst::AddrUnaryOp>(assigned_reg, src1, op);
   }
 
 

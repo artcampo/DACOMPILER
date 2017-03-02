@@ -8,6 +8,7 @@ namespace Compiler{
 using Compiler::IR::Offset;
 using Compiler::IR::Label;
 using Compiler::IR::AddrUnaryType;
+using namespace Compiler::IR::Inst;
 
 namespace AST{
 
@@ -191,7 +192,7 @@ void IRGenerator::BackPatch(const Node& n, const IR::Addr position){
   std::map<const Node*, std::vector<IR::Addr>>::iterator it = back_patch_.find(&n);
   if(it != back_patch_.end()){
     for(const auto& address : it->second){
-      IR::Jump& inst = dynamic_cast<IR::Jump&>(stream_.GetInst(address));
+      Jump& inst = dynamic_cast<Jump&>(stream_.GetInst(address));
 //       std::cout << "Backpatch: "
 //         << IRBuilder::PrintInstruction(inst)
 //         << " with node: " << n->str() << "\n";

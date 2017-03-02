@@ -49,7 +49,7 @@ Reg IRStream::AppendAddrUnary(const Reg src, const AddrUnaryType op){
 
 
 Reg IRStream::RegAssignedToPreviousInst() const{
-  InstExpr& i = dynamic_cast<InstExpr&>(*(stream_[ stream_.size() - 1 ]));
+  Inst::InstDst& i = dynamic_cast<Inst::InstDst&>(*(stream_[ stream_.size() - 1 ]));
   return i.RegDst();
 }
 
