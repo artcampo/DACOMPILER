@@ -27,22 +27,17 @@ Reg IRStream::AppendLoadI(const NodeValue val){
   return RegAssignedToPreviousInst();
 }
 
-Reg IRStream::AppendLoad(const Label& l, const Offset o){
-  Append( Load(l, o) );
+Reg IRStream::AppendLoad(const MemAddr addr){
+  Append( Load(addr) );
   return RegAssignedToPreviousInst();
 }
 
-void IRStream::AppendStore(const Reg src, const Label& l, const Offset o){
-  Append( Store(src,l, o) );
+void IRStream::AppendStore(const Reg src, const MemAddr addr){
+  Append( Store(src, addr) );
 }
 
 Reg IRStream::AppendArith(const Reg src1, const Reg src2, const ArithType op){
   Append( Arith(src1, src2, op) );
-  return RegAssignedToPreviousInst();
-}
-
-Reg IRStream::AppendAddrUnary(const Reg src, const AddrUnaryType op){
-  Append( AddrUnary(src, op) );
   return RegAssignedToPreviousInst();
 }
 

@@ -1,12 +1,12 @@
 #include "IR/IRGenerator.hpp"
-#include "IR/Offset.hpp"
-#include "IR/Label.hpp"
+#include "IR/MemAddr.hpp"
 #include "IR/IRSubtypes.hpp"
 
 namespace Compiler{
 
 using Compiler::IR::Offset;
 using Compiler::IR::Label;
+using Compiler::IR::MemAddr;
 using Compiler::IR::AddrUnaryType;
 using namespace Compiler::IR::Inst;
 
@@ -150,27 +150,28 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
 void IRGenerator::Visit(RefOp const& n, const Node* successor){
   n.Rhs().Accept(*this, successor);
   const IR::Reg reg_src = reg_dst_of_expr_[&n.Rhs()];
-  const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kReference);
-  reg_dst_of_expr_[&n]  = r;
+//   const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kReference);
+//   reg_dst_of_expr_[&n]  = r;
 }
 
 void IRGenerator::Visit(DerefOp const& n, const Node* successor){
   n.Rhs().Accept(*this, successor);
   const IR::Reg reg_src = reg_dst_of_expr_[&n.Rhs()];
-  const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kDereference);
-  reg_dst_of_expr_[&n]  = r;
+//   const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kDereference);
+//   reg_dst_of_expr_[&n]  = r;
 }
 
 void IRGenerator::Visit(Var const& p, const Node* successor){
-  Offset o = unit_.LocalVarOffset(p);
-  const Label& l  = unit_.GetLabelMainDataSegment();
+  Offset o        = unit_.LocalVarOffset(p);
+  const Label l   = unit_.GetLabelMainDataSegment();
+  const MemAddr a = MemAddr(l, o);
 
   if(unit_.IsRead(p)){
-    const IR::Reg r  = stream_.AppendLoad(l, o);
+    const IR::Reg r  = stream_.AppendLoad(a);
     reg_dst_of_expr_[&p] = r;
   }else{
     const IR::Reg r_src = reg_src_of_expr_[&p];
-    stream_.AppendStore(r_src, l, o);
+    stream_.AppendStore(r_src, a);
   }
 }
 

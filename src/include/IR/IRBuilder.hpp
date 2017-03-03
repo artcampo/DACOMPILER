@@ -38,19 +38,14 @@ protected:
     return std::make_unique<Inst::Arith>(assigned_reg, src1, src2, op);
   }
 
-  Inst::PtrLoad Load(const Label& l, const Offset o){
+  Inst::PtrLoad Load(const MemAddr addr){
     Reg assigned_reg = FreeReg();
-    return std::make_unique<Inst::Load>(assigned_reg, l, o);
+    return std::make_unique<Inst::Load>(assigned_reg, addr);
   }
 
-  Inst::PtrStore Store(const Reg src, const Label& l, const Offset o){
+  Inst::PtrStore Store(const Reg src, const MemAddr addr){
     Reg assigned_reg = FreeReg();
-    return std::make_unique<Inst::Store>(src, l, o);
-  }
-
-  Inst::PtrAddrUnaryOp AddrUnary(const Reg src1, const AddrUnaryType op){
-    Reg assigned_reg = FreeReg();
-    return std::make_unique<Inst::AddrUnaryOp>(assigned_reg, src1, op);
+    return std::make_unique<Inst::Store>(src, addr);
   }
 
 

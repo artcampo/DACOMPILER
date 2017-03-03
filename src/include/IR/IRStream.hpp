@@ -18,13 +18,12 @@ struct IRStream : public IRBuilder{
   void AppendJumpIfFalse(const Reg cond, const Addr target);
   void AppendJumpInconditional();
 
-  void AppendStore(const Reg src, const Label& l, const Offset o);
+  void AppendStore(const Reg src,const MemAddr addr);
 
 
   Reg AppendLoadI(const NodeValue val);
-  Reg AppendLoad(const Label& l, const Offset o);
+  Reg AppendLoad(const MemAddr addr);
   Reg AppendArith(const Reg src1, const Reg src2, const ArithType op);
-  Reg AppendAddrUnary(const Reg src, const AddrUnaryType op);
 
   void Print() const noexcept;
 private:

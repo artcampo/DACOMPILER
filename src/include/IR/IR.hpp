@@ -5,6 +5,7 @@
 #include "IR/IRSubtypes.hpp"
 #include "IR/Label.hpp"
 #include "IR/Offset.hpp"
+#include "IR/MemAddr.hpp"
 #include "Node.hpp"
 
 namespace Compiler{
@@ -33,12 +34,11 @@ using PtrAddrUnaryOp  = std::unique_ptr<AddrUnaryOp>;
 
 
 struct InstAddress{
-  InstAddress(const Label& l, const Offset o)
-    :label_( std::move(l.Clone())), offset_(o){}
+  InstAddress(const MemAddr addr)
+    :addr_(addr){}
   ~InstAddress() = default;
 protected:
-  PtrLabel label_;
-  Offset offset_;
+  MemAddr addr_;
 };
 
 struct InstSrc{
@@ -150,13 +150,13 @@ protected:
 };
 
 struct Load : public Inst, public InstDst, public InstAddress{
-  Load(const Reg reg_dst, const Label& l, const Offset o)
-    : InstDst(reg_dst), InstAddress(l, o){};
+  Load(const Reg reg_dst, const MemAddr addr)
+    : InstDst(reg_dst), InstAddress(addr){};
   virtual ~Load() = default;
 
   virtual std::string str() const noexcept{
     return std::string("%")  + std::to_string(dst_)
-         + std::string(" = Load [") + label_->str() + std::string(":") + offset_.str()
+         + std::string(" = Load [") + addr_.str()
          + std::string("]");
   };
 protected:
@@ -179,13 +179,13 @@ protected:
 
 
 struct Store : public Inst, public InstSrc, public InstAddress{
-  Store(const Reg src, const Label& l, const Offset o)
-    : InstSrc(src), InstAddress(l, o){};
+  Store(const Reg src, const MemAddr addr)
+    : InstSrc(src), InstAddress(addr){};
   virtual ~Store() = default;
 
   virtual std::string str() const noexcept{
     return std::string("store %")  + std::to_string(src_)
-         + std::string(" to [") + label_->str() + std::string(":") + offset_.str()
+         + std::string(" to [") + addr_.str()
          + std::string("]") ;
   };
 protected:

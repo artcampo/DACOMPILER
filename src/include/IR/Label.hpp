@@ -10,51 +10,39 @@ namespace IR{
 
 using LabelId = size_t;
 struct Label;
-struct LabelRT;
-struct LabelLT;
-using PtrLabel = std::unique_ptr<Label>;
+// using PtrLabel = std::unique_ptr<Label>;
 
 struct Label{
-  Label(const LabelId id, std::string name) : id_(id), name_(name){};
-  virtual ~Label() = default;
+  Label() = default;
+  Label& operator= ( const Label &o ) = default;
+  ~Label() = default;
 
-  virtual PtrLabel Clone() const noexcept = 0;
-  virtual std::string str() const noexcept = 0;
+  static Label LabelLT(const LabelId id, const std::string name){
+    return Label(id, name, false);
+  }
+
+  /*
+  static Label LabelRT(const LabelId id, const std::string name){
+    return Label(id, name, true);
+  }
+  */
+
+  bool  IsRunTime() const noexcept{ return is_rt_or_lt_;}
+  bool  IsLinkTime() const noexcept{ return not is_rt_or_lt_;}
+
+
+  std::string str() const noexcept{
+    return name_;
+  };
 protected:
-  LabelId id_;
+  LabelId     id_;
   std::string name_;
+  bool        is_rt_or_lt_;
+
+  Label(const LabelId id, const std::string name, const bool is_rt_or_lt_)
+  : id_(id), name_(name){};
 };
 
-struct LabelRT: public  Label{
-  LabelRT(const LabelId id, std::string name) : Label(id, name){};
-  LabelRT(const LabelRT& l) : Label(l.id_, l.name_){};
-
-  ~LabelRT() = default;
-
-  virtual std::string str() const noexcept{
-    return name_;
-  };
-  virtual PtrLabel Clone() const noexcept{
-    return std::unique_ptr<LabelRT>(new LabelRT(*this));
-  };
-protected:
-};
-
-struct LabelLT: public  Label{
-  LabelLT(const LabelId id, std::string name) : Label(id, name){};
-  LabelLT(const LabelLT& l) : Label(l.id_, l.name_){};
-
-  ~LabelLT() = default;
-
-  virtual std::string str() const noexcept{
-    return name_;
-  };
-
-  virtual PtrLabel Clone() const noexcept{
-    return std::unique_ptr<LabelLT>(new LabelLT(*this));
-  };
-protected:
-};
 
 
 
