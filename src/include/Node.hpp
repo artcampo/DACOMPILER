@@ -154,9 +154,9 @@ public:
   ProgBody(const ScopeId id, const Locus& locus
     , PtrProgInit& pinit
     , PtrProgEnd& pend
-    , PtrFuncDef& main)
+    , std::vector<PtrFuncDef>& functions)
   : Node(id, locus), pinit_(std::move(pinit)), pend_(std::move(pend))
-  , main_(std::move(main)){}
+  , functions_(std::move(functions)){}
 
 
   virtual void Accept(IRGenerator& v, const Node* successor);
@@ -165,11 +165,21 @@ public:
 
   ProgInit& GetProgInit() const noexcept{ return *pinit_;}
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
-  FuncDef& GetMainFunc()    const noexcept{ return *main_;}
 private:
   PtrProgInit  pinit_;
   PtrProgEnd   pend_;
-  PtrFuncDef  main_;
+  std::vector<PtrFuncDef> functions_;
+public:
+
+  using iterator = std::vector<PtrFuncDef>::iterator;
+  using const_iterator = std::vector<PtrFuncDef>::const_iterator;
+
+  iterator begin() { return functions_.begin(); }
+  iterator end()   { return functions_.end(); }
+  const_iterator begin()  const { return functions_.begin(); }
+  const_iterator end()    const { return functions_.end(); }
+  const_iterator cbegin() const { return functions_.cbegin(); }
+  const_iterator cend()   const { return functions_.cend(); }
 };
 
 /////////////////////////////////////////////////////////

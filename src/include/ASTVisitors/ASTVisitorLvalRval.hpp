@@ -14,7 +14,7 @@ public:
 
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    p.GetMainFunc().Accept(*this);
+    for(auto& it : p) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 

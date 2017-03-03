@@ -13,8 +13,8 @@ namespace AST{
 
 void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 //   std::cout << "P\n";
-  p.GetProgInit().Accept (*this, &p.GetMainFunc());
-  p.GetMainFunc().Accept (*this, &p.GetProgEnd() );
+  p.GetProgInit().Accept (*this, nullptr);
+  for(auto& it : p) it->Accept(*this, successor);
   p.GetProgEnd().Accept  (*this, nullptr );
 }
 
