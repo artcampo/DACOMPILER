@@ -15,7 +15,7 @@ struct MemAddr{
     : l_(l), o_(o){}
 
 //   std::string str() const noexcept {return l_.str() + o_.str;}
-  std::string str() const noexcept {return l_.str();}
+  std::string str() const noexcept {return l_.str() + std::string(":")+ o_.str();}
 
 //   const bool operator<  ( const Offset &o )const noexcept
 //     {return addr_ < o.addr_;}

@@ -24,6 +24,7 @@ struct IRStream : public IRBuilder{
   Reg AppendLoadI(const NodeValue val);
   Reg AppendLoad(const MemAddr addr);
   Reg AppendArith(const Reg src1, const Reg src2, const ArithType op);
+  Reg AppendPtrElem(const MemAddr addr);
 
   void Print() const noexcept;
 private:

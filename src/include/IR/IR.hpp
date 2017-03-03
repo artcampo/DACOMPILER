@@ -20,7 +20,7 @@ struct Load;
 struct Store;
 struct Arith;
 struct Comparison;
-struct AddrUnaryOp;
+struct PtrElem;
 
 using PtrInst         = std::unique_ptr<Inst>;
 using PtrJumpIncond   = std::unique_ptr<JumpIncond>;
@@ -30,7 +30,7 @@ using PtrLoad         = std::unique_ptr<Load>;
 using PtrStore        = std::unique_ptr<Store>;
 using PtrArith        = std::unique_ptr<Arith>;
 using PtrComparison   = std::unique_ptr<Comparison>;
-using PtrAddrUnaryOp  = std::unique_ptr<AddrUnaryOp>;
+using PtrPtrElem      = std::unique_ptr<PtrElem>;
 
 
 struct InstAddress{
@@ -210,8 +210,6 @@ struct UnaryOp : public Inst, public InstDst, public InstSrc{
   virtual ~UnaryOp() = default;
 
   virtual std::string str() const noexcept = 0;
-protected:
-
 };
 
 struct Arith : public BinaryOp{
@@ -242,21 +240,17 @@ protected:
   CompType op_;
 };
 
-struct AddrUnaryOp : public UnaryOp{
-  AddrUnaryOp(const Reg reg_dst, const Reg src1, const AddrUnaryType op)
-  : UnaryOp(reg_dst, src1), op_(op){};
-  virtual ~AddrUnaryOp() = default;
+struct PtrElem : public Inst, public InstAddress, public InstDst{
+  PtrElem(const Reg reg_dst, const MemAddr addr)
+    : InstAddress(addr), InstDst(reg_dst){}
+  virtual ~PtrElem() = default;
 
   virtual std::string str() const noexcept{
     return std::string("%")  + std::to_string(dst_)
-         + std::string(" = ") + Compiler::IR::str(op_)
-         + std::string(" %") + std::to_string(src_);
+         + std::string(" = PtrElem( ")
+         + addr_.str() + std::string(")");
   };
-protected:
-  AddrUnaryType op_;
 };
-
-
 
 
 }//end namespace Inst

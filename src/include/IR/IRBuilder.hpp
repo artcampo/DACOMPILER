@@ -48,6 +48,10 @@ protected:
     return std::make_unique<Inst::Store>(src, addr);
   }
 
+  Inst::PtrPtrElem PtrElem(const MemAddr addr){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Inst::PtrElem>(assigned_reg, addr);
+  }
 
 
 private:

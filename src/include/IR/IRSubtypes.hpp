@@ -22,14 +22,10 @@ enum class CompType{
   , kLessEqualThan = 3
 };
 
-enum class AddrUnaryType{
-    kReference = 0
-  , kDereference = 1
-};
 
 std::string str(const ArithType op)     noexcept;
 std::string str(const CompType op)      noexcept;
-std::string str(const AddrUnaryType op) noexcept;
+
 
 }//end namespace IR
 }//end namespace Compiler

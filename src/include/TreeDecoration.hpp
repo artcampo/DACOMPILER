@@ -27,8 +27,8 @@ public:
   bool IsValueAccess(const Var& n) const{return var_is_val_or_addr_.at(&n);}
   bool IsAddressAccess(const Var& n) const{return not var_is_val_or_addr_.at(&n);}
 
-  void SetVarAsRead(const Var& n) noexcept{var_is_read_or_write_[&n] = true;}
-  void SetVarAsWrite(const Var& n) noexcept{var_is_read_or_write_[&n] = false;}
+  void SetAsRead(const Expr& n) noexcept{var_is_read_or_write_[&n] = true;}
+  void SetAsWrite(const Expr& n) noexcept{var_is_read_or_write_[&n] = false;}
 
   void SetVarUsageAsValue(const Var& n) noexcept{var_is_val_or_addr_[&n] = true;}
   void SetVarUsageAsAddress(const Var& n) noexcept{var_is_val_or_addr_[&n] = false;}

@@ -43,6 +43,9 @@ private:
   std::map<const Node*, IR::Reg>    reg_src_of_expr_;
   std::map<const Node*, std::vector<IR::Addr>> back_patch_;
 
+  std::map<const Node*, IR::MemAddr> addr_of_var_;
+
+
   void BackPatch(const Node& n, const IR::Addr position);
   void AddToBackPatch(const Node& n, const IR::Addr position);
   void PrintBackPatch();

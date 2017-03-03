@@ -7,7 +7,6 @@ namespace Compiler{
 using Compiler::IR::Offset;
 using Compiler::IR::Label;
 using Compiler::IR::MemAddr;
-using Compiler::IR::AddrUnaryType;
 using namespace Compiler::IR::Inst;
 
 namespace AST{
@@ -149,9 +148,9 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
 
 void IRGenerator::Visit(RefOp const& n, const Node* successor){
   n.Rhs().Accept(*this, successor);
-  const IR::Reg reg_src = reg_dst_of_expr_[&n.Rhs()];
-//   const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kReference);
-//   reg_dst_of_expr_[&n]  = r;
+  const MemAddr a       = addr_of_var_[&n.Rhs()];
+  const IR::Reg r       = stream_.AppendPtrElem(a);
+  reg_dst_of_expr_[&n]  = r;
 }
 
 void IRGenerator::Visit(DerefOp const& n, const Node* successor){
@@ -167,8 +166,12 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
   const MemAddr a = MemAddr(l, o);
 
   if(unit_.IsRead(p)){
-    const IR::Reg r  = stream_.AppendLoad(a);
-    reg_dst_of_expr_[&p] = r;
+    if(unit_.IsValueAccess(p)){
+      const IR::Reg r  = stream_.AppendLoad(a);
+      reg_dst_of_expr_[&p] = r;
+    }else{
+      addr_of_var_[&p] = a;
+    }
   }else{
     const IR::Reg r_src = reg_src_of_expr_[&p];
     stream_.AppendStore(r_src, a);

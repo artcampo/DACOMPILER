@@ -41,6 +41,11 @@ Reg IRStream::AppendArith(const Reg src1, const Reg src2, const ArithType op){
   return RegAssignedToPreviousInst();
 }
 
+Reg IRStream::AppendPtrElem(const MemAddr addr){
+  Append( PtrElem(addr) );
+  return RegAssignedToPreviousInst();
+}
+
 
 
 Reg IRStream::RegAssignedToPreviousInst() const{

@@ -17,10 +17,5 @@ std::string str(const CompType op) noexcept{
   if(CompType::kLessEqualThan == op) return std::string("<=");
 }
 
-std::string str(const AddrUnaryType op) noexcept{
-  if(op == AddrUnaryType::kReference)   return std::string("&");
-  if(op == AddrUnaryType::kDereference) return std::string("*");
-}
-
 }//end namespace IR
 }//end namespace Compiler
