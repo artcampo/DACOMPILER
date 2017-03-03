@@ -11,7 +11,7 @@ namespace AST{
 
 
 enum class kBasicTypeId : size_t{
-    kVoid
+    kVoid = 0
   , kInt  = 1
   , kBool = 2
 };

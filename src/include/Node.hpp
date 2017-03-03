@@ -129,25 +129,6 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class FuncDef : public Node {
-public:
-  virtual ~FuncDef() = default;
-  FuncDef(std::string name, PtrBlock& block,const ScopeId id
-    , const Locus& locus)
-  : Node(id, locus), block_(std::move(block)), name_(name){}
-
-  virtual void Accept(IRGenerator& v, const Node* successor);
-  virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return std::string("FuncDef: ") + name_;}
-
-  Block&    GetBody() const noexcept{ return *block_;}
-private:
-//   PtrArg
-  PtrBlock      block_;
-  std::string   name_;
-};
-
-/////////////////////////////////////////////////////////
 class ProgBody : public Node {
 public:
   virtual ~ProgBody() = default;
@@ -269,3 +250,4 @@ private:
 
 #include "NodeExpr.hpp"
 #include "NodeStmt.hpp"
+#include "NodeFunc.hpp"
