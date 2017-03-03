@@ -9,7 +9,7 @@ void ASTVisitorPrettyPrinter::Visit(ProgBody const& p){
   p.GetProgEnd().Accept(*this);
 }
 
-void ASTVisitorPrettyPrinter::Visit(FuncDecl const& p){
+void ASTVisitorPrettyPrinter::Visit(FuncDef const& p){
   p.GetBody().Accept(*this);
 }
 

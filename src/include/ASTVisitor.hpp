@@ -10,7 +10,7 @@ public:
   virtual void Visit(ProgBody const& p) = 0;
   virtual void Visit(ProgInit const& p) = 0;
   virtual void Visit(ProgEnd const& p) = 0;
-  virtual void Visit(FuncDecl const& p) = 0;
+  virtual void Visit(FuncDef const& p) = 0;
   virtual void Visit(Block const& p) = 0;
   virtual void Visit(IfStmt const& p) = 0;
   virtual void Visit(WhileStmt const& p) = 0;

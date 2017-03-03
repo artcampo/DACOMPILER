@@ -19,7 +19,7 @@ public:
 
 
 
-  virtual void Visit(FuncDecl const& p){
+  virtual void Visit(FuncDef const& p){
 //     std::cout << "Local offset\n";
     p.GetBody().Accept(*this);
   }

@@ -20,7 +20,7 @@ public:
     if(unit_.ValidAst())
       for(auto& f : unit_){
         LocalVarOffsets v(unit_, *f);
-        v.Visit(f->GetFuncDeclNode());
+        v.Visit(f->GetFuncDefNode());
       }
   };
 

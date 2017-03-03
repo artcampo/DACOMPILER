@@ -18,7 +18,7 @@ void IRGenerator::Visit(ProgBody const& p, const Node* successor){
   p.GetProgEnd().Accept  (*this, nullptr );
 }
 
-void IRGenerator::Visit(FuncDecl const& p, const Node* successor){
+void IRGenerator::Visit(FuncDef const& p, const Node* successor){
   p.GetBody().Accept(*this, successor);
 }
 

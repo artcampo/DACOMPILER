@@ -21,7 +21,7 @@ using AST::ProgBody;
 using AST::ScopeId;
 using AST::SymbolTable;
 using namespace Compiler::AST::Ptrs;
-using AST::FuncDecl;
+using AST::FuncDef;
 
 class Function;
 using PtrFunction = std::unique_ptr<Function>;
@@ -31,15 +31,15 @@ using OffsetTable = std::map<Symbols::SymbolId, IR::Offset>;
 class Function{
 public:
 
-  Function(std::string& name, FuncDecl* origin_node
+  Function(std::string& name, FuncDef* origin_node
     , OffsetTable& module_offset_table): name_(name)
       , origin_node_(origin_node), module_offset_table_(module_offset_table){}
 
   Function(std::string& name, OffsetTable& module_offset_table)
     : Function(name, nullptr, module_offset_table){}
 
-  FuncDecl& GetFuncDeclNode() { return *origin_node_; }
-  const FuncDecl& GetFuncDeclNode() const { return *origin_node_; }
+  FuncDef& GetFuncDefNode() { return *origin_node_; }
+  const FuncDef& GetFuncDefNode() const { return *origin_node_; }
 
 
   Symbols::Symbol& GetSymbolDecl(const Node& n) const{
@@ -51,7 +51,7 @@ public:
     symbol_decl_of_node_[&n] = &s;
   }
 
-  void SetOriginNode(FuncDecl& n){
+  void SetOriginNode(FuncDef& n){
     origin_node_ = &n;
   }
 
@@ -67,7 +67,7 @@ public:
 
 private:
   std::string&      name_;
-  FuncDecl*         origin_node_;
+  FuncDef*         origin_node_;
 
   OffsetTable&      module_offset_table_;
   OffsetTable       offset_table_;

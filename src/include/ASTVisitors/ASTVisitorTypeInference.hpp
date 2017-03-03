@@ -17,7 +17,7 @@ public:
     p.GetProgEnd().Accept(*this);
   }
 
-  virtual void Visit(FuncDecl const& p){
+  virtual void Visit(FuncDef const& p){
     p.GetBody().Accept(*this);
   }
 

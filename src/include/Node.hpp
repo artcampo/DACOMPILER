@@ -28,7 +28,7 @@ class ProgBody;
 class ProgInit;
 class ProgEnd;
 class Block;
-class FuncDecl;
+class FuncDef;
 
 //subtypes of Statement
 class Statement;
@@ -56,7 +56,7 @@ using PtrProgBody   = std::unique_ptr<ProgBody>;
 using PtrProgInit   = std::unique_ptr<ProgInit>;
 using PtrProgEnd    = std::unique_ptr<ProgEnd>;
 using PtrBlock      = std::unique_ptr<Block>;
-using PtrFuncDecl   = std::unique_ptr<FuncDecl>;
+using PtrFuncDef   = std::unique_ptr<FuncDef>;
 
 using PtrStatement  = std::unique_ptr<Statement>;
 using PtrIfStmt     = std::unique_ptr<IfStmt>;
@@ -129,16 +129,16 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class FuncDecl : public Node {
+class FuncDef : public Node {
 public:
-  virtual ~FuncDecl() = default;
-  FuncDecl(std::string name, PtrBlock& block,const ScopeId id
+  virtual ~FuncDef() = default;
+  FuncDef(std::string name, PtrBlock& block,const ScopeId id
     , const Locus& locus)
   : Node(id, locus), block_(std::move(block)), name_(name){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return std::string("FuncDecl: ") + name_;}
+  virtual std::string str() const noexcept { return std::string("FuncDef: ") + name_;}
 
   Block&    GetBody() const noexcept{ return *block_;}
 private:
@@ -154,7 +154,7 @@ public:
   ProgBody(const ScopeId id, const Locus& locus
     , PtrProgInit& pinit
     , PtrProgEnd& pend
-    , PtrFuncDecl& main)
+    , PtrFuncDef& main)
   : Node(id, locus), pinit_(std::move(pinit)), pend_(std::move(pend))
   , main_(std::move(main)){}
 
@@ -165,11 +165,11 @@ public:
 
   ProgInit& GetProgInit() const noexcept{ return *pinit_;}
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
-  FuncDecl& GetMainFunc()    const noexcept{ return *main_;}
+  FuncDef& GetMainFunc()    const noexcept{ return *main_;}
 private:
   PtrProgInit  pinit_;
   PtrProgEnd   pend_;
-  PtrFuncDecl  main_;
+  PtrFuncDef  main_;
 };
 
 /////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ using namespace Compiler::AST::Ptrs;
 // class ASTVisitor;
 // namespace AST{ class ASTVisitorDump; class Function;};
 namespace AST{ class ASTVisitorDump;};
-using AST::FuncDecl;
+using AST::FuncDef;
 using AST::PtrFunction;
 using AST::Function;
 using AST::PtrLexicalScope;
@@ -53,7 +53,7 @@ public:
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
-  const ScopeId NewFunction(std::string name, FuncDecl& origin_node){
+  const ScopeId NewFunction(std::string name, FuncDef& origin_node){
     functions_.push_back( std::move(
       std::make_unique<Function>(name, &origin_node, ModuleOffsetTable())));
     curr_func_ = functions_[ functions_.size() - 1].get();

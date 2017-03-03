@@ -9,7 +9,7 @@ void ASTVisitorDump::Visit(ProgBody const& p){
   p.GetProgEnd().Accept(*this);
 }
 
-void ASTVisitorDump::Visit(FuncDecl const& p){
+void ASTVisitorDump::Visit(FuncDef const& p){
   p.GetBody().Accept(*this);
 }
 
