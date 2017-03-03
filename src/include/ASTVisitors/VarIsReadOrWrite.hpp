@@ -22,13 +22,18 @@ public:
   }
 
   virtual void Visit(DerefOp const& p){
+    Set(p);
     p.Rhs().Accept(*this);
     is_read_or_write_inht_ = true;
   }
 
   virtual void Visit(Var const& p){
-    if(is_read_or_write_inht_)  unit_.SetVarAsRead(p);
-    else                        unit_.SetVarAsWrite(p);
+    Set(p);
+  }
+
+  void Set(Expr const& p){
+    if(is_read_or_write_inht_)  unit_.SetAsRead(p);
+    else                        unit_.SetAsWrite(p);
   }
   //SDD
 

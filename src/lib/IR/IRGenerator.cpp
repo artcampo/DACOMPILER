@@ -121,7 +121,7 @@ void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
 
 void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
   p.Rhs().Accept(*this, successor);
-  reg_src_of_expr_[&p.Lhs()] = reg_dst_of_expr_[&p.Rhs()];
+  reg_src_of_assignment_[&p.Lhs()] = reg_dst_of_expr_[&p.Rhs()];
   p.Lhs().Accept(*this, successor);
 }
 
@@ -135,6 +135,7 @@ void IRGenerator::Visit(Literal const& n, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
+  n.Lhs().Accept(*this, successor);
   n.Rhs().Accept(*this, successor);
 
   const IR::Reg reg_src1 = reg_dst_of_expr_[&n.Lhs()];
@@ -155,7 +156,15 @@ void IRGenerator::Visit(RefOp const& n, const Node* successor){
 
 void IRGenerator::Visit(DerefOp const& n, const Node* successor){
   n.Rhs().Accept(*this, successor);
-  const IR::Reg reg_src = reg_dst_of_expr_[&n.Rhs()];
+  const IR::Reg reg_src_addr = reg_dst_of_expr_[&n.Rhs()];
+  if(unit_.IsRead(n)){
+
+    const IR::Reg r       = stream_.AppendLoadReg(reg_src_addr);
+    reg_dst_of_expr_[&n]  = r;
+  }else{
+    const IR::Reg src_value = reg_src_of_assignment_[&n];
+    stream_.AppendStoreReg(reg_src_addr, src_value);
+  }
 //   const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kDereference);
 //   reg_dst_of_expr_[&n]  = r;
 }
@@ -173,7 +182,7 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
       addr_of_var_[&p] = a;
     }
   }else{
-    const IR::Reg r_src = reg_src_of_expr_[&p];
+    const IR::Reg r_src = reg_src_of_assignment_[&p];
     stream_.AppendStore(r_src, a);
   }
 }

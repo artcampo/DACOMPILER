@@ -20,6 +20,7 @@ using AST::LexicalScope;
 using AST::Type;
 using AST::Node;
 using AST::Var;
+using AST::Expr;
 using AST::ProgBody;
 using AST::ScopeId;
 using AST::SymbolTable;

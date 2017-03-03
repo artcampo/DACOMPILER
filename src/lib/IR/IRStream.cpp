@@ -32,9 +32,19 @@ Reg IRStream::AppendLoad(const MemAddr addr){
   return RegAssignedToPreviousInst();
 }
 
+Reg IRStream::AppendLoadReg(const Reg src){
+  Append( LoadReg(src) );
+  return RegAssignedToPreviousInst();
+}
+
 void IRStream::AppendStore(const Reg src, const MemAddr addr){
   Append( Store(src, addr) );
 }
+
+void IRStream::AppendStoreReg(const Reg src1, const Reg src2){
+  Append( StoreReg(src1, src2) );
+}
+
 
 Reg IRStream::AppendArith(const Reg src1, const Reg src2, const ArithType op){
   Append( Arith(src1, src2, op) );

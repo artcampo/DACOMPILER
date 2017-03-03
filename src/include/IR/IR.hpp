@@ -17,7 +17,9 @@ struct JumpCond;
 struct JumpIncond;
 struct LoadI;
 struct Load;
+struct LoadReg;
 struct Store;
+struct StoreReg;
 struct Arith;
 struct Comparison;
 struct PtrElem;
@@ -27,7 +29,9 @@ using PtrJumpIncond   = std::unique_ptr<JumpIncond>;
 using PtrJumpCond     = std::unique_ptr<JumpCond>;
 using PtrLoadI        = std::unique_ptr<LoadI>;
 using PtrLoad         = std::unique_ptr<Load>;
+using PtrLoadReg      = std::unique_ptr<LoadReg>;
 using PtrStore        = std::unique_ptr<Store>;
+using PtrStoreReg     = std::unique_ptr<StoreReg>;
 using PtrArith        = std::unique_ptr<Arith>;
 using PtrComparison   = std::unique_ptr<Comparison>;
 using PtrPtrElem      = std::unique_ptr<PtrElem>;
@@ -47,6 +51,16 @@ struct InstSrc{
   Reg RegSrc() const noexcept { return src_;};
 protected:
   Reg src_;
+};
+
+struct InstSrcSrc{
+  InstSrcSrc(const Reg src1, const Reg src2) : src1_(src1), src2_(src2){}
+  ~InstSrcSrc() = default;
+  Reg RegSrc1() const noexcept { return src1_;};
+  Reg RegSrc2() const noexcept { return src2_;};
+protected:
+  Reg src1_;
+  Reg src2_;
 };
 
 struct InstDst {
@@ -86,7 +100,7 @@ struct Jump: public Inst{
 
   virtual std::string str() const noexcept{
     return std::string("Jump to ") + std::to_string(target_);
-  };
+  }
 protected:
   Addr target_;
 };
@@ -98,7 +112,7 @@ struct JumpCond : public Jump{
 
   virtual std::string str() const noexcept{
     return std::string("JumpCond ");
-  };
+  }
 protected:
   Reg cond_;
 };
@@ -111,7 +125,7 @@ struct JumpCondFalse : public JumpCond{
   virtual std::string str() const noexcept{
     return std::string("JumpCondFalse %") + std::to_string(cond_)
          + std::string(" to:")  + std::to_string(target_);
-  };
+  }
 };
 
 struct JumpCondTrue : public JumpCond{
@@ -122,7 +136,7 @@ struct JumpCondTrue : public JumpCond{
   virtual std::string str() const noexcept{
     return std::string("JumpCondTrue %") + std::to_string(cond_)
          + std::string(" to:")  + std::to_string(target_);
-  };
+  }
 };
 
 struct JumpIncond : public Jump{
@@ -131,7 +145,7 @@ struct JumpIncond : public Jump{
 
   virtual std::string str() const noexcept{
     return std::string("JumpIncond") + std::to_string(target_);
-  };
+  }
 };
 
 
@@ -144,9 +158,7 @@ struct LoadI : public Inst, public InstDst, public InstVal{
     return std::string("%")  + std::to_string(dst_)
          + std::string(" = LoadI(") + std::to_string(val_)
          + std::string(")") ;
-  };
-protected:
-
+  }
 };
 
 struct Load : public Inst, public InstDst, public InstAddress{
@@ -158,8 +170,7 @@ struct Load : public Inst, public InstDst, public InstAddress{
     return std::string("%")  + std::to_string(dst_)
          + std::string(" = Load [") + addr_.str()
          + std::string("]");
-  };
-protected:
+  }
 };
 
 
@@ -172,8 +183,7 @@ struct LoadReg : public Inst, public InstDst, public InstSrc{
     return std::string("%")  + std::to_string(dst_)
          + std::string(" = Load [ %") + std::to_string(src_)
          + std::string("]");
-  };
-protected:
+  }
 };
 
 
@@ -187,21 +197,29 @@ struct Store : public Inst, public InstSrc, public InstAddress{
     return std::string("store %")  + std::to_string(src_)
          + std::string(" to [") + addr_.str()
          + std::string("]") ;
-  };
-protected:
+  }
+};
+
+struct StoreReg : public Inst, public InstSrcSrc{
+  StoreReg(const Reg src1, const Reg src2)
+    : InstSrcSrc(src1, src2){};
+  virtual ~StoreReg() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("store %")  + std::to_string(src1_)
+         + std::string(" to [%") + std::to_string(src2_)
+         + std::string("]") ;
+  }
 };
 
 
-struct BinaryOp : public Inst, public InstDst{
+
+struct BinaryOp : public Inst, public InstDst, public InstSrcSrc{
   BinaryOp(const Reg reg_dst, const Reg src1, const Reg src2)
-  : InstDst(reg_dst), reg_src1_(src1), reg_src2_(src2){};
+  : InstDst(reg_dst), InstSrcSrc(src1, src2){};
   virtual ~BinaryOp() = default;
 
   virtual std::string str() const noexcept = 0;
-
-protected:
-  Reg reg_src1_;
-  Reg reg_src2_;
 };
 
 struct UnaryOp : public Inst, public InstDst, public InstSrc{
@@ -219,9 +237,9 @@ struct Arith : public BinaryOp{
 
   virtual std::string str() const noexcept{
     return std::string("%")  + std::to_string(dst_)
-         + std::string(" = %") + std::to_string(reg_src1_) + std::string(" ")
-         + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(reg_src2_);
-  };
+         + std::string(" = %") + std::to_string(src1_) + std::string(" ")
+         + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(src2_);
+  }
 protected:
   ArithType op_;
 };
@@ -233,9 +251,9 @@ struct Comparison : public BinaryOp{
 
   virtual std::string str() const noexcept{
     return std::string("%")  + std::to_string(dst_)
-         + std::string(" = %") + std::to_string(reg_src1_) + std::string(" ")
-         + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(reg_src2_);
-  };
+         + std::string(" = %") + std::to_string(src1_) + std::string(" ")
+         + Compiler::IR::str(op_) + std::string(" %")+ std::to_string(src2_);
+  }
 protected:
   CompType op_;
 };
@@ -249,7 +267,7 @@ struct PtrElem : public Inst, public InstAddress, public InstDst{
     return std::string("%")  + std::to_string(dst_)
          + std::string(" = PtrElem( ")
          + addr_.str() + std::string(")");
-  };
+  }
 };
 
 

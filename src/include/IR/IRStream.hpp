@@ -19,10 +19,11 @@ struct IRStream : public IRBuilder{
   void AppendJumpInconditional();
 
   void AppendStore(const Reg src,const MemAddr addr);
-
+  void AppendStoreReg(const Reg src1, const Reg src2);
 
   Reg AppendLoadI(const NodeValue val);
   Reg AppendLoad(const MemAddr addr);
+  Reg AppendLoadReg(const Reg src);
   Reg AppendArith(const Reg src1, const Reg src2, const ArithType op);
   Reg AppendPtrElem(const MemAddr addr);
 

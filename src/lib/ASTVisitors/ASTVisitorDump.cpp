@@ -129,11 +129,14 @@ void ASTVisitorDump::DecreaseIndent(){
 void ASTVisitorDump::DisplayAttributes(Node const& p){
   if(show_attributes_){
     auto it = unit_.type_of_node_.find(&p);
-    bool display = (it != unit_.type_of_node_.end()) or unit_.HasLRness(p);
+    bool display = (it != unit_.type_of_node_.end()) or unit_.HasLRness(p)
+      or unit_.HasReadWrite(p) or  unit_.HasVarUsage(p);
     if(display) std::cout << " [";
     if(it != unit_.type_of_node_.end()) std::cout << it->second->str();
 
     if(unit_.HasLRness(p)) std::cout << " " << unit_.LRnessStr(p);
+    if(unit_.HasReadWrite(p)) std::cout << " " << unit_.ReadWriteStr(p);
+    if(unit_.HasVarUsage(p)) std::cout << " " << unit_.VarUsageStr(p);
     if(display) std::cout << "]";
   }
 }

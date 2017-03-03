@@ -28,14 +28,14 @@ protected:
     return std::make_unique<Inst::JumpIncond>();
   };
 
-  Inst::PtrLoadI LoadI(const NodeValue val){
-    Reg assigned_reg = FreeReg();
-    return std::make_unique<Inst::LoadI>(assigned_reg, val);
-  }
-
   Inst::PtrArith Arith(const Reg src1, const Reg src2, const ArithType op){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::Arith>(assigned_reg, src1, src2, op);
+  }
+
+  Inst::PtrLoadI LoadI(const NodeValue val){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Inst::LoadI>(assigned_reg, val);
   }
 
   Inst::PtrLoad Load(const MemAddr addr){
@@ -43,10 +43,22 @@ protected:
     return std::make_unique<Inst::Load>(assigned_reg, addr);
   }
 
+  Inst::PtrLoadReg LoadReg(const Reg src){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Inst::LoadReg>(assigned_reg, src);
+  }
+
   Inst::PtrStore Store(const Reg src, const MemAddr addr){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::Store>(src, addr);
   }
+
+  //src1 is value to be stored, src2 contains address
+  Inst::PtrStoreReg StoreReg(const Reg src1, const Reg src2){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Inst::StoreReg>(src1, src2);
+  }
+
 
   Inst::PtrPtrElem PtrElem(const MemAddr addr){
     Reg assigned_reg = FreeReg();

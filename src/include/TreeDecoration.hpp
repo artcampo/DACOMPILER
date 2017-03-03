@@ -14,6 +14,7 @@ namespace Compiler{
 
 using AST::Node;
 using AST::Var;
+using AST::Expr;
 using AST::OffsetTable;
 using AST::OffsetTable;
 
@@ -21,8 +22,8 @@ class TreeDecoration : public LnessRness{
 public:
   TreeDecoration(){}
 
-  bool IsRead(const Var& n) const{return var_is_read_or_write_.at(&n);}
-  bool IsWrite(const Var& n) const{return not var_is_read_or_write_.at(&n);}
+  bool IsRead(const Expr& n) const{return var_is_read_or_write_.at(&n);}
+  bool IsWrite(const Expr& n) const{return not var_is_read_or_write_.at(&n);}
 
   bool IsValueAccess(const Var& n) const{return var_is_val_or_addr_.at(&n);}
   bool IsAddressAccess(const Var& n) const{return not var_is_val_or_addr_.at(&n);}
@@ -45,6 +46,29 @@ public:
 
   IR::Offset LocalVarOffset(const Var& n) const{
     return module_offset_table_.at(n.Id());
+  }
+
+  bool HasReadWrite(const Node& n) const{
+    auto it = var_is_read_or_write_.find(&n);
+    return it != var_is_read_or_write_.end();
+  }
+
+  bool HasVarUsage(const Node& n) const{
+    auto it = var_is_val_or_addr_.find(&n);
+    return it != var_is_val_or_addr_.end();
+  }
+
+
+  std::string ReadWriteStr(const Node& n) const{
+    if(not HasReadWrite(n)) return std::string("No ReadWrite");
+    if(IsRead(dynamic_cast<const Expr&>(n)))           return std::string("Read");
+    if(IsWrite(dynamic_cast<const Expr&>(n)))          return std::string("Write");
+  }
+
+  std::string VarUsageStr(const Node& n) const{
+    if(not HasVarUsage(n))  return std::string("No VarUsage");
+    if(IsValueAccess(dynamic_cast<const Var&>(n)))    return std::string("Value");
+    if(IsAddressAccess(dynamic_cast<const Var&>(n)))  return std::string("Address");
   }
 
 

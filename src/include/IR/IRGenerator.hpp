@@ -41,6 +41,9 @@ private:
   std::map<const Node*, IR::Reg>    reg_dst_of_expr_;
   //reg source of Node (not sparsingly used)
   std::map<const Node*, IR::Reg>    reg_src_of_expr_;
+  //only used for the src of assignment's lhs
+  std::map<const Node*, IR::Reg>    reg_src_of_assignment_;
+
   std::map<const Node*, std::vector<IR::Addr>> back_patch_;
 
   std::map<const Node*, IR::MemAddr> addr_of_var_;
