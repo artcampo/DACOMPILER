@@ -14,6 +14,7 @@ using AST::kBasicTypeId;
 using AST::Type;
 using AST::BasicType;
 using AST::PtrType;
+using AST::FuncType;
 // using AST::StructType;
 
 /*
@@ -38,6 +39,8 @@ public:
   const Type& PtrToT(const Type& t);
   const Type& PointedBy(const Type& t);
 
+  const Type& GetFuncType(const Type& return_type
+                        , const std::vector<Type*>& arg_types);
 private:
   const Type& GetType(const kBasicTypeId basic_id);
 
@@ -48,6 +51,7 @@ private:
   std::map<kBasicTypeId, TypeId> type_id_of_basic_type_;
   std::map<TypeId, TypeId> type_id_of_pointer_to_t_;
   std::map<TypeId, TypeId> type_id_of_pointed_by_t_;
+  std::map<std::vector<Type*>, TypeId> type_id_of_function_by_signature_;
   size_t free_type_id_;
 
   const TypeId& GetTypeId(const kBasicTypeId basic){

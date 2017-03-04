@@ -128,7 +128,7 @@ public:
   bool IsDeclValid(const std::string name, const Type& type){
     return Scope().IsDeclValid(name, type);
   }
-  bool RegisterDecl(const std::string name, const Type& type,  const Node& n){
+  bool RegisterDecl(const std::string name, const Type& type, const Node& n){
     AST::Symbols::SymbolId symbol_id = free_symbol_id_;
     bool registered = Scope().RegisterDecl(name, type, n, free_symbol_id_);
     if(registered){
