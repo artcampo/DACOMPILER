@@ -67,9 +67,10 @@ const Type& LexicalScope::GetType(const std::string& name){
   return declaration_table_[id]->GetType();
 }
 
-LexicalScope* LexicalScope::NewNestedScope(const ScopeId id){
+LexicalScope* LexicalScope::NewNestedScope(const ScopeId id
+    , const ScopeOwnerId scope_owner_id){
 
-  LexicalScope* n = new LexicalScope(id, this, symbol_table_
+  LexicalScope* n = new LexicalScope(id, this, scope_owner_id, symbol_table_
             , declaration_table_, symbolid_of_node_);
   nested_scopes_.push_back( std::unique_ptr<LexicalScope>(n) );
   return n;

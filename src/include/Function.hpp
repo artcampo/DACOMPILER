@@ -32,11 +32,14 @@ class Function{
 public:
 
   Function(std::string& name, FuncDef* origin_node
-    , OffsetTable& module_offset_table): name_(name)
-      , origin_node_(origin_node), module_offset_table_(module_offset_table){}
+    , OffsetTable& module_offset_table, const ScopeOwnerId scope_owner_id)
+  : name_(name)
+    , origin_node_(origin_node), module_offset_table_(module_offset_table)
+    , scope_owner_id_(scope_owner_id){}
 
-  Function(std::string& name, OffsetTable& module_offset_table)
-    : Function(name, nullptr, module_offset_table){}
+  Function(std::string& name, OffsetTable& module_offset_table
+    , const ScopeOwnerId scope_owner_id)
+    : Function(name, nullptr, module_offset_table, scope_owner_id){}
 
   FuncDef& GetFuncDefNode() { return *origin_node_; }
   const FuncDef& GetFuncDefNode() const { return *origin_node_; }
@@ -66,8 +69,9 @@ public:
   }
 
 private:
+  ScopeOwnerId      scope_owner_id_;
   std::string&      name_;
-  FuncDef*         origin_node_;
+  FuncDef*          origin_node_;
 
   OffsetTable&      module_offset_table_;
   OffsetTable       offset_table_;

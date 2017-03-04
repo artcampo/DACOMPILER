@@ -12,6 +12,8 @@
 #include <map>
 #include <memory>
 #include <iterator>
+#include <stack>
+#include <cassert>
 
 namespace Compiler{
 
@@ -36,37 +38,40 @@ using AST::Function;
 using AST::PtrLexicalScope;
 using AST::SymbolIdOfNode;
 using AST::OffsetTable;
+using AST::ScopeOwnerId;
 
 class CompilationUnit : public TreeDecoration, public TypeTable
   , public LabelManager{
 public:
 
-  CompilationUnit(): ast_(), free_scope_id_(0), free_symbol_id_(0), TypeTable(error_log_)
+  CompilationUnit(): ast_(), free_scope_id_(0), free_symbol_id_(0)
+    , free_scope_ownner_id_(0), TypeTable(error_log_)
     , curr_func_(nullptr)
     , module_scope_(std::move(std::make_unique<LexicalScope>
-        (FreeScopeId(), nullptr, symbol_table_, module_declaration_table_
-        , symbolid_of_node_)))
+        (FreeScopeId(), nullptr, FreeScopeOwnerId(), symbol_table_
+        , module_declaration_table_, symbolid_of_node_)))
     , current_scope_(module_scope_.get())
     , module_declaration_table_()
+    , global_scope_ownner_id_(0)
     {}
 
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
-  const ScopeId NewFunction(std::string name, FuncDef& origin_node){
+  const ScopeId NewFunction(std::string name, FuncDef& origin_node, const ScopeOwnerId scope_owner_id){
     functions_.push_back( std::move(
-      std::make_unique<Function>(name, &origin_node, ModuleOffsetTable())));
+      std::make_unique<Function>(name, &origin_node, ModuleOffsetTable(), scope_owner_id)));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
-    return NewNestedScope();
+    return NewNestedScope(scope_owner_id);
   }
 
-  const ScopeId NewFunction(std::string& name){
+  const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){
     functions_.push_back( std::move(
-      std::make_unique<Function>(name, ModuleOffsetTable())));
+      std::make_unique<Function>(name, ModuleOffsetTable(), scope_owner_id)));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
-    return NewNestedScope();
+    return NewNestedScope(scope_owner_id);
   }
 
   void ExitFunctionDefinition(){
@@ -74,19 +79,23 @@ public:
     RestoreScope();
   }
 
-  ScopeId NewFirstScope(){
+  ScopeId NewFirstScope(const ScopeOwnerId scope_owner_id){
+    std::cout << scope_owner_id<<" "<<module_scope_->GetScopeOwnerId();
+    assert(scope_owner_id == module_scope_->GetScopeOwnerId());
     return module_scope_->GetScopeId();
   }
 
-  const ScopeId NewNestedScope(){
+  const ScopeId NewNestedScope(const ScopeOwnerId scope_owner_id){
     const ScopeId id = FreeScopeId();
     LexicalScope* new_scope;
-    new_scope = current_scope_->NewNestedScope(id);
+    new_scope = current_scope_->NewNestedScope(id, scope_owner_id);
     scope_by_id_[id] = new_scope;
     current_scope_   = new_scope;
-
     return new_scope->GetScopeId();
   }
+
+  const ScopeOwnerId NewScopeOwner() noexcept{ return FreeScopeOwnerId(); }
+  const ScopeOwnerId GlobalScopeOwnerId() const noexcept{ return global_scope_ownner_id_; }
 
   void RestoreScope(){
 //     std::cout << "*** restoring: " << current_scope_->str()<< "\n";
@@ -150,6 +159,8 @@ public:
 private:
   ScopeId                 free_scope_id_;
   AST::Symbols::SymbolId  free_symbol_id_;
+  ScopeOwnerId            free_scope_ownner_id_;
+  ScopeOwnerId            global_scope_ownner_id_;
 
   SymbolTable       symbol_table_;
   DeclarationTable  module_declaration_table_;
@@ -172,6 +183,7 @@ private:
 
 
   const ScopeId FreeScopeId() noexcept{ ++free_scope_id_; return free_scope_id_ - 1;}
+  const ScopeOwnerId FreeScopeOwnerId() noexcept{ ++free_scope_ownner_id_; return free_scope_ownner_id_ - 1;}
 
 
 public:

@@ -25,6 +25,7 @@ namespace AST{
 
 // using namespace Symbols;
 using ScopeId = size_t;
+using ScopeOwnerId = size_t;
 //pair of name and symbol that was shadowed (or -1 if none)
 using InsertedSymbol = std::pair<Symbols::SymbolString, Symbols::SymbolId>;
 using InsertedDeclarations = std::pair<Symbols::SymbolId, Symbols::Symbol&>;
@@ -37,21 +38,22 @@ using PtrLexicalScope = std::unique_ptr<LexicalScope>;
 class LexicalScope {
 public:
   LexicalScope(const ScopeId id, LexicalScope* const parent
-    , SymbolTable& symbol_table
-    , DeclarationTable& declaration_table
-    , SymbolIdOfNode& symbolid_of_node)
-  : id_(id), parent_(parent)
-  , symbol_table_(symbol_table), declaration_table_(declaration_table)
-  , symbolid_of_node_(symbolid_of_node){}
-
-  LexicalScope(const ScopeId id, LexicalScope* const parent
     , Node* const generator
+    , const ScopeOwnerId scope_owner_id
     , SymbolTable& symbol_table
     , DeclarationTable& declaration_table
     , SymbolIdOfNode& symbolid_of_node)
   : id_(id), parent_(parent), generator_(generator)
-  , symbol_table_(symbol_table), declaration_table_(declaration_table)
-  , symbolid_of_node_(symbolid_of_node){}
+    , symbol_table_(symbol_table), declaration_table_(declaration_table)
+    , symbolid_of_node_(symbolid_of_node), scope_owner_id_(scope_owner_id){}
+
+  LexicalScope(const ScopeId id, LexicalScope* const parent
+    , const ScopeOwnerId scope_owner_id
+    , SymbolTable& symbol_table
+    , DeclarationTable& declaration_table
+    , SymbolIdOfNode& symbolid_of_node)
+  : LexicalScope(id, parent, nullptr, scope_owner_id, symbol_table, declaration_table
+    , symbolid_of_node){}
 
   bool IsDeclValid(const std::string name, const Type& type);
   bool RegisterDecl(const std::string name, const Type& type, const Node& n
@@ -61,7 +63,8 @@ public:
   const Symbols::SymbolId DeclId(const std::string& name) const;
   const ScopeId GetScopeId() const noexcept{return id_;};
 
-  LexicalScope* NewNestedScope(const ScopeId id);
+  LexicalScope* NewNestedScope(const ScopeId id
+                              , const ScopeOwnerId scope_owner_id);
   LexicalScope* GetParentScope() const noexcept{return parent_;};
 
   void UndoTables();
@@ -77,9 +80,11 @@ public:
     s += std::string("}");
     return s;
   }
+  const ScopeOwnerId GetScopeOwnerId() const noexcept{ return scope_owner_id_;}
 
 private:
   ScopeId       id_;
+  ScopeOwnerId  scope_owner_id_;
   LexicalScope* parent_;
   Node*         generator_;
   std::vector<PtrLexicalScope> nested_scopes_;
