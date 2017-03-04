@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <vector>
 #include <iterator>
+#include <iostream>
 #include "Locus.hpp"
 
 namespace Compiler{
