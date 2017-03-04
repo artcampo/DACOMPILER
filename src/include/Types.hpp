@@ -53,6 +53,7 @@ public:
   virtual std::string str() const noexcept{
     if(basic_id_ == kBasicTypeId::kInt) return std::string("int");
     if(basic_id_ == kBasicTypeId::kBool) return std::string("bool");
+    if(basic_id_ == kBasicTypeId::kVoid) return std::string("void");
     return std::string("BasicType not implemented.");
   }
 
@@ -103,7 +104,7 @@ public:
 
   virtual size_t  Size() const noexcept{ return 1;};
   virtual std::string str() const noexcept{
-    return std::string("f: (") + args_str_ + std::string(")->") + ret_str_;
+    return std::string("function: (") + args_str_ + std::string(")->") + ret_str_;
   }
 
   virtual bool IsBool() const noexcept{ return false;}
