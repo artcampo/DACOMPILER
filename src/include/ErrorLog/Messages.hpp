@@ -18,7 +18,7 @@ const static std::string kErr28("[err:28] function declaration's arguments not c
 const static std::string kErr29("[err:29] function declaration's body not started with '{'");
 const static std::string kErr30("[err:30] function declaration's body not closed with '}'");
 const static std::string kErr31("[err:31] function body empty");
-const static std::string kErr31("[err:32] function name already exists");
+const static std::string kErr32("[err:32] function name already exists");
 
 
 }//end namespace Compiler

@@ -9,12 +9,12 @@ namespace AST{
 class FuncDef : public Node {
 public:
   virtual ~FuncDef() = default;
-  FuncDef(std::string name, PtrBlock& body
+  FuncDef(std::string name
+    , PtrBlock& body
     , const Type& ret_type
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), body_(std::move(body)), name_(name), ret_type_(ret_type)
-  , id_(sid){}
+  : Node(id, locus), body_(std::move(body)), name_(name), ret_type_(ret_type){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
