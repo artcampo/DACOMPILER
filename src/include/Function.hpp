@@ -80,9 +80,11 @@ public:
 
   const Label&      EntryLabel() const noexcept{ return entry_label_;}
   const Label&      LocalsLabel() const noexcept{ return locals_label_;}
+
+  std::string str()  const noexcept{ return name_;}
 private:
   ScopeOwnerId      scope_owner_id_;
-  std::string&      name_;
+  std::string       name_;
   FuncDef*          origin_node_;
   const Label&      entry_label_;
   const Label&      locals_label_;

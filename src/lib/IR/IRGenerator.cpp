@@ -25,6 +25,10 @@ void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 }
 
 void IRGenerator::Visit(FuncDef const& p, const Node* successor){
+  Function& f = unit_.GetFunc(p);
+  std::cout << "in f: " << f.str();
+  const IR::Label& l = f.LocalsLabel();
+  std::cout << " with label: " << l.str();
   local_label_inht_ = const_cast<Label*>(&unit_.GetFunc(p).LocalsLabel());
   std::cout << "Using label: " <<unit_.LabelStr( local_label_inht_->Id());
   p.GetBody().Accept(*this, successor);

@@ -22,11 +22,16 @@ public:
   virtual void Visit(FuncDef const& p){
 //     std::cout << "Local offset\n";
     p.GetBody().Accept(*this);
+    IR::AddrOffset k = p.NumPars() - 1;
+    IR::AddrOffset i = 0;
+    //for(auto& it = p.ParBegin(), end = p.ParEnd(); it != end; ++it){
+    for(auto& it : p.ParList()){
+      Symbols::Symbol& s = func_.GetSymbolDecl(*it);
+      IR::AddrOffset offset    = -2 - (k - i);
+      func_.StoreSymbolOffset( s.Id(), IR::Offset(offset, s.BareName()));
+      std::cout << s.str() << " to offset: " << offset << std::endl;
+    }
   }
-
-  virtual void Visit(Block const& p){
-    for(auto& c : p.statements_) c->Accept(*this);
-  };
 
   virtual void Visit(VarDecl const& p){
 
@@ -37,17 +42,6 @@ public:
     offset_ += func_.GetSymbolDecl(p).Size();
 //     offset_
   };
-
-  virtual void Visit(WhileStmt const& p){
-    p.GetBody().Accept(*this);
-  }
-  virtual void Visit(DeclStmt const& p){
-    p.GetVarDeclList().Accept(*this);
-  }
-
-  virtual void Visit(VarDeclList const& p){
-    for(auto& it : p) it->Accept(*this);
-  }
 
   virtual void Visit(IfStmt const& p){
 //     std::cout << unit_.GetScope(p.GetThen()->GetScopeId())->str() <<"\n";
@@ -65,13 +59,24 @@ public:
     }
   };
 
+  //Traversal
+  virtual void Visit(WhileStmt const& p){
+    p.GetBody().Accept(*this);
+  }
+  virtual void Visit(DeclStmt const& p){
+    p.GetVarDeclList().Accept(*this);
+  }
+  virtual void Visit(VarDeclList const& p){
+    for(auto& it : p) it->Accept(*this);
+  }
+  virtual void Visit(Block const& p){
+    for(auto& c : p.statements_) c->Accept(*this);
+  };
 
-
-
+  //Nothing to do
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
   virtual void Visit(ProgBody const& p){};
-
   virtual void Visit(BinaryOp const& p){};
   virtual void Visit(AssignStmt const& p){};
   virtual void Visit(Literal const& p){};
@@ -82,7 +87,7 @@ public:
 private:
   CompilationUnit&  unit_;
   Function&         func_;
-  IR::Addr          offset_;
+  IR::AddrOffset    offset_;
 };
 
 

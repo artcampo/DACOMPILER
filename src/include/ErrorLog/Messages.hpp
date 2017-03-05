@@ -3,7 +3,11 @@
 
 namespace Compiler{
 
+const static std::string kErr15("[err:15] Symbol already declared.");
 const static std::string kErr16("[error:16] Var used before declaration");
+
+
+const static std::string kErr19("[err:19] Variable declarations must be separated with comma.");
 
 const static std::string kErr20("[err:20] while's condition is not a bool");
 const static std::string kErr21("[err:21] if's condition is not a bool");
@@ -20,6 +24,7 @@ const static std::string kErr30("[err:30] function declaration's body not closed
 const static std::string kErr31("[err:31] function body empty");
 const static std::string kErr32("[err:32] function name already exists");
 const static std::string kErr33("[err:33] function must start with return type");
+const static std::string kErr34("[err:34] parameters must be separated with comma");
 
 
 }//end namespace Compiler
