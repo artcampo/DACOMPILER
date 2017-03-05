@@ -1,0 +1,5 @@
+The Symbol Table is kept up to date with the current scope, as such:
+1) within current scope lookup by name gives the nearest scope
+definition of the symbol
+2) When parsing ends, the only scope alive is the global scope, and
+the only definitions there are the module's functions (including "main")

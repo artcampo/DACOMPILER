@@ -33,6 +33,7 @@ private:
   void IncreaseIndent();
   void DecreaseIndent();
   void DisplayAttributes(Node const& p);
+  void DumpSymbolTable();
 
   int  indent_;
   bool show_attributes_;

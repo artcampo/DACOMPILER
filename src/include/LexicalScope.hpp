@@ -73,9 +73,8 @@ public:
     std::string s = std::string("Scope ") + std::to_string(id_)
                   + std::string(": {");
     for(int i = 0; i < declarations_.size(); ++i){
-      s+= std::to_string(declarations_[i].first) + std::string(", ");
-      s+= symbols_[i].first + std::string(" ");
-
+      s+= "(" + std::to_string(declarations_[i].first) + ":";
+      s+= symbols_[i].first + ") ";
     }
     s += std::string("}");
     return s;

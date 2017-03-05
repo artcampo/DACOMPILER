@@ -18,7 +18,7 @@ void ASTVisitorDump::Visit(ProgInit const& p){
 }
 
 void ASTVisitorDump::Visit(ProgEnd const& p){
-
+  DumpSymbolTable();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -138,6 +138,25 @@ void ASTVisitorDump::DisplayAttributes(Node const& p){
     if(unit_.HasReadWrite(p)) std::cout << " " << unit_.ReadWriteStr(p);
     if(unit_.HasVarUsage(p)) std::cout << " " << unit_.VarUsageStr(p);
     if(display) std::cout << "]";
+  }
+}
+
+void ASTVisitorDump::DumpSymbolTable(){
+  /*
+  //This should only list the module's functions
+  std::cout << "Symbol Table:\n";
+  for(auto& it : unit_.symbol_table_){
+    std::cout << it.first
+              << " id: " << it.second
+              << " decl: " << unit_.module_declaration_table_[it.second]->str()
+              << "\n";
+  }
+  std::cout << "end Symbol Table:\n";
+  */
+
+  std::cout << "\nDeclaration Table:\n";
+  for(auto& it : unit_.module_declaration_table_){
+    std::cout << it.first << ": " <<it.second->str()<<"\n";
   }
 }
 

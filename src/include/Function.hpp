@@ -2,7 +2,6 @@
 #include "AST.hpp"
 #include "Types.hpp"
 #include "Symbol.hpp"
-#include "SymbolTable.hpp"
 #include "TypeTable.hpp"
 #include "Node.hpp"
 #include "Symbol.hpp"
@@ -19,7 +18,6 @@ using AST::Type;
 using AST::Node;
 using AST::ProgBody;
 using AST::ScopeId;
-using AST::SymbolTable;
 using namespace Compiler::AST::Ptrs;
 using AST::FuncDef;
 

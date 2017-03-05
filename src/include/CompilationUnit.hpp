@@ -53,7 +53,9 @@ public:
     , current_scope_(module_scope_.get())
     , module_declaration_table_()
     , global_scope_ownner_id_(0)
-    {}
+    {
+      scope_by_id_[GlobalScopeId( GlobalScopeOwnerId() )] = module_scope_.get();
+    }
 
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
@@ -79,8 +81,11 @@ public:
     RestoreScope();
   }
 
-  ScopeId NewFirstScope(const ScopeOwnerId scope_owner_id){
-    std::cout << scope_owner_id<<" "<<module_scope_->GetScopeOwnerId();
+  const ScopeOwnerId NewScopeOwner() noexcept{ return FreeScopeOwnerId(); }
+  const ScopeOwnerId GlobalScopeOwnerId() const noexcept{ return global_scope_ownner_id_; }
+
+  ScopeId GlobalScopeId(const ScopeOwnerId scope_owner_id){
+//     std::cout << scope_owner_id<<" "<<module_scope_->GetScopeOwnerId();
     assert(scope_owner_id == module_scope_->GetScopeOwnerId());
     return module_scope_->GetScopeId();
   }
@@ -93,9 +98,6 @@ public:
     current_scope_   = new_scope;
     return new_scope->GetScopeId();
   }
-
-  const ScopeOwnerId NewScopeOwner() noexcept{ return FreeScopeOwnerId(); }
-  const ScopeOwnerId GlobalScopeOwnerId() const noexcept{ return global_scope_ownner_id_; }
 
   void RestoreScope(){
 //     std::cout << "*** restoring: " << current_scope_->str()<< "\n";

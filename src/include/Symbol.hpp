@@ -43,7 +43,11 @@ public:
   size_t Size() const noexcept{ return type_.Size();}
 
   std::string str() const noexcept{
-    return std::string("Symbol: [") + name_ + std::string("]");
+    return std::string("Symbol: [")
+      + " in scope " + std::to_string(scope_id_)
+      + " " + name_
+      + " of type " + type_.str()
+      + std::string("]");
   }
 
   std::string BareName() const noexcept{ return name_; }
