@@ -14,3 +14,8 @@ Instructions that do not fit in the previous categories
 call(Label)
 
 Where MemAddr = {Label, Offset}
+
+Label can be resolved either at link-time or at run-time.
+Link-time labels: entry point for any function, local vars of main.
+Run-time labels: local vars for any function other than main.
+

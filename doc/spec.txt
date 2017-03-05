@@ -8,3 +8,7 @@ Ex: int a, b, c;
 
 Pointers to first class types allowed.
 ex: int* a; bool* b;
+
+Functions
+Return type is mandatory.
+Argument list can be empty.
