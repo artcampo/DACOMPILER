@@ -14,11 +14,19 @@ namespace AST{
 void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 //   std::cout << "P\n";
   p.GetProgInit().Accept (*this, nullptr);
-  for(auto& it : p) it->Accept(*this, successor);
+
+  //Process main
+  for(auto& it : p) if(it->Name()=="main") it->Accept(*this, successor);
+
+  //Process the rest of the functions
+  for(auto& it : p) if(it->Name()!="main") it->Accept(*this, successor);
+
   p.GetProgEnd().Accept  (*this, nullptr );
 }
 
 void IRGenerator::Visit(FuncDef const& p, const Node* successor){
+  local_label_inht_ = const_cast<Label*>(&unit_.GetFunc(p).LocalsLabel());
+  std::cout << "Using label: " <<unit_.LabelStr( local_label_inht_->Id());
   p.GetBody().Accept(*this, successor);
 }
 
@@ -171,8 +179,7 @@ void IRGenerator::Visit(DerefOp const& n, const Node* successor){
 
 void IRGenerator::Visit(Var const& p, const Node* successor){
   Offset o        = unit_.LocalVarOffset(p);
-  const Label l   = unit_.GetLabelMainDataSegment();
-  const MemAddr a = MemAddr(l, o);
+  const MemAddr a = MemAddr(*local_label_inht_, o);
 
   if(unit_.IsRead(p)){
     if(unit_.IsValueAccess(p)){

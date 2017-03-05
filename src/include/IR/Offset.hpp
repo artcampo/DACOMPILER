@@ -25,7 +25,7 @@ struct Offset{
     {return addr_ < o.addr_;}
 
 private:
-  AddrOffset addr_;
+  AddrOffset  addr_;
   std::string name_;
 };
 

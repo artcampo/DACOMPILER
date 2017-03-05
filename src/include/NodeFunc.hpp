@@ -21,6 +21,7 @@ public:
   virtual std::string str() const noexcept { return std::string("FuncDef: ") + name_;}
 
   Block&    GetBody() const noexcept{ return *body_;}
+  const std::string&  Name() const noexcept{ return name_;}
 private:
 //   PtrArg
   PtrBlock      body_;

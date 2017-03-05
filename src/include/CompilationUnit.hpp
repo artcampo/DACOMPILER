@@ -9,6 +9,7 @@
 #include "TreeDecoration.hpp"
 #include "LabelManager.hpp"
 #include "Function.hpp"
+#include "IR/Label.hpp"
 #include <map>
 #include <memory>
 #include <iterator>
@@ -39,6 +40,7 @@ using AST::PtrLexicalScope;
 using AST::SymbolIdOfNode;
 using AST::OffsetTable;
 using AST::ScopeOwnerId;
+using IR::Label;
 
 class CompilationUnit : public TreeDecoration, public TypeTable
   , public LabelManager{
@@ -60,6 +62,7 @@ public:
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
+  /*
   const ScopeId NewFunction(std::string name, FuncDef& origin_node, const ScopeOwnerId scope_owner_id){
     functions_.push_back( std::move(
       std::make_unique<Function>(name, &origin_node, ModuleOffsetTable(), scope_owner_id)));
@@ -67,10 +70,19 @@ public:
     function_by_name_[name] = curr_func_;
     return NewNestedScope(scope_owner_id);
   }
-
+*/
   const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){
+    const Label& entry = NewFunctionEntryLabel(name);
+    const Label* local;
+    if(name == "main")  local = &GetLabelMainLocals();
+    else                local = &NewFunctionARLabel(name);
+
     functions_.push_back( std::move(
-      std::make_unique<Function>(name, ModuleOffsetTable(), scope_owner_id)));
+      std::make_unique<Function>(name
+        , ModuleOffsetTable()
+        , scope_owner_id
+        , entry
+        , *local)));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
     return NewNestedScope(scope_owner_id);
@@ -79,6 +91,12 @@ public:
   void ExitFunctionDefinition(){
     curr_func_ = nullptr;
     RestoreScope();
+  }
+
+  void SetFuncOriginNode(const FuncDef& n){
+    assert(curr_func_ != nullptr); // "SetFunc in no func");
+    function_by_funcdef_[const_cast<FuncDef*>(&n)] = curr_func_;
+    curr_func_->SetOriginNode(n);
   }
 
   const ScopeOwnerId NewScopeOwner() noexcept{ return FreeScopeOwnerId(); }
@@ -106,35 +124,22 @@ public:
 //     std::cout << "*** to: " << current_scope_->str()<< "\n";
   }
 
-  const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
-
-  void InitAst(PtrProgBody& prog){
-    ast_.prog_ = std::move(prog);
-  }
-
-//   const Prog* GetAstProg() const noexcept{ return *ast_.prog_;}
-  ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
-
   LexicalScope* GetScope(const ScopeId id) const{
 //     std::cout << "asking: " << id<<std::endl;
     return scope_by_id_.at(id);
   }
   size_t NumScopes() const noexcept{ return free_scope_id_;};
 
-  void SetFileData(std::vector<char>* file_data){
-    error_log_.SetFileData(file_data);
-  }
-
-  void Error(const std::string& message, const Locus& locus){
-    error_log_.Error(message, locus);
-  }
-
-  void Error(const std::string& message){
-    std::cout << message << "\n";
-  }
 
   Function& GetFunc(std::string name){ return *function_by_name_.at(name);}
   const Function& GetFunc(std::string name) const { return *function_by_name_.at(name);}
+
+  Function& GetFunc(const FuncDef& n){
+    return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
+  }
+  const Function& GetFunc(const FuncDef& n) const{
+    return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
+  }
 
   bool IsDeclValid(const std::string name, const Type& type){
     return Scope().IsDeclValid(name, type);
@@ -180,6 +185,7 @@ private:
   std::map<ScopeId,LexicalScope*>   scope_by_id_;
   std::map<std::string, Function*>  function_by_name_;
   SymbolIdOfNode                    symbolid_of_node_;
+  std::map<FuncDef*, Function*>     function_by_funcdef_;
 
   //Attributes computed by visitors
 
@@ -200,7 +206,27 @@ public:
   const_iterator end()    const { return functions_.end(); }
   const_iterator cbegin() const { return functions_.cbegin(); }
   const_iterator cend()   const { return functions_.cend(); }
-//   friend class ASTVisitor;
+
+const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
+
+  void InitAst(PtrProgBody& prog){
+    ast_.prog_ = std::move(prog);
+  }
+
+//   const Prog* GetAstProg() const noexcept{ return *ast_.prog_;}
+  ProgBody* GetAstProg() noexcept{ return ast_.prog_.get();}
+
+  void SetFileData(std::vector<char>* file_data){
+    error_log_.SetFileData(file_data);
+  }
+
+  void Error(const std::string& message, const Locus& locus){
+    error_log_.Error(message, locus);
+  }
+
+  void Error(const std::string& message){
+    std::cout << message << "\n";
+  }
 };
 
 // namespace CompilationUnitInfo{
