@@ -18,7 +18,7 @@ struct Offset{
 
   std::string str() const noexcept{
     //return std::to_string(addr_) + std::string(" ") + name_;
-    return name_;
+    return name_ + " " + std::to_string(addr_);
   }
 
   const bool operator<  ( const Offset &o )const noexcept

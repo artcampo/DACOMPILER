@@ -10,10 +10,10 @@ namespace IR{
 
 using LabelId = size_t;
 struct Label;
-using PtrLabel = std::unique_ptr<Label>;
+// using PtrLabel = std::unique_ptr<Label>;
 
 struct Label{
-  Label() = default;
+  Label():id_(-1),name_(""),is_rt_or_lt_(false){};
   Label& operator= ( const Label &o ) = default;
   Label( const Label &o ) = default;
   ~Label() = default;
@@ -25,13 +25,13 @@ struct Label{
   }
    */
 
-  static PtrLabel LabelLT(const LabelId id, const std::string name){
-    return std::make_unique<Label>(id, name, false);
+  static Label LabelLT(const LabelId id, const std::string name){
+    return Label(id, name, false);
   }
 
 
-  static PtrLabel LabelRT(const LabelId id, const std::string name){
-    return std::make_unique<Label>(id, name, true);
+  static Label LabelRT(const LabelId id, const std::string name){
+    return Label(id, name, true);
   }
 
   const LabelId Id() const noexcept{ return id_;}
@@ -42,15 +42,13 @@ struct Label{
   std::string str() const noexcept{
     return name_;
   };
-
-  Label(const LabelId id, const std::string name, const bool is_rt_or_lt)
-  : id_(id), name_(name), is_rt_or_lt_(is_rt_or_lt){};
-private:
+protected:
   LabelId     id_;
   std::string name_;
   bool        is_rt_or_lt_;
 
-
+  Label(const LabelId id, const std::string name, const bool is_rt_or_lt)
+  : id_(id), name_(name), is_rt_or_lt_(is_rt_or_lt){};
 };
 
 

@@ -54,7 +54,7 @@ private:
   void PrintBackPatch();
   void Print() const noexcept;
 
-  IR::Label*   local_label_inht_;
+  IR::Label   local_label_inht_;
 
 };
 

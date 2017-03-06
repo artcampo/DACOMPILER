@@ -1,0 +1,22 @@
+Activation Record (AR) when g calls f looks like
+
+[caller's responsability] - f_arg 0
+[caller's responsability] - f_arg 1
+[caller's responsability] - ..
+[caller's responsability] - f_arg k
+[caller's responsability] - g return address
+
+[callee's responsability] - f local var 0
+[callee's responsability] - f local var 1
+[callee's responsability] - ...
+[callee's responsability] - f local var k2
+
+Thus offsets from the ARP are as follows
+for argument i out of k, offset is -2 - ((k - 1)-i)
+
+Example, k = 4
+f_arg 0, offset -5
+f_arg 1, offset -4
+f_arg 2, offset -3
+f_arg 3, offset -2 => -2 - ((k - 1)-i)
+

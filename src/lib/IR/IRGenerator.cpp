@@ -25,12 +25,12 @@ void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 }
 
 void IRGenerator::Visit(FuncDef const& p, const Node* successor){
-  Function& f = unit_.GetFunc(p);
-  std::cout << "in f: " << f.str();
-  const IR::Label& l = f.LocalsLabel();
-  std::cout << " with label: " << l.str();
-  local_label_inht_ = const_cast<Label*>(&unit_.GetFunc(p).LocalsLabel());
-  std::cout << "Using label: " <<unit_.LabelStr( local_label_inht_->Id());
+//   Function& f = unit_.GetFunc(p);
+//   std::cout << "in f: " << f.str();
+//   const IR::Label l = f.LocalsLabel();
+//   std::cout << " with label: " << l.str();
+  local_label_inht_ = unit_.GetFunc(p).LocalsLabel();
+//   std::cout << "Using label: " <<unit_.LabelStr( local_label_inht_.Id());
   p.GetBody().Accept(*this, successor);
 }
 
@@ -183,7 +183,7 @@ void IRGenerator::Visit(DerefOp const& n, const Node* successor){
 
 void IRGenerator::Visit(Var const& p, const Node* successor){
   Offset o        = unit_.LocalVarOffset(p);
-  const MemAddr a = MemAddr(*local_label_inht_, o);
+  const MemAddr a = MemAddr(local_label_inht_, o);
 
   if(unit_.IsRead(p)){
     if(unit_.IsValueAccess(p)){

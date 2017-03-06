@@ -72,17 +72,17 @@ public:
   }
 */
   const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){
-    const Label& entry = NewFunctionEntryLabel(name);
-    const Label* local;
-    if(name == "main")  local = &GetLabelMainLocals();
-    else                local = &NewFunctionARLabel(name);
+    const Label entry = NewFunctionEntryLabel(name);
+    Label local;
+    if(name == "main")  local = GetLabelMainLocals();
+    else                local = NewFunctionARLabel(name);
 
     functions_.push_back( std::move(
       std::make_unique<Function>(name
         , ModuleOffsetTable()
         , scope_owner_id
         , entry
-        , *local)));
+        , local)));
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
     return NewNestedScope(scope_owner_id);

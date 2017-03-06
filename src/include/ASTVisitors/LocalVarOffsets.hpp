@@ -29,7 +29,7 @@ public:
       Symbols::Symbol& s = func_.GetSymbolDecl(*it);
       IR::AddrOffset offset    = -2 - (k - i);
       func_.StoreSymbolOffset( s.Id(), IR::Offset(offset, s.BareName()));
-      std::cout << s.str() << " to offset: " << offset << std::endl;
+//       std::cout << s.str() << " to offset: " << offset << std::endl;
     }
   }
 

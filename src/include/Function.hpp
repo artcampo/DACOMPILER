@@ -42,8 +42,8 @@ public:
     : Function(name, nullptr, module_offset_table, scope_owner_id){}
 */
   Function(std::string& name, OffsetTable& module_offset_table
-    , const ScopeOwnerId scope_owner_id, const Label& entry_label
-    , const Label& locals_label)
+    , const ScopeOwnerId scope_owner_id, const Label entry_label
+    , const Label locals_label)
   : name_(name)
     , origin_node_(nullptr)
     , module_offset_table_(module_offset_table)
@@ -78,16 +78,16 @@ public:
     return offset_table_.at(id);
   }
 
-  const Label&      EntryLabel() const noexcept{ return entry_label_;}
-  const Label&      LocalsLabel() const noexcept{ return locals_label_;}
+  const Label      EntryLabel() const noexcept{ return entry_label_;}
+  const Label      LocalsLabel() const noexcept{ return locals_label_;}
 
   std::string str()  const noexcept{ return name_;}
 private:
   ScopeOwnerId      scope_owner_id_;
   std::string       name_;
   FuncDef*          origin_node_;
-  const Label&      entry_label_;
-  const Label&      locals_label_;
+  const Label      entry_label_;
+  const Label      locals_label_;
 
   OffsetTable&      module_offset_table_;
   OffsetTable       offset_table_;
