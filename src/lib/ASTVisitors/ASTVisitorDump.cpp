@@ -114,6 +114,14 @@ void ASTVisitorDump::Visit(DerefOp const& p){
   IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
 }
 
+void ASTVisitorDump::Visit(FuncCall const& p){
+  p.str();
+}
+
+void ASTVisitorDump::Visit(FuncRet const& p){
+  p.GetCall().Accept(*this);
+}
+
 
 void ASTVisitorDump::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< "-";

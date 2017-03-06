@@ -27,8 +27,10 @@ public:
     is_read_or_write_inht_ = true;
   }
 
-  virtual void Visit(Var const& p){
-    Set(p);
+  virtual void Visit(Var const& p)      { Set(p);}
+  virtual void Visit(FuncCall const& p) {
+    //TODO: should funcCall be an expression?
+    //Set(p);
   }
 
   void Set(Expr const& p){
@@ -72,6 +74,8 @@ public:
     p.Rhs().Accept(*this);
   }
 
+  virtual void Visit(FuncRet const& p){ p.GetCall().Accept(*this); }
+
   //Nothing to do
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
@@ -79,8 +83,8 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(Literal const& p){}
-  virtual void Visit(FuncCall const& p){}
-  virtual void Visit(FuncRet const& p){}
+
+
 
 private:
   CompilationUnit&  unit_;

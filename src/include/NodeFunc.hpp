@@ -68,6 +68,7 @@ public:
   const std::string&  Name() const noexcept{ return name_;}
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
+  const Type& GetType()const noexcept{return function_type_;}
 private:
   std::string   name_;
   const Type&   function_type_;
@@ -102,6 +103,8 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const noexcept { return "FuncRet: " + ret_type_.str();}
 
+  FuncCall&    GetCall() const noexcept{ return *call_;}
+  const Type& GetType()const noexcept{return ret_type_;}
 private:
 
   const Type&   ret_type_;

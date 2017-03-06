@@ -11,22 +11,7 @@ public:
 
   ASTVisitorTypeInference(CompilationUnit& unit): unit_(unit){};
 
-  virtual void Visit(ProgBody const& p){
-    p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
-    p.GetProgEnd().Accept(*this);
-  }
 
-  virtual void Visit(FuncDef const& p){
-    p.GetBody().Accept(*this);
-  }
-
-  virtual void Visit(ProgInit const& p){};
-  virtual void Visit(ProgEnd const& p){};
-
-  virtual void Visit(Block const& p){
-    for (auto& c : p.statements_) c->Accept(*this);
-  }
   virtual void Visit(IfStmt const& p){
     p.GetCond().Accept(*this);
     p.GetThen().Accept(*this);
@@ -76,11 +61,39 @@ public:
 
   virtual void Visit(Literal const& p){unit_.SetTypeOfNode(p, p.GetType());}
   virtual void Visit(Var const& p)    {unit_.SetTypeOfNode(p, p.GetType());}
+
+  virtual void Visit(FuncRet const& p){
+    p.GetCall().Accept(*this);
+    unit_.SetTypeOfNode(p, p.GetType());
+  }
+
+  virtual void Visit(FuncCall const& p){
+    unit_.SetTypeOfNode(p, p.GetType());
+  }
+
+  //Traversal
+  virtual void Visit(ProgBody const& p){
+    p.GetProgInit().Accept(*this);
+    for(auto& it : p) it->Accept(*this);
+    p.GetProgEnd().Accept(*this);
+  }
+
+  virtual void Visit(FuncDef const& p){
+    p.GetBody().Accept(*this);
+  }
+
+  virtual void Visit(Block const& p){
+    for (auto& c : p.statements_) c->Accept(*this);
+  }
+
+
+
+  //Nothing to do
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
-  virtual void Visit(FuncCall const& p){}
-  virtual void Visit(FuncRet const& p){}
+  virtual void Visit(ProgInit const& p){};
+  virtual void Visit(ProgEnd const& p){};
 
 private:
   CompilationUnit&  unit_;

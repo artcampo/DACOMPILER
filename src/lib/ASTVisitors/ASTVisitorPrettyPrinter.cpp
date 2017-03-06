@@ -108,6 +108,13 @@ void ASTVisitorPrettyPrinter::Visit(DerefOp const& p){
   p.Rhs().Accept(*this);
 }
 
+void ASTVisitorPrettyPrinter::Visit(FuncCall const& p){
+  p.str();
+}
+void ASTVisitorPrettyPrinter::Visit(FuncRet const& p){
+  p.GetCall().Accept(*this);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< " ";
