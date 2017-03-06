@@ -144,7 +144,7 @@ public:
   bool IsDeclValid(const std::string& name){return Scope().IsDeclValid(name);}
   bool HasDecl(const std::string& name){return Scope().HasDecl(name);}
   const Type& GetType(const std::string& name){return Scope().GetType(name);}
-
+  const Type& GetType(const TypeId id) const{ return GetType(id);}
 
 
   bool RegisterDecl(const std::string name, const Type& type, const Node& n){

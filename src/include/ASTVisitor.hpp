@@ -23,6 +23,8 @@ public:
   virtual void Visit(Var const& p) = 0;
   virtual void Visit(RefOp const& p) = 0;
   virtual void Visit(DerefOp const& p) = 0;
+  virtual void Visit(FuncCall const& p) = 0;
+  virtual void Visit(FuncRet const& p) = 0;
 };
 
 }//end namespace AST

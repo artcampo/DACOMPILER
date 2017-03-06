@@ -114,6 +114,8 @@ public:
 
   size_t  NumPars() const noexcept{ return pars_tid_.size();};
 
+  const TypeId  RetTypeId() const noexcept{ return return_tid_;};
+
 private:
   TypeId              return_tid_;
   std::vector<TypeId> pars_tid_;

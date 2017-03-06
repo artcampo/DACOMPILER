@@ -25,6 +25,9 @@ public:
   virtual void Visit(RefOp const& p);
   virtual void Visit(DerefOp const& p);
 
+  virtual void Visit(FuncCall const& p){}
+  virtual void Visit(FuncRet const& p){}
+
   ASTVisitorDump(CompilationUnit& unit, const bool show_attributes = false)
     :  unit_(unit), indent_(1), show_attributes_(show_attributes){};
 

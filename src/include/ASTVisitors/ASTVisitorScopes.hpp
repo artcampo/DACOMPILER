@@ -60,6 +60,8 @@ public:
   virtual void Visit(DerefOp const& p){};
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
+  virtual void Visit(FuncCall const& p){}
+  virtual void Visit(FuncRet const& p){}
 
 private:
   CompilationUnit&  unit_;

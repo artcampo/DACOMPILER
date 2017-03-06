@@ -79,6 +79,8 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(Literal const& p){}
+  virtual void Visit(FuncCall const& p){}
+  virtual void Visit(FuncRet const& p){}
 
 private:
   CompilationUnit&  unit_;

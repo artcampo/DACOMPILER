@@ -53,7 +53,7 @@ public:
 class FuncCall: public Node {
 public:
   virtual ~FuncCall() = default;
-  FuncCall(std::string name
+  FuncCall(const std::string& name
     , const Type& function_type
     , std::vector<PtrExpr>& arg_list
     , const ScopeId id
@@ -88,25 +88,23 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class FuncRet: public Node {
+class FuncRet: public Expr {
 public:
   virtual ~FuncRet() = default;
   FuncRet(const Type& ret_type
-    , PtrFuncCall call
+    , PtrFuncCall& call
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), name_(name), ret_type_(ret_type)
+  : Expr(id, locus), ret_type_(ret_type)
     , call_(std::move(call)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return "FuncRet: " + ret_type.str();}
-
-  const std::string&  Name() const noexcept{ return name_;}
+  virtual std::string str() const noexcept { return "FuncRet: " + ret_type_.str();}
 
 private:
-  std::string   name_;
-  const Type&   ret_type;
+
+  const Type&   ret_type_;
   PtrFuncCall   call_;
 };
 

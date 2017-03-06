@@ -24,6 +24,9 @@ public:
   virtual void Visit(RefOp const& p);
   virtual void Visit(DerefOp const& p);
 
+  virtual void Visit(FuncCall const& p){}
+  virtual void Visit(FuncRet const& p){}
+
   ASTVisitorPrettyPrinter(): indent_(0){};
 
 private:

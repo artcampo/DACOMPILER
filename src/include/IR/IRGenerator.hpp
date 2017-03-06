@@ -31,6 +31,8 @@ public:
   virtual void Visit(DeclStmt const& p, const Node* successor);
   virtual void Visit(VarDeclList const& p, const Node* successor);
   virtual void Visit(VarDecl const& p, const Node* successor);
+  virtual void Visit(FuncCall const& p, const Node* successor);
+  virtual void Visit(FuncRet const& p, const Node* successor);
 
   void EndOfProgram();
 private:
