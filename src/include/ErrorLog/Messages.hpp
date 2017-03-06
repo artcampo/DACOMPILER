@@ -8,6 +8,8 @@ const static std::string kErr15("[err:15] Symbol already declared.");
 const static std::string kErr16("[error:16] Var used before declaration");
 
 
+
+const static std::string kErr18("[err:18] Incompatible types in assignment: ");
 const static std::string kErr19("[err:19] Variable declarations must be separated with comma.");
 
 const static std::string kErr20("[err:20] while's condition is not a bool");

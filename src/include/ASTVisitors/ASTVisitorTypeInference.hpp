@@ -40,7 +40,9 @@ public:
     p.Lhs().Accept(*this);
     p.Rhs().Accept(*this);
     if(unit_.GetTypeOfNode(p.Lhs()) != unit_.GetTypeOfNode(p.Rhs()))
-      unit_.Error("[err:18] Incompatible types in assignment", p.GetLocus());
+      unit_.Error(kErr18
+        + unit_.GetTypeOfNode(p.Lhs()).str() + " to "
+        + unit_.GetTypeOfNode(p.Rhs()).str(), p.GetLocus());
 //     unit_.SetTypeOfNode(&p, unit_.GetTypeOfNode(p.Lhs()));
   }
 

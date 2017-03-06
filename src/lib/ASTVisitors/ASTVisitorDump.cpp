@@ -115,12 +115,15 @@ void ASTVisitorDump::Visit(DerefOp const& p){
 }
 
 void ASTVisitorDump::Visit(FuncCall const& p){
-  p.str();
-  for(const auto& it : p) it->Accept(*this);
+  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  for(const auto& it : p){
+    IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
+  }
 }
 
 void ASTVisitorDump::Visit(FuncRet const& p){
-  p.GetCall().Accept(*this);
+  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  IncreaseIndent(); Indent(); p.GetCall().Accept(*this);DecreaseIndent();
 }
 
 
