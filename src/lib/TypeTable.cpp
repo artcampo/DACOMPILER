@@ -3,7 +3,7 @@
 namespace Compiler{
 
 const Type& TypeTable::GetType(const kBasicTypeId basic_id){
-  const TypeId& type_id = GetTypeId(basic_id);
+  const TypeId type_id = GetTypeId(basic_id);
   auto it = type_table_.find(type_id);
   if(it == type_table_.end()){
     type_table_[type_id] = std::make_unique<BasicType>(type_id, basic_id);
@@ -34,8 +34,8 @@ const Type& TypeTable::PointedBy(const Type& t){
 }
 
 const Type& TypeTable::GetFuncType(const Type& return_type
-                        , const std::vector<Type*>& arg_types){
-  std::vector<Type*> type_signature(arg_types);
+                        , const std::vector<const Type*>& arg_types){
+  std::vector<const Type*> type_signature(arg_types);
   type_signature.push_back(const_cast<Type*>(&return_type));
 
   auto it = type_id_of_function_by_signature_.find(type_signature);

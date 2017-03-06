@@ -94,7 +94,7 @@ public:
   virtual ~FuncType() = default;
 
   FuncType(const TypeId& type_id, const Type& return_type
-    , const std::vector<Type*>& par_types)
+    , const std::vector<const Type*>& par_types)
     : Type(type_id), return_tid_(return_type.GetTypeId())
     , ret_str_(return_type.str())
     {

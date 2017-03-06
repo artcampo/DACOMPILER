@@ -40,7 +40,7 @@ public:
   const Type& PointedBy(const Type& t);
 
   const Type& GetFuncType(const Type& return_type
-                        , const std::vector<Type*>& arg_types);
+                        , const std::vector<const Type*>& arg_types);
 
   const Type& GetType(const TypeId id) const{ return *type_table_.at(id);}
 private:
@@ -53,10 +53,10 @@ private:
   std::map<kBasicTypeId, TypeId> type_id_of_basic_type_;
   std::map<TypeId, TypeId> type_id_of_pointer_to_t_;
   std::map<TypeId, TypeId> type_id_of_pointed_by_t_;
-  std::map<std::vector<Type*>, TypeId> type_id_of_function_by_signature_;
+  std::map<std::vector<const Type*>, TypeId> type_id_of_function_by_signature_;
   size_t free_type_id_;
 
-  const TypeId& GetTypeId(const kBasicTypeId basic){
+  const TypeId GetTypeId(const kBasicTypeId basic){
     auto it = type_id_of_basic_type_.find(basic);
     if(it == type_id_of_basic_type_.end())
       type_id_of_basic_type_[basic] = FreeTypeId();

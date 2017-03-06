@@ -58,6 +58,8 @@ public:
     return s;
   }
 
+  const Type& GetType() const noexcept{ return type_;};
+
 private:
   const std::string name_;
   const Type& type_;
