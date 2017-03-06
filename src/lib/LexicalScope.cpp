@@ -51,7 +51,7 @@ bool LexicalScope::IsDeclValid(const std::string name){
   return true;
 }
 
-bool LexicalScope::IsDecl(const std::string& name){
+bool LexicalScope::HasDecl(const std::string& name){
   auto it = symbol_table_.find(name);
   if(it == symbol_table_.end()) return false;
   return true;
