@@ -55,10 +55,12 @@ public:
   : LexicalScope(id, parent, nullptr, scope_owner_id, symbol_table, declaration_table
     , symbolid_of_node){}
 
-  bool IsDeclValid(const std::string name);
+  bool IsDeclValid(const std::string& name);
+  bool HasDecl(const std::string& name);
+
   bool RegisterDecl(const std::string name, const Type& type, const Node& n
       , AST::Symbols::SymbolId symbol_id);
-  bool HasDecl(const std::string& name);
+
   const Type& GetType(const std::string& name);
   const Symbols::SymbolId DeclId(const std::string& name) const;
   const ScopeId GetScopeId() const noexcept{return id_;};

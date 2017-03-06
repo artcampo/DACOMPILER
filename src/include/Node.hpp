@@ -50,6 +50,10 @@ class UnaryOp;
 class RefOp;
 class DerefOp;
 
+//Functions
+class FuncRet;
+class FuncCall;
+
 namespace Ptrs{
 
 using PtrProgBody   = std::unique_ptr<ProgBody>;
@@ -72,6 +76,9 @@ using PtrVar        = std::unique_ptr<Var>;
 using PtrUnaryOp    = std::unique_ptr<UnaryOp>;
 using PtrRefOp      = std::unique_ptr<RefOp>;
 using PtrDerefOp    = std::unique_ptr<DerefOp>;
+using PtrFuncRet    = std::unique_ptr<FuncRet>;
+using PtrFuncCall   = std::unique_ptr<FuncCall>;
+
 
 }//end namespace Ptrs
 using namespace Compiler::AST::Ptrs;

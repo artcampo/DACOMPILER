@@ -41,6 +41,8 @@ public:
 
   const Type& GetFuncType(const Type& return_type
                         , const std::vector<Type*>& arg_types);
+
+  const Type& GetType(const TypeId id) const{ return *type_table_.at(id);}
 private:
   const Type& GetType(const kBasicTypeId basic_id);
 

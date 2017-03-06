@@ -141,9 +141,12 @@ public:
     return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
   }
 
-  bool IsDeclValid(const std::string name){
-    return Scope().IsDeclValid(name);
-  }
+  bool IsDeclValid(const std::string& name){return Scope().IsDeclValid(name);}
+  bool HasDecl(const std::string& name){return Scope().HasDecl(name);}
+  const Type& GetType(const std::string& name){return Scope().GetType(name);}
+
+
+
   bool RegisterDecl(const std::string name, const Type& type, const Node& n){
     AST::Symbols::SymbolId symbol_id = free_symbol_id_;
     bool registered = Scope().RegisterDecl(name, type, n, free_symbol_id_);
