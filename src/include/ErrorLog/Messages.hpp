@@ -3,6 +3,7 @@
 
 namespace Compiler{
 
+const static std::string kErr14("[err:14] Expecting rpar after expression.");
 const static std::string kErr15("[err:15] Symbol already declared.");
 const static std::string kErr16("[error:16] Var used before declaration");
 
@@ -25,6 +26,9 @@ const static std::string kErr31("[err:31] function body empty");
 const static std::string kErr32("[err:32] function name already exists");
 const static std::string kErr33("[err:33] function must start with return type");
 const static std::string kErr34("[err:34] parameters must be separated with comma");
+const static std::string kErr35("[err:35] Expecting rpar closing function call");
+const static std::string kErr36("[err:36] Argument not containing an expression");
 
+const static std::string kErrUn1("[err:x1] name not followed by valid token");
 
 }//end namespace Compiler
