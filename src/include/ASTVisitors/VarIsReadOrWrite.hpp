@@ -30,7 +30,7 @@ public:
   virtual void Visit(Var const& p)      { Set(p);}
   virtual void Visit(FuncCall const& p) {
     //TODO: should funcCall be an expression?
-    //Set(p);
+    for(const auto& it : p) it->Accept(*this);
   }
 
   void Set(Expr const& p){

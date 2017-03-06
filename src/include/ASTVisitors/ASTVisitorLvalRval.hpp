@@ -44,12 +44,14 @@ public:
 
   virtual void Visit(Literal const& p){unit_.SetNodeAsRval(p);}
 
-  virtual void Visit(Var const& p){
-    unit_.SetNodeAsLval(p);
-  }
+  virtual void Visit(Var const& p){unit_.SetNodeAsLval(p);}
 
-  virtual void Visit(FuncCall const& p){ unit_.SetNodeAsRval(p); }
-  virtual void Visit(FuncRet const& p){ unit_.SetNodeAsRval(p); }
+  virtual void Visit(FuncCall const& p){ unit_.SetNodeAsLval(p); }
+
+  virtual void Visit(FuncRet const& p){
+    if( p.GetType().IsPtr() ) unit_.SetNodeAsLval(p);
+    else                      unit_.SetNodeAsRval(p);
+  }
 
   //Traversal
   virtual void Visit(ProgBody const& p){

@@ -88,7 +88,7 @@ private:
 
 };
 
-//Offers range-for iteration over its par types
+//Provides range-for iteration over its par types
 class FuncType : public Type{
 public:
   virtual ~FuncType() = default;

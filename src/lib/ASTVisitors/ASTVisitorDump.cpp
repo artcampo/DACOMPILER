@@ -116,6 +116,7 @@ void ASTVisitorDump::Visit(DerefOp const& p){
 
 void ASTVisitorDump::Visit(FuncCall const& p){
   p.str();
+  for(const auto& it : p) it->Accept(*this);
 }
 
 void ASTVisitorDump::Visit(FuncRet const& p){

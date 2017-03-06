@@ -37,10 +37,6 @@ public:
     p.GetProgEnd().Accept(*this);
   }
 
-  virtual void Visit(FuncDef const& p){
-    p.GetBody().Accept(*this);
-  }
-
   virtual void Visit(Block const& p){
     for (auto& c : p.statements_) c->Accept(*this);
   }
@@ -66,11 +62,13 @@ public:
     p.Rhs().Accept(*this);
   }
 
-  virtual void Visit(DerefOp const& p){
-    p.Rhs().Accept(*this);
-  }
-
+  virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
+  virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(FuncRet const& p){ p.GetCall().Accept(*this); }
+
+  virtual void Visit(FuncCall const& p){
+    for(const auto& it : p) it->Accept(*this);
+  }
 
   //Nothing to do
   virtual void Visit(Literal const& p){}
@@ -79,7 +77,7 @@ public:
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
-  virtual void Visit(FuncCall const& p){}
+
 
 
 private:

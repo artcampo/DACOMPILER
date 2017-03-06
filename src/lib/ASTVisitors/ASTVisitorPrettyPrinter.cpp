@@ -110,6 +110,7 @@ void ASTVisitorPrettyPrinter::Visit(DerefOp const& p){
 
 void ASTVisitorPrettyPrinter::Visit(FuncCall const& p){
   p.str();
+  for(const auto& it : p) it->Accept(*this);
 }
 void ASTVisitorPrettyPrinter::Visit(FuncRet const& p){
   p.GetCall().Accept(*this);

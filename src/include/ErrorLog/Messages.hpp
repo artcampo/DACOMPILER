@@ -32,6 +32,8 @@ const static std::string kErr37("[err:37] Function call referes to non declared 
 const static std::string kErr38("[err:38] Function call with a non-function name");
 const static std::string kErr39("[err:39] Function call with less arguments than expected");
 const static std::string kErr40("[err:40] Function call with more arguments than expected (extra arguments will be discarded)");
+const static std::string kErr41("[err:41] Argument type conflict: ");
+
 
 
 const static std::string kErrUn1("[err:x1] name not followed by valid token");

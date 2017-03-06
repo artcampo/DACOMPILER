@@ -50,11 +50,12 @@ public:
 };
 
 /////////////////////////////////////////////////////////
+//Provides range-for iteration over its arg expressions
 class FuncCall: public Node {
 public:
   virtual ~FuncCall() = default;
   FuncCall(const std::string& name
-    , const Type& function_type
+    , const FuncType& function_type
     , std::vector<PtrExpr>& arg_list
     , const ScopeId id
     , const Locus& locus)
@@ -68,24 +69,22 @@ public:
   const std::string&  Name() const noexcept{ return name_;}
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
-  const Type& GetType()const noexcept{return function_type_;}
+  const FuncType& GetType()const noexcept{return function_type_;}
 private:
   std::string   name_;
-  const Type&   function_type_;
+  const FuncType&   function_type_;
   std::vector<PtrExpr> arg_list_;
 
 public:
-  /*
-   //TODO: use these again!
-  using it_par       = std::vector<PtrVarDecl>::iterator;
-  using const_it_par = std::vector<PtrVarDecl>::const_iterator;
-  it_par ParBegin() { return par_list_.begin(); }
-  it_par ParEnd()   { return par_list_.end(); }
-  const_it_par ParBegin()  const { return par_list_.begin(); }
-  const_it_par ParEnd()    const { return par_list_.end(); }
-  const_it_par ParCbegin() const { return par_list_.cbegin(); }
-  const_it_par ParCend()   const { return par_list_.cend(); }
-  */
+
+  using iterator       = std::vector<PtrExpr>::iterator;
+  using const_iterator = std::vector<PtrExpr>::const_iterator;
+  iterator begin() { return arg_list_.begin(); }
+  iterator end()   { return arg_list_.end(); }
+  const_iterator begin()  const { return arg_list_.begin(); }
+  const_iterator end()    const { return arg_list_.end(); }
+  const_iterator cbegin() const { return arg_list_.cbegin(); }
+  const_iterator cend()   const { return arg_list_.cend(); }
 };
 
 /////////////////////////////////////////////////////////
