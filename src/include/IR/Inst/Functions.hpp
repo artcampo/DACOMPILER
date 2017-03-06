@@ -51,6 +51,16 @@ struct ReturnMain : public Inst{
   }
 };
 
+struct Call : public Inst, public InstAddress{
+  Call(const MemAddr addr) : InstAddress(addr){};
+  virtual ~Call() = default;
+
+  virtual std::string str() const noexcept{
+    return "call [" + addr_.str() + "]";
+  }
+};
+
+
 }//end namespace Inst
 }//end namespace IR
 }//end namespace Compiler

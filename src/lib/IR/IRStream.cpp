@@ -64,10 +64,10 @@ void IRStream::AppendSetRetVal(const Reg src){
   Append( SetRetVal(src) );
 }
 
-void IRStream::AppendSetPar(const Reg src){ Append( SetPar(src) );}
-void IRStream::AppendReturn()             { Append( Return() ); }
-void IRStream::AppendReturnMain()         { Append( ReturnMain() );  }
-
+void IRStream::AppendSetPar(const Reg src)    { Append( SetPar(src) );}
+void IRStream::AppendReturn()                 { Append( Return() ); }
+void IRStream::AppendReturnMain()             { Append( ReturnMain() );  }
+void IRStream::AppendCall(const MemAddr addr) { Append( Call(addr) );  };
 
 Reg IRStream::RegAssignedToPreviousInst() const{
   Inst::InstDst& i = dynamic_cast<Inst::InstDst&>(*(stream_[ stream_.size() - 1 ]));

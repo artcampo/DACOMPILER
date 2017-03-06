@@ -206,12 +206,20 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(FuncCall const& p, const Node* successor){
+  //generate arguments
+  for(const auto& it : p) it->Accept(*this, successor);
+  //generate set prior to call
+  for(const auto& it : p) stream_.AppendSetPar( reg_dst_of_expr_[&*it]);
 
+  const MemAddr a = MemAddr(unit_.GetFunc(p.Name()).EntryLabel(), 0);
+  stream_.AppendCall(a);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(FuncRet const& p, const Node* successor){
-
+  p.GetCall().Accept(*this, successor);
+  if( p.GetType() != unit_.GetTypeVoid() )
+    stream_.AppendGetRetVal();
 }
 
 /////////////////////////////////////////////////////////////////////////////

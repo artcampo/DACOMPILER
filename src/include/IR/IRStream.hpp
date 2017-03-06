@@ -32,6 +32,8 @@ struct IRStream : public IRBuilder{
   void AppendSetPar(const Reg src);
   void AppendReturn();
   void AppendReturnMain();
+  void AppendCall(const MemAddr addr);
+
 
   void Print() const noexcept;
 private:

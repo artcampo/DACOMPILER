@@ -28,6 +28,7 @@ struct SetRetVal;
 struct SetPar;
 struct Return;
 struct ReturnMain;
+struct Call;
 
 using PtrInst         = std::unique_ptr<Inst>;
 using PtrJumpIncond   = std::unique_ptr<JumpIncond>;
@@ -46,6 +47,8 @@ using PtrSetRetVal    = std::unique_ptr<SetRetVal>;
 using PtrSetPar       = std::unique_ptr<SetPar>;
 using PtrReturn       = std::unique_ptr<Return>;
 using PtrReturnMain   = std::unique_ptr<ReturnMain>;
+using PtrCall         = std::unique_ptr<Call>;
+
 
 struct InstAddress{
   InstAddress(const MemAddr addr)

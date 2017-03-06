@@ -85,6 +85,10 @@ protected:
     return std::make_unique<Inst::ReturnMain>();
   }
 
+  Inst::PtrCall Call(const MemAddr addr){
+    return std::make_unique<Inst::Call>(addr);
+  }
+
 
 private:
   Reg   next_free_reg_;

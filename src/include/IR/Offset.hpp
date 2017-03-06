@@ -15,6 +15,8 @@ struct Offset{
 
   Offset(const AddrOffset addr, const std::string name)
     : addr_(addr), name_(name){}
+  Offset(const AddrOffset addr)
+    : addr_(addr), name_(""){}
 
   std::string str() const noexcept{
     //return std::to_string(addr_) + std::string(" ") + name_;
