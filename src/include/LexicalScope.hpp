@@ -55,7 +55,7 @@ public:
   : LexicalScope(id, parent, nullptr, scope_owner_id, symbol_table, declaration_table
     , symbolid_of_node){}
 
-  bool IsDeclValid(const std::string name, const Type& type);
+  bool IsDeclValid(const std::string name);
   bool RegisterDecl(const std::string name, const Type& type, const Node& n
       , AST::Symbols::SymbolId symbol_id);
   bool IsDecl(const std::string& name);
