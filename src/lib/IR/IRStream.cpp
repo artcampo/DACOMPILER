@@ -56,6 +56,17 @@ Reg IRStream::AppendPtrElem(const MemAddr addr){
   return RegAssignedToPreviousInst();
 }
 
+Reg IRStream::AppendGetRetVal(){
+  Append( GetRetVal() );
+  return RegAssignedToPreviousInst();
+}
+void IRStream::AppendSetRetVal(const Reg src){
+  Append( SetRetVal(src) );
+}
+
+void IRStream::AppendSetPar(const Reg src){ Append( SetPar(src) );}
+void IRStream::AppendReturn()             { Append( Return() ); }
+void IRStream::AppendReturnMain()         { Append( ReturnMain() );  }
 
 
 Reg IRStream::RegAssignedToPreviousInst() const{

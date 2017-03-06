@@ -16,10 +16,16 @@ void IRGenerator::Visit(ProgBody const& p, const Node* successor){
   p.GetProgInit().Accept (*this, nullptr);
 
   //Process main
-  for(auto& it : p) if(it->Name()=="main") it->Accept(*this, successor);
+  for(auto& it : p) if(it->Name()=="main"){
+    it->Accept(*this, successor);
+    stream_.AppendReturnMain();
+  }
 
   //Process the rest of the functions
-  for(auto& it : p) if(it->Name()!="main") it->Accept(*this, successor);
+  for(auto& it : p) if(it->Name()!="main"){
+    it->Accept(*this, successor);
+    stream_.AppendReturn();
+  }
 
   p.GetProgEnd().Accept  (*this, nullptr );
 }

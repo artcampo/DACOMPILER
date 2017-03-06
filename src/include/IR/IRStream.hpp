@@ -27,6 +27,12 @@ struct IRStream : public IRBuilder{
   Reg AppendArith(const Reg src1, const Reg src2, const ArithType op);
   Reg AppendPtrElem(const MemAddr addr);
 
+  Reg AppendGetRetVal();
+  void AppendSetRetVal(const Reg src);
+  void AppendSetPar(const Reg src);
+  void AppendReturn();
+  void AppendReturnMain();
+
   void Print() const noexcept;
 private:
   std::vector<Inst::PtrInst> stream_;

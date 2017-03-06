@@ -23,6 +23,11 @@ struct StoreReg;
 struct Arith;
 struct Comparison;
 struct PtrElem;
+struct GetRetVal;
+struct SetRetVal;
+struct SetPar;
+struct Return;
+struct ReturnMain;
 
 using PtrInst         = std::unique_ptr<Inst>;
 using PtrJumpIncond   = std::unique_ptr<JumpIncond>;
@@ -36,6 +41,11 @@ using PtrArith        = std::unique_ptr<Arith>;
 using PtrComparison   = std::unique_ptr<Comparison>;
 using PtrPtrElem      = std::unique_ptr<PtrElem>;
 
+using PtrGetRetVal    = std::unique_ptr<GetRetVal>;
+using PtrSetRetVal    = std::unique_ptr<SetRetVal>;
+using PtrSetPar       = std::unique_ptr<SetPar>;
+using PtrReturn       = std::unique_ptr<Return>;
+using PtrReturnMain   = std::unique_ptr<ReturnMain>;
 
 struct InstAddress{
   InstAddress(const MemAddr addr)
@@ -114,3 +124,4 @@ struct UnaryOp : public Inst, public InstDst, public InstSrc{
 #include "Inst/Jumps.hpp"
 #include "Inst/MemAccess.hpp"
 #include "Inst/Ops.hpp"
+#include "Inst/Functions.hpp"

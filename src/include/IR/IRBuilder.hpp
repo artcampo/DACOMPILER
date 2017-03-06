@@ -59,10 +59,30 @@ protected:
     return std::make_unique<Inst::StoreReg>(src1, src2);
   }
 
-
   Inst::PtrPtrElem PtrElem(const MemAddr addr){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::PtrElem>(assigned_reg, addr);
+  }
+
+  Inst::PtrGetRetVal GetRetVal(){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Inst::GetRetVal>(assigned_reg);
+  }
+
+  Inst::PtrSetRetVal SetRetVal(const Reg src){
+    return std::make_unique<Inst::SetRetVal>(src);
+  }
+
+  Inst::PtrSetPar SetPar(const Reg src){
+    return std::make_unique<Inst::SetPar>(src);
+  }
+
+  Inst::PtrReturn Return(){
+    return std::make_unique<Inst::Return>();
+  }
+
+  Inst::PtrReturnMain ReturnMain(){
+    return std::make_unique<Inst::ReturnMain>();
   }
 
 
