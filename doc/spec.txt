@@ -1,6 +1,12 @@
 Language with nested scopes.
+Static type checking.
 
-First class types: int, bool.
+First class types: void, int, bool.
+Instantiation of void Variables or pointer to it is forbidden.
+(and any level of indirection for that matter, so no void**)
+
+Recursive types: pointers to any type, functions over any type.
+While pointers do exists, its arithmetic is strictly forbidden.
 
 Variables have to be defined before use.
 Multiple variable declaration is allowed, comma-separated
@@ -11,4 +17,6 @@ ex: int* a; bool* b;
 
 Functions
 Return type is mandatory.
+Parameter list can be empty.
 Argument list can be empty.
+Return statement is mandatory if return type is not void.
