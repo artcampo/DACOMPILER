@@ -88,6 +88,9 @@ public:
 
   virtual void Visit(ReturnStmt const& p){
     p.RetExpr().Accept(*this);
+    const Type& rt = p.GetFuncDef().GetRetType();
+    const Type& et = unit_.GetTypeOfNode(p.RetExpr());
+    if(rt != et) unit_.Error(kErr45 + rt.str() + " vs " + et.str());
   }
 
   //Traversal

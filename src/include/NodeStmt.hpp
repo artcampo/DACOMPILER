@@ -10,6 +10,7 @@ class DeclStmt;
 class VarDeclList;
 class VarDecl;
 class AssignStmt;
+class FuncDef;
 
 
 /////////////////////////////////////////////////////////
@@ -120,6 +121,7 @@ public:
     : Statement(id, locus), ret_expr_(std::move(ret_expr)), func_(func){}
 
   Expr& RetExpr() const noexcept{return *ret_expr_;}
+  FuncDef& GetFuncDef() const noexcept{return func_;}
 
   virtual std::string str() const{
     return "Return (" + ret_expr_->str() + ")";

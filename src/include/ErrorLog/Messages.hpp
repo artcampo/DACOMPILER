@@ -39,6 +39,7 @@ const static std::string kErr41("[err:41] Argument type conflict: ");
 const static std::string kErr42("[err:42] ");
 const static std::string kErr43("[err:43] Missing semicolon after return statement. ");
 const static std::string kErr44("[err:44] Return statement not inside function definition. ");
+const static std::string kErr45("[err:45] Return's expression doesn not match function return type: ");
 
 
 

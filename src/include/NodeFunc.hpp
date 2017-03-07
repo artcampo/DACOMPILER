@@ -24,6 +24,7 @@ public:
 
   Block&    GetBody() const noexcept{ return *body_;}
   const std::string&  Name() const noexcept{ return name_;}
+  const Type&  GetRetType() const noexcept{ return ret_type_;}
 
   size_t NumPars()  const noexcept{ return par_list_.size();}
   const std::vector<PtrVarDecl>& ParList()const noexcept{ return par_list_;}
