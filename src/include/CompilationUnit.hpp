@@ -49,6 +49,7 @@ public:
   CompilationUnit(): ast_(), free_scope_id_(0), free_symbol_id_(0)
     , free_scope_ownner_id_(0), TypeTable(error_log_)
     , curr_func_(nullptr)
+    , curr_func_def_(nullptr)
     , module_scope_(std::move(std::make_unique<LexicalScope>
         (FreeScopeId(), nullptr, FreeScopeOwnerId(), symbol_table_
         , module_declaration_table_, symbolid_of_node_)))
@@ -164,7 +165,8 @@ public:
     return registered;
   }
 
-
+  bool      InsideFunctionDefinition() const noexcept { return curr_func_ != nullptr; }
+  FuncDef&  CurrentFuncDef() const noexcept { return *curr_func_def_; }
 
 private:
   ScopeId                 free_scope_id_;
@@ -179,7 +181,9 @@ private:
   Ast               ast_;
 
   std::vector<AST::PtrFunction> functions_;
-  AST::Function*         curr_func_;
+  AST::Function*          curr_func_;
+  FuncDef*                curr_func_def_;
+
   PtrLexicalScope   module_scope_;
   LexicalScope*     current_scope_;
 
