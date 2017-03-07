@@ -3,6 +3,7 @@
 
 namespace Compiler{
 
+const static std::string kErr4("[err:4] Expecting semicolon after Expr.");
 const static std::string kErr14("[err:14] Expecting rpar after expression.");
 const static std::string kErr15("[err:15] Symbol already declared.");
 const static std::string kErr16("[error:16] Var used before declaration");
@@ -35,6 +36,8 @@ const static std::string kErr38("[err:38] Function call with a non-function name
 const static std::string kErr39("[err:39] Function call with less arguments than expected");
 const static std::string kErr40("[err:40] Function call with more arguments than expected (extra arguments will be discarded)");
 const static std::string kErr41("[err:41] Argument type conflict: ");
+const static std::string kErr42("[err:42] ");
+const static std::string kErr43("[err:43] Missing semicolon after return statement. ");
 
 
 

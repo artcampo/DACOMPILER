@@ -37,6 +37,11 @@ public:
     if(is_read_or_write_inht_)  unit_.SetAsRead(p);
     else                        unit_.SetAsWrite(p);
   }
+
+  virtual void Visit(ReturnStmt const& p){
+    is_read_or_write_inht_ = true;
+    p.RetExpr().Accept(*this);
+  }
   //SDD
 
   //Traversal

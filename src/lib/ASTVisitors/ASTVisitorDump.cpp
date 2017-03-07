@@ -123,8 +123,15 @@ void ASTVisitorDump::Visit(FuncCall const& p){
 
 void ASTVisitorDump::Visit(FuncRet const& p){
   std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
-  IncreaseIndent(); Indent(); p.GetCall().Accept(*this);DecreaseIndent();
+  IncreaseIndent(); Indent(); p.GetCall().Accept(*this); DecreaseIndent();
 }
+
+void ASTVisitorDump::Visit(ReturnStmt const& p){
+  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  IncreaseIndent(); Indent(); p.RetExpr().Accept(*this); DecreaseIndent();
+}
+
+
 
 
 void ASTVisitorDump::Indent(){

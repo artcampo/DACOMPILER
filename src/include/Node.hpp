@@ -36,6 +36,7 @@ class IfStmt;
 class WhileStmt;
 class DeclStmt;
 class AssignStmt;
+class ReturnStmt;
 
 //subtypes of node
 class Expr;
@@ -78,6 +79,7 @@ using PtrRefOp      = std::unique_ptr<RefOp>;
 using PtrDerefOp    = std::unique_ptr<DerefOp>;
 using PtrFuncRet    = std::unique_ptr<FuncRet>;
 using PtrFuncCall   = std::unique_ptr<FuncCall>;
+using PtrReturnStmt = std::unique_ptr<ReturnStmt>;
 
 
 }//end namespace Ptrs

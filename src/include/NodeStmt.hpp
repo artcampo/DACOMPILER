@@ -110,5 +110,26 @@ private:
   PtrBlock  body_;
 };
 
+
+
+/////////////////////////////////////////////////////////
+class ReturnStmt : public Statement {
+public:
+  virtual ~ReturnStmt() = default;
+  ReturnStmt(PtrExpr& ret_expr, const ScopeId id, const Locus& locus)
+    : Statement(id, locus), ret_expr_(std::move(ret_expr)) {}
+
+  Expr& RetExpr() const noexcept{return *ret_expr_;}
+
+  virtual std::string str() const{
+    return "Return (" + ret_expr_->str() + ")";
+  };
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(IRGenerator& v, const Node* successor);
+private:
+  PtrExpr ret_expr_;
+};
+
 }//end namespace AST
 }//end namespace Compiler

@@ -79,12 +79,17 @@ public:
     p.GetBody().Accept(*this);
   }
 
+  virtual void Visit(ReturnStmt const& p){
+    p.RetExpr().Accept(*this);
+  }
+
   //Nothing to do
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
+
 
 
 

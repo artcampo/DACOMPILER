@@ -223,6 +223,11 @@ void IRGenerator::Visit(FuncRet const& p, const Node* successor){
 }
 
 /////////////////////////////////////////////////////////////////////////////
+void IRGenerator::Visit(ReturnStmt const& p, const Node* successor){
+   p.RetExpr().Accept(*this, successor);
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Print() const noexcept{
   stream_.Print();
 }

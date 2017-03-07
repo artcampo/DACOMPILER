@@ -86,6 +86,10 @@ public:
     }
   }
 
+  virtual void Visit(ReturnStmt const& p){
+    p.RetExpr().Accept(*this);
+  }
+
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);

@@ -116,6 +116,11 @@ void ASTVisitorPrettyPrinter::Visit(FuncRet const& p){
   p.GetCall().Accept(*this);
 }
 
+void ASTVisitorPrettyPrinter::Visit(ReturnStmt const& p){
+  std::cout << p.str(); std::cout << "\n";
+  IncreaseIndent(); Indent(); p.RetExpr().Accept(*this); DecreaseIndent();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< " ";

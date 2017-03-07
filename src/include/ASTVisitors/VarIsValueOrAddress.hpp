@@ -62,6 +62,10 @@ public:
     p.Rhs().Accept(*this);
   }
 
+  virtual void Visit(ReturnStmt const& p){
+    p.RetExpr().Accept(*this);
+  }
+
   virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
   virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(FuncRet const& p){ p.GetCall().Accept(*this); }

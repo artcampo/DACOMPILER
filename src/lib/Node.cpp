@@ -27,6 +27,7 @@ void DerefOp::Accept     (ASTVisitor& v){ v.Visit(*this); }
 // void UnaryOp::Accept     (ASTVisitor& v){ v.Visit(*this); }
 void FuncCall::Accept    (ASTVisitor& v){ v.Visit(*this); }
 void FuncRet::Accept     (ASTVisitor& v){ v.Visit(*this); }
+void ReturnStmt::Accept  (ASTVisitor& v){ v.Visit(*this); }
 
 
 void ProgBody::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
@@ -48,6 +49,7 @@ void RefOp::Accept       (IRGenerator& v, const Node* successor){ return v.Visit
 void DerefOp::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 void FuncCall::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 void FuncRet::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void ReturnStmt::Accept  (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 // void UnaryOp::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 
 std::string BinaryOp::OpString() const noexcept{
