@@ -29,6 +29,7 @@ class ProgInit;
 class ProgEnd;
 class Block;
 class FuncDef;
+class FuncDecl;
 
 //subtypes of Statement
 class Statement;
@@ -61,7 +62,9 @@ using PtrProgBody   = std::unique_ptr<ProgBody>;
 using PtrProgInit   = std::unique_ptr<ProgInit>;
 using PtrProgEnd    = std::unique_ptr<ProgEnd>;
 using PtrBlock      = std::unique_ptr<Block>;
-using PtrFuncDef   = std::unique_ptr<FuncDef>;
+using PtrFuncDef    = std::unique_ptr<FuncDef>;
+using PtrFuncDecl   = std::unique_ptr<FuncDecl>;
+
 
 using PtrStatement  = std::unique_ptr<Statement>;
 using PtrIfStmt     = std::unique_ptr<IfStmt>;

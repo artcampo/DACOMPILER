@@ -117,11 +117,11 @@ private:
 class ReturnStmt : public Statement {
 public:
   virtual ~ReturnStmt() = default;
-  ReturnStmt(PtrExpr& ret_expr, FuncDef& func, const ScopeId id, const Locus& locus)
-    : Statement(id, locus), ret_expr_(std::move(ret_expr)), func_(func){}
+  ReturnStmt(PtrExpr& ret_expr, FuncDecl& func_decl, const ScopeId id, const Locus& locus)
+    : Statement(id, locus), ret_expr_(std::move(ret_expr)), func_decl_(func_decl){}
 
   Expr& RetExpr() const noexcept{return *ret_expr_;}
-  FuncDef& GetFuncDef() const noexcept{return func_;}
+  FuncDecl& GetFuncDecl() const noexcept{return func_decl_;}
 
   virtual std::string str() const{
     return "Return (" + ret_expr_->str() + ")";
@@ -131,7 +131,7 @@ public:
   virtual void Accept(IRGenerator& v, const Node* successor);
 private:
   PtrExpr ret_expr_;
-  FuncDef& func_;
+  FuncDecl& func_decl_;
 };
 
 }//end namespace AST

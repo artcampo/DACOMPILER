@@ -34,6 +34,7 @@ using namespace Compiler::AST::Ptrs;
 // namespace AST{ class ASTVisitorDump; class Function;};
 namespace AST{ class ASTVisitorDump;};
 using AST::FuncDef;
+using AST::FuncDecl;
 using AST::PtrFunction;
 using AST::Function;
 using AST::PtrLexicalScope;
@@ -49,7 +50,7 @@ public:
   CompilationUnit(): ast_(), free_scope_id_(0), free_symbol_id_(0)
     , free_scope_ownner_id_(0), TypeTable(error_log_)
     , curr_func_(nullptr)
-    , curr_func_def_(nullptr)
+    , curr_func_decl_(nullptr)
     , module_scope_(std::move(std::make_unique<LexicalScope>
         (FreeScopeId(), nullptr, FreeScopeOwnerId(), symbol_table_
         , module_declaration_table_, symbolid_of_node_)))
@@ -89,8 +90,12 @@ public:
     return NewNestedScope(scope_owner_id);
   }
 
+  void EnterFunctionDefinition(FuncDecl* current_func_decl){
+    curr_func_decl_ = current_func_decl;
+  }
   void ExitFunctionDefinition(){
     curr_func_ = nullptr;
+    curr_func_decl_ = nullptr;
     RestoreScope();
   }
 
@@ -165,8 +170,8 @@ public:
     return registered;
   }
 
-  bool      InsideFunctionDefinition() const noexcept { return curr_func_ != nullptr; }
-  FuncDef&  CurrentFuncDef() const noexcept { return *curr_func_def_; }
+  bool      InsideFunctionDefinition() const noexcept { return curr_func_decl_ != nullptr; }
+  FuncDecl& CurrentFuncDecl() const noexcept { return *curr_func_decl_; }
 
 private:
   ScopeId                 free_scope_id_;
@@ -182,7 +187,7 @@ private:
 
   std::vector<AST::PtrFunction> functions_;
   AST::Function*          curr_func_;
-  FuncDef*                curr_func_def_;
+  FuncDecl*                curr_func_decl_;
 
   PtrLexicalScope   module_scope_;
   LexicalScope*     current_scope_;

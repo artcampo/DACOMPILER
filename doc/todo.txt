@@ -1,8 +1,10 @@
 High priority:
 -mul/div/sub
 -logic comparison
+.
 
 Low priority:
+- allow empty functions
 - Implement an acyclic visitor
 - move bison implementation to test folder
 - policy for logging

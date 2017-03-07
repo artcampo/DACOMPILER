@@ -4,25 +4,26 @@
 namespace Compiler{
 namespace AST{
 
-
-/////////////////////////////////////////////////////////
-class FuncDef : public Node {
+  /////////////////////////////////////////////////////////
+class FuncDecl : public Node {
 public:
-  virtual ~FuncDef() = default;
-  FuncDef(std::string name
-    , PtrBlock& body
+  virtual ~FuncDecl() = default;
+  FuncDecl(std::string name
     , const Type& ret_type
     , std::vector<PtrVarDecl>& par_list
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), body_(std::move(body)), name_(name), ret_type_(ret_type)
+  : Node(id, locus), name_(name), ret_type_(ret_type)
     , par_list_(std::move(par_list)){}
 
-  virtual void Accept(IRGenerator& v, const Node* successor);
-  virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return std::string("FuncDef: ") + name_;}
 
-  Block&    GetBody() const noexcept{ return *body_;}
+  //FuncDecl cannot be visited
+  virtual void Accept(IRGenerator& v, const Node* successor){};
+  virtual void Accept(ASTVisitor& v){};
+
+  virtual std::string str() const noexcept { return std::string("FuncDecl: ") + name_;}
+
+
   const std::string&  Name() const noexcept{ return name_;}
   const Type&  GetRetType() const noexcept{ return ret_type_;}
 
@@ -30,11 +31,49 @@ public:
   const std::vector<PtrVarDecl>& ParList()const noexcept{ return par_list_;}
   std::vector<PtrVarDecl>& ParList() noexcept{ return par_list_;}
 private:
-//   PtrArg
-  PtrBlock      body_;
   std::string   name_;
   const Type&   ret_type_;
   std::vector<PtrVarDecl> par_list_;
+
+public:
+  /*
+   //TODO: use these again!
+  using it_par       = std::vector<PtrVarDecl>::iterator;
+  using const_it_par = std::vector<PtrVarDecl>::const_iterator;
+  it_par ParBegin() { return par_list_.begin(); }
+  it_par ParEnd()   { return par_list_.end(); }
+  const_it_par ParBegin()  const { return par_list_.begin(); }
+  const_it_par ParEnd()    const { return par_list_.end(); }
+  const_it_par ParCbegin() const { return par_list_.cbegin(); }
+  const_it_par ParCend()   const { return par_list_.cend(); }
+  */
+};
+
+/////////////////////////////////////////////////////////
+class FuncDef : public Node {
+public:
+  virtual ~FuncDef() = default;
+  FuncDef(PtrFuncDecl& decl
+    , PtrBlock& body
+    , const ScopeId id
+    , const Locus& locus)
+  : Node(id, locus), body_(std::move(body)), decl_(std::move(decl)){}
+
+  virtual void Accept(IRGenerator& v, const Node* successor);
+  virtual void Accept(ASTVisitor& v);
+  virtual std::string str() const noexcept { return "FuncDef: " + decl_->Name();}
+
+  Block&    GetBody() const noexcept{ return *body_;}
+  const std::string&  Name() const noexcept{ return decl_->Name();}
+  const Type&  GetRetType() const noexcept{ return decl_->GetRetType();}
+
+  size_t NumPars()  const noexcept{ return decl_->NumPars();}
+  const std::vector<PtrVarDecl>& ParList() const noexcept{ return decl_->ParList();}
+  std::vector<PtrVarDecl>& ParList() noexcept{ return decl_->ParList();}
+private:
+//   PtrArg
+  PtrBlock      body_;
+  PtrFuncDecl   decl_;
 
 public:
   /*
