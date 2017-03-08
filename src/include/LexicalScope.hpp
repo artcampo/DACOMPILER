@@ -61,7 +61,7 @@ public:
   bool RegisterDecl(const std::string& name, const Type& type, const Node& n
       , AST::Symbols::SymbolId symbol_id);
 
-  const Type& GetType(const std::string& name);
+//   const Type& GetType(const std::string& name) const;
   const Symbols::SymbolId DeclId(const std::string& name) const;
   const ScopeId GetScopeId() const noexcept{return id_;};
 

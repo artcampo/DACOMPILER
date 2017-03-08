@@ -61,12 +61,12 @@ const Symbols::SymbolId LexicalScope::DeclId(const std::string& name) const{
   auto it = symbol_table_.find(name);
   return it->second;
 }
-
+/*
 const Type& LexicalScope::GetType(const std::string& name){
   const Symbols::SymbolId id = symbol_table_[name];
   return declaration_table_[id]->GetType();
 }
-
+*/
 LexicalScope* LexicalScope::NewNestedScope(const ScopeId id
     , const ScopeOwnerId scope_owner_id){
 

@@ -12,7 +12,30 @@ class Node;
 namespace Symbols{
 
 using SymbolString = std::string;
-using SymbolId     = int;
+// using SymbolId     = int;
+
+class SymbolId{
+public:
+  SymbolId(){}
+  SymbolId(const int id) : id_(id){}
+
+  const bool operator<  ( const SymbolId &type_id )const noexcept{
+    return id_ < type_id.id_;
+  }
+
+  const SymbolId& operator=(const SymbolId &t ){id_ = t.id_;}
+  const bool operator==( const SymbolId& t ) const noexcept {return id_ == t.id_;}
+  const bool operator==( const int t ) const noexcept {return id_ == t;}
+
+//   operator int() const { return id_; }
+//   SymbolId& operator (const int& id){ id_ = id; return *this;}
+  SymbolId& operator++(){++id_; return *this;}
+  SymbolId operator++(int){ SymbolId copy(*this);++(*this); return copy;}
+  operator int() const { return id_; }
+
+private:
+  int id_;
+};
 
 class Symbol {
 public:
