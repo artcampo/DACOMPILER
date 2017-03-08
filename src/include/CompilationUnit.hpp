@@ -140,7 +140,7 @@ public:
   bool IsDeclValid(const std::string& name){return Scope().IsDeclValid(name);}
   bool HasDecl(const std::string& name){return Scope().HasDecl(name);}
   const Type& GetType(const std::string& name){
-    return TypeTable::GetType( Scope().DeclId(name) );
+    return module_declaration_table_.at(Scope().DeclId(name))->GetType();
   }
   const Type& GetType(const TypeId id) const{ return TypeTable::GetType(id);}
 
