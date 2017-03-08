@@ -19,13 +19,7 @@ class ExprVar : public Expr {
 public:
   virtual ~ExprVar() = default;
   ExprVar(const ScopeId id, const Locus& locus) : Expr(id, locus){}
-
-/*
-  virtual void Accept(ASTVisitor& v);
-  virtual void Accept(IRGenerator& v, const Node* successor);
-  */
   std::string str() const noexcept = 0;
-
 };
 
 /////////////////////////////////////////////////////////

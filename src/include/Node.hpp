@@ -110,8 +110,6 @@ class Expr : public Node{
 public:
   virtual ~Expr() = default;
   Expr(const ScopeId id, const Locus& locus) : Node(id, locus){};
-  virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(IRGenerator& v, const Node* successor) = 0;
   virtual std::string str() const = 0;
 };
 

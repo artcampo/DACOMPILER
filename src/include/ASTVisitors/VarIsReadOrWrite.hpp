@@ -15,6 +15,11 @@ public:
     , is_read_or_write_inht_(true){};
 
 
+  //santa's little helper
+  void Set(ExprVar const& p){
+    if(is_read_or_write_inht_)  unit_.SetAsRead(p);
+    else                        unit_.SetAsWrite(p);
+  }
 
   virtual void Visit(AssignStmt const& p){
     is_read_or_write_inht_ = false; p.Lhs().Accept(*this);
@@ -31,11 +36,6 @@ public:
   virtual void Visit(FuncCall const& p) {
     //TODO: should funcCall be an expression?
     for(const auto& it : p) it->Accept(*this);
-  }
-
-  void Set(Expr const& p){
-//     if(is_read_or_write_inht_)  unit_.SetAsRead(p);
-//     else                        unit_.SetAsWrite(p);
   }
 
   virtual void Visit(ReturnStmt const& p){
