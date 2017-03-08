@@ -128,14 +128,14 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class FuncRet: public Expr {
+class FuncRet: public ExprVar {
 public:
   virtual ~FuncRet() = default;
   FuncRet(const Type& ret_type
     , PtrFuncCall& call
     , const ScopeId id
     , const Locus& locus)
-  : Expr(id, locus), ret_type_(ret_type)
+  : ExprVar(id, locus), ret_type_(ret_type)
     , call_(std::move(call)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);

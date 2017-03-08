@@ -13,6 +13,21 @@ class VarDeclList;
 class VarDecl;
 class AssignStmt;
 
+
+//
+class ExprVar : public Expr {
+public:
+  virtual ~ExprVar() = default;
+  ExprVar(const ScopeId id, const Locus& locus) : Expr(id, locus){}
+
+/*
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(IRGenerator& v, const Node* successor);
+  */
+  std::string str() const noexcept = 0;
+
+};
+
 /////////////////////////////////////////////////////////
 class Literal : public Expr {
 public:
@@ -61,12 +76,12 @@ private:
 
 
 /////////////////////////////////////////////////////////
-class Var : public Expr{
+class Var : public ExprVar{
 public:
   virtual ~Var() = default;
   Var(const std::string& name, const Type& type, Symbols::SymbolId id
     , const ScopeId scope_id , const Locus& locus)
-    : Expr(scope_id, locus), name_(name),type_(type), id_(id){}
+    : ExprVar(scope_id, locus), name_(name),type_(type), id_(id){}
 
   const Type& GetType()const noexcept{return type_;}
   std::string str() const noexcept{return name_;}
@@ -82,33 +97,27 @@ private:
 };
 
 /////////////////////////////////////////////////////////
-class UnaryOp : public Expr {
+class UnaryOp  {
 public:
+  //UnaryOp()   = default;
+  ~UnaryOp()  = default;
 
-  virtual ~UnaryOp() = default;
-  //TODO change op to own type
-  UnaryOp(PtrExpr& rhs, const ScopeId id
-    , const Locus& locus)
-    : Expr(id, locus), rhs_(std::move(rhs)){}
+  UnaryOp(PtrExpr& rhs) :  rhs_(std::move(rhs)){}
 
-  Expr& Rhs() const noexcept{return *rhs_;}
+  virtual Expr& Rhs() const noexcept {return *rhs_;}
 
-  virtual std::string str() const noexcept = 0;
-
-  virtual void Accept(ASTVisitor& v) = 0;
-  virtual void Accept(IRGenerator& v, const Node* successor) = 0;
 private:
   PtrExpr rhs_;
 };
 
 /////////////////////////////////////////////////////////
-class RefOp : public UnaryOp {
+class RefOp : public Expr, public UnaryOp {
 public:
 
   virtual ~RefOp() = default;
   //TODO change op to own type
   RefOp(PtrExpr& rhs, const ScopeId id, const Locus& locus)
-    : UnaryOp(rhs, id, locus){}
+    : Expr(id, locus), UnaryOp(rhs){}
 
   virtual std::string str() const noexcept{
     return std::string("@");
@@ -119,13 +128,13 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class DerefOp : public UnaryOp {
+class DerefOp : public ExprVar, public UnaryOp {
 public:
 
   virtual ~DerefOp() = default;
   //TODO change op to own type
   DerefOp(PtrExpr& rhs, const ScopeId id, const Locus& locus)
-    : UnaryOp(rhs, id, locus){}
+    : ExprVar(id, locus), UnaryOp(rhs){}
 
   virtual std::string str() const noexcept{
     return std::string("*");
