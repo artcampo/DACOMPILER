@@ -34,8 +34,8 @@ public:
   }
 
   void Set(Expr const& p){
-    if(is_read_or_write_inht_)  unit_.SetAsRead(p);
-    else                        unit_.SetAsWrite(p);
+//     if(is_read_or_write_inht_)  unit_.SetAsRead(p);
+//     else                        unit_.SetAsWrite(p);
   }
 
   virtual void Visit(ReturnStmt const& p){

@@ -1,0 +1,9 @@
+Attributes associated to AST's nodes:
+
+Bottom-up:
+node_is_lval_or_rval_, if node can be used as lval
+type_of_node_, type associated with node
+
+Top-down:
+var_is_val_or_addr_, is var being accessed by value or address
+var_is_read_or_write_, should var access be r/w

@@ -41,6 +41,7 @@ class ReturnStmt;
 
 //subtypes of node
 class Expr;
+class ExprVar;
 class VarDeclList;
 class VarDecl;
 

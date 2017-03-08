@@ -14,7 +14,7 @@ namespace Compiler{
 
 using AST::Node;
 using AST::Var;
-using AST::Expr;
+using AST::ExprVar;
 using AST::OffsetTable;
 using AST::OffsetTable;
 
@@ -22,14 +22,14 @@ class TreeDecoration : public LnessRness{
 public:
   TreeDecoration(){}
 
-  bool IsRead(const Expr& n) const{return var_is_read_or_write_.at(&n);}
-  bool IsWrite(const Expr& n) const{return not var_is_read_or_write_.at(&n);}
+  bool IsRead(const ExprVar& n) const{return var_is_read_or_write_.at(&n);}
+  bool IsWrite(const ExprVar& n) const{return not var_is_read_or_write_.at(&n);}
 
   bool IsValueAccess(const Var& n) const{return var_is_val_or_addr_.at(&n);}
   bool IsAddressAccess(const Var& n) const{return not var_is_val_or_addr_.at(&n);}
 
-  void SetAsRead(const Expr& n) noexcept{var_is_read_or_write_[&n] = true;}
-  void SetAsWrite(const Expr& n) noexcept{var_is_read_or_write_[&n] = false;}
+  void SetAsRead(const ExprVar& n) noexcept{var_is_read_or_write_[&n] = true;}
+  void SetAsWrite(const ExprVar& n) noexcept{var_is_read_or_write_[&n] = false;}
 
   void SetVarUsageAsValue(const Var& n) noexcept{var_is_val_or_addr_[&n] = true;}
   void SetVarUsageAsAddress(const Var& n) noexcept{var_is_val_or_addr_[&n] = false;}
@@ -61,8 +61,8 @@ public:
 
   std::string ReadWriteStr(const Node& n) const{
     if(not HasReadWrite(n)) return std::string("No ReadWrite");
-    if(IsRead(dynamic_cast<const Expr&>(n)))           return std::string("Read");
-    if(IsWrite(dynamic_cast<const Expr&>(n)))          return std::string("Write");
+    if(IsRead(dynamic_cast<const ExprVar&>(n)))  return std::string("Read");
+    if(IsWrite(dynamic_cast<const ExprVar&>(n))) return std::string("Write");
   }
 
   std::string VarUsageStr(const Node& n) const{
@@ -74,7 +74,7 @@ public:
 
 
 protected:
-  std::map<const Node*,bool> node_is_lval_or_rval_;
+//   std::map<const Node*,bool> node_is_lval_or_rval_;
   std::map<const Node*,bool> var_is_read_or_write_;
   std::map<const Node*,bool> var_is_val_or_addr_;
 
