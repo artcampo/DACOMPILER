@@ -1,6 +1,8 @@
 #pragma once
-#include "TypeId.hpp"
 #include "Types.hpp"
+#include "Types/BasicType.hpp"
+#include "Types/PtrType.hpp"
+#include "Types/FuncType.hpp"
 #include "ErrorLog.hpp"
 #include <memory>
 #include <map>

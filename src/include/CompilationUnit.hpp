@@ -1,7 +1,6 @@
 #pragma once
 #include "AST.hpp"
 #include "LexicalScope.hpp"
-#include "Types.hpp"
 #include "Symbol.hpp"
 #include "SymbolTable.hpp"
 #include "TypeTable.hpp"
