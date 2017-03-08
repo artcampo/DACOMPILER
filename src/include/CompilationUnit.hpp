@@ -194,8 +194,8 @@ private:
   //Attributes computed by visitors
 
 
-  const ScopeId FreeScopeId() noexcept{ ++free_scope_id_; return free_scope_id_ - 1;}
-  const ScopeOwnerId FreeScopeOwnerId() noexcept{ ++free_scope_ownner_id_; return free_scope_ownner_id_ - 1;}
+  const ScopeId FreeScopeId() noexcept{ return free_scope_id_++;}
+  const ScopeOwnerId FreeScopeOwnerId() noexcept{ return free_scope_ownner_id_++;}
 
 
 public:

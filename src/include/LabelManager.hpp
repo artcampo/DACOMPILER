@@ -39,7 +39,7 @@ private:
   std::map<IR::LabelId, std::string> name_of_label_;
   std::vector<IR::Label> labels_;
   IR::LabelId   free_id_;
-  const IR::LabelId FreeId() noexcept{ ++free_id_; return free_id_ - 1;}
+  const IR::LabelId FreeId() noexcept{ return free_id_ ++;}
 };
 
 

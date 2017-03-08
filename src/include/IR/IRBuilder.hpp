@@ -93,10 +93,7 @@ protected:
 private:
   Reg   next_free_reg_;
 
-  Reg   FreeReg(){
-    next_free_reg_++;
-    return next_free_reg_ - 1;
-  }
+  Reg   FreeReg(){return next_free_reg_++;}
 };
 
 }//end namespace IR
