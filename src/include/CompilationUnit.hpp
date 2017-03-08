@@ -64,15 +64,6 @@ public:
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
-  /*
-  const ScopeId NewFunction(std::string name, FuncDef& origin_node, const ScopeOwnerId scope_owner_id){
-    functions_.push_back( std::move(
-      std::make_unique<Function>(name, &origin_node, ModuleOffsetTable(), scope_owner_id)));
-    curr_func_ = functions_[ functions_.size() - 1].get();
-    function_by_name_[name] = curr_func_;
-    return NewNestedScope(scope_owner_id);
-  }
-*/
   const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){
     const Label entry = NewFunctionEntryLabel(name);
     Label local;
@@ -137,8 +128,8 @@ public:
   size_t NumScopes() const noexcept{ return free_scope_id_;};
 
 
-  Function& GetFunc(std::string name){ return *function_by_name_.at(name);}
-  const Function& GetFunc(std::string name) const { return *function_by_name_.at(name);}
+  Function& GetFunc(const std::string& name){ return *function_by_name_.at(name);}
+  const Function& GetFunc(const std::string& name) const { return *function_by_name_.at(name);}
 
   Function& GetFunc(const FuncDef& n){
     return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
@@ -153,7 +144,7 @@ public:
   const Type& GetType(const TypeId id) const{ return TypeTable::GetType(id);}
 
 
-  bool RegisterDecl(const std::string name, const Type& type, const Node& n){
+  bool RegisterDecl(const std::string& name, const Type& type, const Node& n){
     AST::Symbols::SymbolId symbol_id = free_symbol_id_;
     bool registered = Scope().RegisterDecl(name, type, n, free_symbol_id_);
     if(registered){

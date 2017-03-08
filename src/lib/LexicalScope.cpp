@@ -9,7 +9,7 @@ namespace AST{
 // returns:
 // - false if same symbol on same scope was already defined
 // - true otherwise
-bool LexicalScope::RegisterDecl(const std::string name, const Type& type
+bool LexicalScope::RegisterDecl(const std::string& name, const Type& type
   ,  const Node& n, AST::Symbols::SymbolId symbol_id){
   auto it = symbol_table_.find(name);
   Symbols::SymbolId previous_id = -1;

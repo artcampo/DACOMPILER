@@ -8,7 +8,7 @@ namespace AST{
 class FuncDecl : public Node {
 public:
   virtual ~FuncDecl() = default;
-  FuncDecl(std::string name
+  FuncDecl(const std::string& name
     , const Type& ret_type
     , std::vector<PtrVarDecl>& par_list
     , const ScopeId id

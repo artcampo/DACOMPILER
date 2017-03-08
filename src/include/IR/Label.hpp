@@ -25,12 +25,12 @@ struct Label{
   }
    */
 
-  static Label LabelLT(const LabelId id, const std::string name){
+  static Label LabelLT(const LabelId id, std::string name){
     return Label(id, name, false);
   }
 
 
-  static Label LabelRT(const LabelId id, const std::string name){
+  static Label LabelRT(const LabelId id, std::string name){
     return Label(id, name, true);
   }
 
@@ -47,7 +47,7 @@ protected:
   std::string name_;
   bool        is_rt_or_lt_;
 
-  Label(const LabelId id, const std::string name, const bool is_rt_or_lt)
+  Label(const LabelId id, const std::string& name, const bool is_rt_or_lt)
   : id_(id), name_(name), is_rt_or_lt_(is_rt_or_lt){};
 };
 

@@ -58,7 +58,7 @@ public:
   bool IsDeclValid(const std::string& name);
   bool HasDecl(const std::string& name);
 
-  bool RegisterDecl(const std::string name, const Type& type, const Node& n
+  bool RegisterDecl(const std::string& name, const Type& type, const Node& n
       , AST::Symbols::SymbolId symbol_id);
 
   const Type& GetType(const std::string& name);

@@ -13,7 +13,7 @@ struct Offset{
   Offset(const Offset &o) = default;
   Offset& operator= ( const Offset &o ) = default;
 
-  Offset(const AddrOffset addr, const std::string name)
+  Offset(const AddrOffset addr, const std::string& name)
     : addr_(addr), name_(name){}
   Offset(const AddrOffset addr)
     : addr_(addr), name_(""){}
