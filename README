@@ -1,11 +1,11 @@
-DACOMP, stand-alone simple compiler for educative pourposes. 
-Uses Flex/Bison.
+DACOMP, stand-alone simple compiler for educative pourposes.
+Uses custom made parser [1].
 
 Assumes DAVM is installed in the parent directory.
 
 Developed by:
 - Arturo San Emeterio Campos (arturocampos82@gmail.com)
-- Daniel Peyrolón 
+- Daniel Peyrolón
 
 Some scripts are provided to ease use:
 1) clean_install, install at current dir /install
@@ -13,3 +13,5 @@ Some scripts are provided to ease use:
 2) execute_tests, run the acceptance tests in /install
 3) regenerate_tests, use the current output of the tests as the proper
 base line. WARNING: this is written to /src
+
+[1] Parser can be found at https://github.com/artcampo/DAPARS/
