@@ -1,4 +1,4 @@
-#include "TypeTable.hpp"
+#include "Module/TypeTable.hpp"
 
 namespace Compiler{
 

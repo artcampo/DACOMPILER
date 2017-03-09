@@ -17,9 +17,10 @@ public:
     return pointed_str_ + std::string("*");
   }
 
-  virtual bool IsBool() const noexcept{ return false;}
-  virtual bool IsPtr()  const noexcept{ return true;}
-  virtual bool IsFunc() const noexcept{ return false;}
+  virtual bool IsBool()  const noexcept{ return false;}
+  virtual bool IsPtr()   const noexcept{ return true;}
+  virtual bool IsFunc()  const noexcept{ return false;}
+  virtual bool IsClass() const noexcept{ return false;}
 
 private:
   TypeId  pointed_tid_;

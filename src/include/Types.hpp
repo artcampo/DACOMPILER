@@ -22,6 +22,7 @@ class Type;
 class BasicType;
 class PtrType;
 class FuncType;
+class ClassType;
 
 class Type{
 public:

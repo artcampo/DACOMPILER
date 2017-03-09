@@ -2,10 +2,9 @@
 #include "AST.hpp"
 #include "Types.hpp"
 #include "Symbol.hpp"
-#include "TypeTable.hpp"
 #include "Node.hpp"
 #include "Symbol.hpp"
-#include "Function.hpp"
+#include "Module/TypeTable.hpp"
 #include "IR/Offset.hpp"
 #include "IR/Label.hpp"
 #include <map>

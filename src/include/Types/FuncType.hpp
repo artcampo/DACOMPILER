@@ -24,9 +24,10 @@ public:
     return std::string("function: (") + pars_str_ + std::string(")->") + ret_str_;
   }
 
-  virtual bool IsBool() const noexcept{ return false;}
-  virtual bool IsPtr()  const noexcept{ return false;}
-  virtual bool IsFunc() const noexcept{ return true;}
+  virtual bool IsBool()  const noexcept{ return false;}
+  virtual bool IsPtr()   const noexcept{ return false;}
+  virtual bool IsFunc()  const noexcept{ return true;}
+  virtual bool IsClass() const noexcept{ return false;}
 
   size_t  NumPars() const noexcept{ return pars_tid_.size();};
 

@@ -3,12 +3,13 @@
 #include "LexicalScope.hpp"
 #include "Symbol.hpp"
 #include "SymbolTable.hpp"
-#include "TypeTable.hpp"
 #include "ErrorLog.hpp"
 #include "TreeDecoration.hpp"
-#include "LabelManager.hpp"
-#include "Function.hpp"
 #include "IR/Label.hpp"
+#include "Module/TypeTable.hpp"
+#include "Module/LabelManager.hpp"
+#include "Module/FunctionManager.hpp"
+#include "Module/ClassManager.hpp"
 #include <map>
 #include <memory>
 #include <iterator>
@@ -32,24 +33,19 @@ using namespace Compiler::AST::Ptrs;
 // class ASTVisitor;
 // namespace AST{ class ASTVisitorDump; class Function;};
 namespace AST{ class ASTVisitorDump;};
-using AST::FuncDef;
-using AST::FuncDecl;
-using AST::PtrFunction;
-using AST::Function;
+
 using AST::PtrLexicalScope;
 using AST::SymbolIdOfNode;
-using AST::OffsetTable;
+// using AST::OffsetTable;
 using AST::ScopeOwnerId;
 using IR::Label;
 
 class CompilationUnit : public TreeDecoration, public TypeTable
-  , public LabelManager{
+  , public LabelManager, public ClassManager, public FunctionManager{
 public:
 
   CompilationUnit(): ast_(), free_scope_id_(0), free_symbol_id_(0)
     , free_scope_ownner_id_(0), TypeTable(error_log_)
-    , curr_func_(nullptr)
-    , curr_func_decl_(nullptr)
     , module_scope_(std::move(std::make_unique<LexicalScope>
         (FreeScopeId(), nullptr, FreeScopeOwnerId(), symbol_table_
         , module_declaration_table_, symbolid_of_node_)))
@@ -63,36 +59,17 @@ public:
   LexicalScope& Scope() noexcept{return *current_scope_;}
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
+
   const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){
     const Label entry = NewFunctionEntryLabel(name);
     Label local;
     if(name == "main")  local = GetLabelMainLocals();
     else                local = NewFunctionARLabel(name);
 
-    functions_.push_back( std::move(
-      std::make_unique<Function>(name
-        , ModuleOffsetTable()
-        , scope_owner_id
-        , entry
-        , local)));
-    curr_func_ = functions_[ functions_.size() - 1].get();
-    function_by_name_[name] = curr_func_;
+    FunctionManager::NewFunction(name, ModuleOffsetTable(), scope_owner_id
+      , entry, local);
+
     return NewNestedScope(scope_owner_id);
-  }
-
-  void EnterFunctionDefinition(FuncDecl* current_func_decl){
-    curr_func_decl_ = current_func_decl;
-  }
-  void ExitFunctionDefinition(){
-    curr_func_ = nullptr;
-    curr_func_decl_ = nullptr;
-    RestoreScope();
-  }
-
-  void SetFuncOriginNode(const FuncDef& n){
-    assert(curr_func_ != nullptr); // "SetFunc in no func");
-    function_by_funcdef_[const_cast<FuncDef*>(&n)] = curr_func_;
-    curr_func_->SetOriginNode(n);
   }
 
   const ScopeOwnerId NewScopeOwner() noexcept{ return FreeScopeOwnerId(); }
@@ -127,15 +104,7 @@ public:
   size_t NumScopes() const noexcept{ return free_scope_id_;};
 
 
-  Function& GetFunc(const std::string& name){ return *function_by_name_.at(name);}
-  const Function& GetFunc(const std::string& name) const { return *function_by_name_.at(name);}
 
-  Function& GetFunc(const FuncDef& n){
-    return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
-  }
-  const Function& GetFunc(const FuncDef& n) const{
-    return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
-  }
 
   bool IsDeclValid(const std::string& name){return Scope().IsDeclValid(name);}
   bool HasDecl(const std::string& name){return Scope().HasDecl(name);}
@@ -151,8 +120,8 @@ public:
     if(registered){
       symbolid_of_node_[&n] = symbol_id;
       ++free_symbol_id_;
-      if(curr_func_ != nullptr){
-        curr_func_->StoreDecl( *module_declaration_table_[symbol_id], n);
+      if(CurrentFunction() != nullptr){
+        CurrentFunction()->StoreDecl( *module_declaration_table_[symbol_id], n);
 //         std::cout << "Reg: n:"<< &n << " s: " <<module_declaration_table_[symbol_id].get()
 //         << " symbol: " << module_declaration_table_[symbol_id]->str()
 //         << " " << n.str()
@@ -162,8 +131,7 @@ public:
     return registered;
   }
 
-  bool      InsideFunctionDefinition() const noexcept { return curr_func_decl_ != nullptr; }
-  FuncDecl& CurrentFuncDecl() const noexcept { return *curr_func_decl_; }
+
 
 private:
   ScopeId                 free_scope_id_;
@@ -177,22 +145,17 @@ private:
   ErrorLog          error_log_;
   Ast               ast_;
 
-  std::vector<AST::PtrFunction> functions_;
-  AST::Function*          curr_func_;
-  FuncDecl*                curr_func_decl_;
+
 
   PtrLexicalScope   module_scope_;
   LexicalScope*     current_scope_;
 
-
   //Referencing structures
   std::map<ScopeId,LexicalScope*>   scope_by_id_;
-  std::map<std::string, Function*>  function_by_name_;
   SymbolIdOfNode                    symbolid_of_node_;
-  std::map<FuncDef*, Function*>     function_by_funcdef_;
+
 
   //Attributes computed by visitors
-
 
   const ScopeId FreeScopeId() noexcept{ return free_scope_id_++;}
   const ScopeOwnerId FreeScopeOwnerId() noexcept{ return free_scope_ownner_id_++;}
@@ -211,7 +174,7 @@ public:
   const_iterator cbegin() const { return functions_.cbegin(); }
   const_iterator cend()   const { return functions_.cend(); }
 
-const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
+  const bool ValidAst() const noexcept { return ast_.prog_ != nullptr; }
 
   void InitAst(PtrProgBody& prog){
     ast_.prog_ = std::move(prog);

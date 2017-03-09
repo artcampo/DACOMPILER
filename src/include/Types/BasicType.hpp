@@ -18,9 +18,10 @@ public:
     return std::string("BasicType not implemented.");
   }
 
-  virtual bool IsBool() const noexcept{ return basic_id_ == kBasicTypeId::kBool;}
-  virtual bool IsPtr()  const noexcept{ return false;}
-  virtual bool IsFunc() const noexcept{ return false;}
+  virtual bool IsBool()  const noexcept{ return basic_id_ == kBasicTypeId::kBool;}
+  virtual bool IsPtr()   const noexcept{ return false;}
+  virtual bool IsFunc()  const noexcept{ return false;}
+  virtual bool IsClass() const noexcept{ return false;}
 
 private:
   kBasicTypeId basic_id_;
