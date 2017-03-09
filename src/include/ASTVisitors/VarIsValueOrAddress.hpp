@@ -34,6 +34,7 @@ public:
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
     for(auto& it : p) it->Accept(*this);
+    for(auto& it : p.GetClassDefs() ) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 
@@ -81,6 +82,7 @@ public:
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
+  virtual void Visit(ClassDef const& p){}
 
 
 

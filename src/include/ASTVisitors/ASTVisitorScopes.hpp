@@ -20,6 +20,7 @@ public:
       )->str() <<"\n";
     p.GetProgInit().Accept(*this);
     for(auto& it : p) it->Accept(*this);
+    for(auto& it : p.GetClassDefs() ) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   };
 
@@ -49,20 +50,21 @@ public:
   }
 
   //Nothing to do
-  virtual void Visit(BinaryOp const& p){};
-  virtual void Visit(AssignStmt const& p){};
-  virtual void Visit(Literal const& p){};
-  virtual void Visit(Var const& p)    {};
-  virtual void Visit(DeclStmt const& p){};
-  virtual void Visit(VarDeclList const& p){};
-  virtual void Visit(VarDecl const& p){};
-  virtual void Visit(RefOp const& p){};
-  virtual void Visit(DerefOp const& p){};
-  virtual void Visit(ProgInit const& p){};
-  virtual void Visit(ProgEnd const& p){};
+  virtual void Visit(BinaryOp const& p){}
+  virtual void Visit(AssignStmt const& p){}
+  virtual void Visit(Literal const& p){}
+  virtual void Visit(Var const& p)    {}
+  virtual void Visit(DeclStmt const& p){}
+  virtual void Visit(VarDeclList const& p){}
+  virtual void Visit(VarDecl const& p){}
+  virtual void Visit(RefOp const& p){}
+  virtual void Visit(DerefOp const& p){}
+  virtual void Visit(ProgInit const& p){}
+  virtual void Visit(ProgEnd const& p){}
   virtual void Visit(FuncCall const& p){}
   virtual void Visit(FuncRet const& p){}
-  virtual void Visit(ReturnStmt const& p){};
+  virtual void Visit(ReturnStmt const& p){}
+  virtual void Visit(ClassDef const& p){}
 
 private:
   CompilationUnit&  unit_;

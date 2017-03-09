@@ -10,7 +10,9 @@ namespace AST{
 void ProgBody::Accept    (ASTVisitor& v){ v.Visit(*this); }
 void ProgInit::Accept    (ASTVisitor& v){ v.Visit(*this); }
 void ProgEnd::Accept     (ASTVisitor& v){ v.Visit(*this); }
-void FuncDef::Accept    (ASTVisitor& v){ v.Visit(*this); }
+void FuncDef::Accept     (ASTVisitor& v){ v.Visit(*this); }
+void ClassDef::Accept    (ASTVisitor& v){ v.Visit(*this); }
+
 
 void Block::Accept       (ASTVisitor& v){ v.Visit(*this); }
 void IfStmt::Accept      (ASTVisitor& v){ v.Visit(*this); }
@@ -33,7 +35,8 @@ void ReturnStmt::Accept  (ASTVisitor& v){ v.Visit(*this); }
 void ProgBody::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 void ProgInit::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 void ProgEnd::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
-void FuncDef::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void FuncDef::Accept     (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
+void ClassDef::Accept    (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 
 void Block::Accept       (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }
 void IfStmt::Accept      (IRGenerator& v, const Node* successor){ return v.Visit(*this, successor); }

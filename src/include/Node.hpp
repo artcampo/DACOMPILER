@@ -161,6 +161,9 @@ public:
 
   ProgInit& GetProgInit() const noexcept{ return *pinit_;}
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
+
+  std::vector<PtrClassDef>& GetClassDefs() noexcept{ return classes_;}
+  const std::vector<PtrClassDef>& GetClassDefs() const noexcept{ return classes_;}
 private:
   PtrProgInit               pinit_;
   PtrProgEnd                pend_;

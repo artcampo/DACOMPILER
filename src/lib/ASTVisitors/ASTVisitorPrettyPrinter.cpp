@@ -6,11 +6,16 @@ namespace AST{
 void ASTVisitorPrettyPrinter::Visit(ProgBody const& p){
   p.GetProgInit().Accept(*this);
   for(auto& it : p) it->Accept(*this);
+  for(auto& it : p.GetClassDefs() ) it->Accept(*this);
   p.GetProgEnd().Accept(*this);
 }
 
 void ASTVisitorPrettyPrinter::Visit(FuncDef const& p){
   p.GetBody().Accept(*this);
+}
+
+void ASTVisitorPrettyPrinter::Visit(ClassDef const& p){
+  std::cout << p.str();
 }
 
 void ASTVisitorPrettyPrinter::Visit(ProgInit const& p){

@@ -11,6 +11,8 @@
 namespace Compiler{
 namespace AST{
 
+//This visitor is only instantiated on functions, not on Prog
+
 class LocalVarOffsets : public ASTVisitor{
 public:
 
@@ -85,7 +87,8 @@ public:
   virtual void Visit(DerefOp const& p){};
   virtual void Visit(FuncCall const& p){}
   virtual void Visit(FuncRet const& p){}
-  virtual void Visit(ReturnStmt const& p){};
+  virtual void Visit(ReturnStmt const& p){}
+  virtual void Visit(ClassDef const& p){}
 
 private:
   CompilationUnit&  unit_;

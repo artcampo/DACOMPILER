@@ -14,8 +14,8 @@ public:
     , const Locus& locus)
   : Node(id, locus), name_(name){}
 
-//   virtual void Accept(IRGenerator& v, const Node* successor);
-//   virtual void Accept(ASTVisitor& v);
+  virtual void Accept(IRGenerator& v, const Node* successor);
+  virtual void Accept(ASTVisitor& v);
   virtual std::string str() const noexcept { return "ClassDef: " + name_;}
 
 

@@ -34,6 +34,7 @@ public:
   virtual void Visit(FuncCall const& p, const Node* successor);
   virtual void Visit(FuncRet const& p, const Node* successor);
   virtual void Visit(ReturnStmt const& p, const Node* successor);
+  virtual void Visit(ClassDef const& p, const Node* successor);
 
 
   void EndOfProgram();

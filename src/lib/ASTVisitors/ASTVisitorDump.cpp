@@ -6,11 +6,16 @@ namespace AST{
 void ASTVisitorDump::Visit(ProgBody const& p){
   p.GetProgInit().Accept(*this);
   for(auto& it : p) it->Accept(*this);
+  for(auto& it : p.GetClassDefs() ) it->Accept(*this);
   p.GetProgEnd().Accept(*this);
 }
 
 void ASTVisitorDump::Visit(FuncDef const& p){
   p.GetBody().Accept(*this);
+}
+
+void ASTVisitorDump::Visit(ClassDef const& p){
+  std::cout << p.str();
 }
 
 void ASTVisitorDump::Visit(ProgInit const& p){
