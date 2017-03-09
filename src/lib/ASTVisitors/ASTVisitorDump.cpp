@@ -5,17 +5,25 @@ namespace AST{
 
 void ASTVisitorDump::Visit(ProgBody const& p){
   p.GetProgInit().Accept(*this);
-  for(auto& it : p) it->Accept(*this);
-  for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+  for(auto& it : p) { Indent(); it->Accept(*this); }
+  for(auto& it : p.GetClassDefs() ) { Indent(); it->Accept(*this);}
   p.GetProgEnd().Accept(*this);
 }
 
 void ASTVisitorDump::Visit(FuncDef const& p){
+  std::cout << p.str()<<"\n";
+  IncreaseIndent(); //Indent();
   p.GetBody().Accept(*this);
+  DecreaseIndent();
 }
 
 void ASTVisitorDump::Visit(ClassDef const& p){
   std::cout << p.str();
+  /*
+  IncreaseIndent(); Indent();
+  p.¿?.Accept(*this);
+  DecreaseIndent();
+  */
 }
 
 void ASTVisitorDump::Visit(ProgInit const& p){
@@ -47,11 +55,8 @@ void ASTVisitorDump::Visit(Literal const& p){
 void ASTVisitorDump::Visit(BinaryOp const& p){
   std::cout << "Op:" << p.OpString(); DisplayAttributes(p); std::cout <<"\n";
   IncreaseIndent();
-  Indent();
-  p.Lhs().Accept(*this);
-  std::cout << "\n";
-  Indent();
-  p.Rhs().Accept(*this);
+  Indent(); p.Lhs().Accept(*this); std::cout << "\n";
+  Indent(); p.Rhs().Accept(*this);
 
   DecreaseIndent();
 }
@@ -178,7 +183,7 @@ void ASTVisitorDump::DumpSymbolTable(){
   std::cout << "end Symbol Table:\n";
   */
 
-  std::cout << "\nDeclaration Table:\n";
+  std::cout << "\n\nDeclaration Table:\n";
   for(auto& it : unit_.module_declaration_table_){
     std::cout << it.first << ": " <<it.second->str()<<"\n";
   }
