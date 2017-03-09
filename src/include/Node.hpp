@@ -56,6 +56,7 @@ class DerefOp;
 //Functions
 class FuncRet;
 class FuncCall;
+class ClassDef;
 
 namespace Ptrs{
 
@@ -84,6 +85,7 @@ using PtrDerefOp    = std::unique_ptr<DerefOp>;
 using PtrFuncRet    = std::unique_ptr<FuncRet>;
 using PtrFuncCall   = std::unique_ptr<FuncCall>;
 using PtrReturnStmt = std::unique_ptr<ReturnStmt>;
+using PtrClassDef   = std::unique_ptr<ClassDef>;
 
 
 }//end namespace Ptrs
@@ -146,9 +148,11 @@ public:
   ProgBody(const ScopeId id, const Locus& locus
     , PtrProgInit& pinit
     , PtrProgEnd& pend
-    , std::vector<PtrFuncDef>& functions)
+    , std::vector<PtrFuncDef>& functions
+    , std::vector<PtrClassDef>& classes)
   : Node(id, locus), pinit_(std::move(pinit)), pend_(std::move(pend))
-  , functions_(std::move(functions)){}
+  , functions_(std::move(functions))
+  , classes_(std::move(classes)){}
 
 
   virtual void Accept(IRGenerator& v, const Node* successor);
@@ -158,9 +162,10 @@ public:
   ProgInit& GetProgInit() const noexcept{ return *pinit_;}
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
 private:
-  PtrProgInit  pinit_;
-  PtrProgEnd   pend_;
-  std::vector<PtrFuncDef> functions_;
+  PtrProgInit               pinit_;
+  PtrProgEnd                pend_;
+  std::vector<PtrFuncDef>   functions_;
+  std::vector<PtrClassDef>  classes_;
 public:
 
   using iterator = std::vector<PtrFuncDef>::iterator;
@@ -206,3 +211,4 @@ public:
 #include "NodeStmt.hpp"
 #include "NodeFunc.hpp"
 #include "NodeVar.hpp"
+#include "NodeClass.hpp"
