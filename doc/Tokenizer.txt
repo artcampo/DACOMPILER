@@ -1,0 +1,10 @@
+To desambiguate certain rules we need to pass context information to it.
+This happens for names that are used as user defined types.
+While we need those names to be free, that would lead to rules with same
+starting symbols. Namely declarations and any expression.
+
+This can be bypassed by tagging those names that refer to types as a diferent
+terminal symbol, in my implementation "name_type".
+
+To implement that we need to register the user types in the tokenizer, and from
+that point at on, it will return this terminal symbol instead.
