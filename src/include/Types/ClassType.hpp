@@ -13,7 +13,7 @@ public:
 
   virtual size_t  Size() const noexcept{ return 1;};
   virtual std::string str() const noexcept{
-    return pointed_str_ + std::string("*");
+    return name_;
   }
 
   virtual bool IsBool()  const noexcept{ return false;}

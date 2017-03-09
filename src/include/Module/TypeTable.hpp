@@ -3,6 +3,7 @@
 #include "Types/BasicType.hpp"
 #include "Types/PtrType.hpp"
 #include "Types/FuncType.hpp"
+#include "Types/ClassType.hpp"
 #include "ErrorLog.hpp"
 #include <memory>
 #include <map>
@@ -17,6 +18,7 @@ using AST::Type;
 using AST::BasicType;
 using AST::PtrType;
 using AST::FuncType;
+using AST::ClassType;
 // using AST::StructType;
 
 /*
@@ -44,7 +46,10 @@ public:
   const Type& GetFuncType(const Type& return_type
                         , const std::vector<const Type*>& arg_types);
 
+  const Type& GetClassType(const std::string& name);
+
   const Type& GetType(const TypeId id) const{ return *type_table_.at(id);}
+
 private:
   const Type& GetType(const kBasicTypeId basic_id);
 
@@ -56,6 +61,7 @@ private:
   std::map<TypeId, TypeId> type_id_of_pointer_to_t_;
   std::map<TypeId, TypeId> type_id_of_pointed_by_t_;
   std::map<std::vector<const Type*>, TypeId> type_id_of_function_by_signature_;
+  std::map<std::string, TypeId> type_id_of_class_;
   size_t free_type_id_;
 
   const TypeId GetTypeId(const kBasicTypeId basic){

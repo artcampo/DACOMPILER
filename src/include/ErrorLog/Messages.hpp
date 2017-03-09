@@ -45,7 +45,7 @@ const static std::string kErr80("[err:80] class declaration name missing");
 const static std::string kErr81("[err:81] class declaration not started with '{'");
 const static std::string kErr82("[err:82] class declaration not closed with '}'");
 const static std::string kErr83("[err:83] class declaration must start with 'class'");
-
+const static std::string kErr84("[err:84] class name already exists");
 
 
 const static std::string kErrUn1("[err:x1] name not followed by valid token");
