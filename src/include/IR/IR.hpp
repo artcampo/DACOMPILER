@@ -6,7 +6,7 @@
 #include "IR/Label.hpp"
 #include "IR/Offset.hpp"
 #include "IR/MemAddr.hpp"
-#include "Node.hpp"
+#include "AST/ASTNodes.hpp"
 
 namespace Compiler{
 namespace IR{

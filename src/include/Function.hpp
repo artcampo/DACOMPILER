@@ -1,8 +1,8 @@
 #pragma once
-#include "AST.hpp"
+#include "AST/AST.hpp"
 #include "Types.hpp"
 #include "Symbol.hpp"
-#include "Node.hpp"
+#include "AST/Node.hpp"
 #include "Symbol.hpp"
 #include "Module/TypeTable.hpp"
 #include "IR/Offset.hpp"

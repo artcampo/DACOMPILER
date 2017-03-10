@@ -1,5 +1,5 @@
 #pragma once
-#include "AST.hpp"
+#include "AST/AST.hpp"
 #include "LexicalScope.hpp"
 #include "Types.hpp"
 #include "Symbol.hpp"

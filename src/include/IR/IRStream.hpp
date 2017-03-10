@@ -1,7 +1,7 @@
 #pragma once
 #include "IR/IR.hpp"
 #include "IR/IRBuilder.hpp"
-#include "Node.hpp"
+#include "AST/Node.hpp"
 #include <vector>
 
 namespace Compiler{

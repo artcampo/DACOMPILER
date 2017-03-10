@@ -1,10 +1,10 @@
 #pragma once
-#include "Node.hpp"
 #include <memory>
-
 
 namespace Compiler{
 namespace AST{
+
+class ProgBody;
 
 struct Ast{
   Ast() : prog_(nullptr){}

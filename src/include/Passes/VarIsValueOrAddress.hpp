@@ -1,6 +1,6 @@
 #pragma once
 #include "Passes/Pass.hpp"
-#include "ASTVisitor.hpp"
+#include "AST/ASTVisitor.hpp"
 #include "CompilationUnit.hpp"
 #include "Types.hpp"
 #include "ErrorLog/Messages.hpp"

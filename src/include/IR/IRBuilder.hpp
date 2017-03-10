@@ -3,7 +3,7 @@
 #include <memory>
 #include <cstddef>
 #include "IR/IR.hpp"
-#include "Node.hpp"
+#include "AST/Node.hpp"
 
 namespace Compiler{
 namespace IR{

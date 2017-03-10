@@ -1,5 +1,5 @@
-#include "Node.hpp"
-#include "ASTVisitor.hpp"
+#include "AST/Node.hpp"
+#include "AST/ASTVisitor.hpp"
 #include "IR/IRGenerator.hpp"
 #include "IRDefinition.hpp"
 #include <cstddef>

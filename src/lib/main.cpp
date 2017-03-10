@@ -1,5 +1,5 @@
-#include "AST.hpp"
-#include "Node.hpp"
+#include "AST/AST.hpp"
+#include "AST/Node.hpp"
 #include "Utils.hpp"
 #include "ASTVisitorCodeGenerator.hpp"
 #include "ASTVisitors/ASTVisitorPrettyPrinter.hpp"

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "AST/Node.hpp"
 
 namespace Compiler{
 namespace AST{

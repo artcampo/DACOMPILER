@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////
 %{
-    #include "AST.hpp"
-    #include "Node.hpp"
+    #include "AST/AST.hpp"
+    #include "AST/Node.hpp"
     #include "IRDefinition.hpp"
     #include <iostream>
 

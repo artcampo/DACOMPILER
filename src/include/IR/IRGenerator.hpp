@@ -1,8 +1,8 @@
 #pragma once
-#include "Node.hpp"
+#include "AST/Node.hpp"
 #include "Types.hpp"
 #include "CompilationUnit.hpp"
-#include "ASTVisitor.hpp"
+#include "AST/ASTVisitor.hpp"
 #include "IR/IRStream.hpp"
 #include <map>
 

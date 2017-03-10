@@ -1,6 +1,6 @@
 #pragma once
-#include "ASTVisitor.hpp"
-#include "Node.hpp"
+#include "AST/ASTVisitor.hpp"
+#include "AST/Node.hpp"
 #include "ByteCode.hpp"
 #include "Utils.hpp"
 #include "Function.hpp"

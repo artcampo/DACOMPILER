@@ -1,5 +1,4 @@
 #pragma once
-// #include "ASTVisitor.hpp"
 #include <iostream>
 #include <vector>
 #include <stdint.h>
@@ -8,13 +7,13 @@
 #include "Types.hpp"
 #include "ScopeId.hpp"
 #include "Locus.hpp"
-#include "Symbol.hpp"
 
 
 namespace Compiler{
 
 using NodeValue = uint32_t;
 using OpType    = uint32_t; //TODO: USE THESE!!
+
 
 namespace AST{
 
@@ -93,6 +92,7 @@ using PtrVarName    = std::unique_ptr<VarName>;
 
 
 }//end namespace Ptrs
+
 using namespace Compiler::AST::Ptrs;
 
 class Node {
@@ -211,11 +211,6 @@ public:
 
 
 }//end namespace AST
-
 }//end namespace Compiler
 
-#include "NodeExpr.hpp"
-#include "NodeStmt.hpp"
-#include "NodeFunc.hpp"
-#include "NodeVar.hpp"
-#include "NodeClass.hpp"
+

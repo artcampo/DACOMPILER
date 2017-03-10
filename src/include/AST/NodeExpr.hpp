@@ -1,17 +1,12 @@
 #pragma once
 #include <memory>
-// #include "ASTVisitor.hpp"
+#include "Symbol.hpp"
 
+#include "ScopeId.hpp"
+#include "AST/Node.hpp"
 
 namespace Compiler{
 namespace AST{
-
-class Node;
-class Expr;
-class DeclStmt;
-class VarDeclList;
-class VarDecl;
-class AssignStmt;
 
 
 //

@@ -1,6 +1,6 @@
 #pragma once
-#include "AST.hpp"
-#include "Node.hpp"
+#include "AST/AST.hpp"
+#include "AST/ASTNodes.hpp"
 
 namespace Compiler{
 namespace AST{
