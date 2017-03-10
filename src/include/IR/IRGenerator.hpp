@@ -9,6 +9,13 @@
 namespace Compiler{
 namespace AST{
 
+/*
+ * While this is an ASTVisitor it has been set apart for one reasons
+ * It needs one extra parameter for the successor inherited value
+ * (this could have been stored in the visitor itself, but would have
+ * made the implementation of each function more complex, when this is
+ * the visitor of already higher complexity).
+*/
 
 class IRGenerator{
 public:
@@ -35,6 +42,7 @@ public:
   virtual void Visit(FuncRet const& p, const Node* successor);
   virtual void Visit(ReturnStmt const& p, const Node* successor);
   virtual void Visit(ClassDef const& p, const Node* successor);
+  virtual void Visit(VarName const& p, const Node* successor);
 
 
   void EndOfProgram();

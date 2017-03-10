@@ -28,11 +28,13 @@ class Type{
 public:
   virtual ~Type(){}
   Type(const TypeId& type_id) : type_id_(type_id){}
-  virtual size_t      Size() const noexcept = 0;
+
+  virtual size_t     Size() const noexcept = 0;
   virtual std::string str() const noexcept = 0;
-  virtual bool IsBool() const noexcept = 0;
-  virtual bool IsPtr() const noexcept = 0;
-  virtual bool IsFunc() const noexcept= 0;
+  virtual bool IsBool()     const noexcept = 0;
+  virtual bool IsPtr()      const noexcept = 0;
+  virtual bool IsFunc()     const noexcept= 0;
+  virtual bool IsClass()    const noexcept= 0;
 
   const bool operator<  ( const Type &type )const noexcept
     {return type_id_ < type.type_id_;}

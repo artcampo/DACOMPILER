@@ -226,10 +226,17 @@ void IRGenerator::Visit(FuncRet const& p, const Node* successor){
 void IRGenerator::Visit(ReturnStmt const& p, const Node* successor){
    p.RetExpr().Accept(*this, successor);
 }
+
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(ClassDef const& p, const Node* successor){
 
 }
+
+/////////////////////////////////////////////////////////////////////////////
+void IRGenerator::Visit(VarName const& p, const Node* successor){
+
+}
+
 
 
 

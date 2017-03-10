@@ -1,6 +1,12 @@
 #pragma once
 #include "Types.hpp"
 
+/*
+ * The type fingerprint for a class is only its name.
+ * To make the whole interface uniform, ClassType only contains its
+ * TypeId for checking (name is only used for printing).
+ */
+
 namespace Compiler{
 namespace AST{
 

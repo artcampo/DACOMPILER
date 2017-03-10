@@ -141,7 +141,9 @@ void ASTVisitorDump::Visit(ReturnStmt const& p){
   IncreaseIndent(); Indent(); p.RetExpr().Accept(*this); DecreaseIndent();
 }
 
-
+void ASTVisitorDump::Visit(VarName const& p){
+  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+}
 
 
 void ASTVisitorDump::Indent(){

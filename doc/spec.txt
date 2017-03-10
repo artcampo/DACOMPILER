@@ -1,5 +1,8 @@
+-- General
 Language with nested scopes.
 Static type checking.
+
+-- Types
 
 First class types: void, int, bool.
 Instantiation of void Variables or pointer to it is forbidden.
@@ -15,8 +18,14 @@ Ex: int a, b, c;
 Pointers to first class types allowed.
 ex: int* a; bool* b;
 
-Functions
+There is no support for structures and there will never be.
+
+-- Functions
 Return type is mandatory.
 Parameter list can be empty.
 Argument list can be empty.
 Return statement is mandatory if return type is not void.
+
+-- Objects
+No inheritance (to be soon changed).
+Closed class structure.

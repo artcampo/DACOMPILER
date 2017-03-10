@@ -83,7 +83,7 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(ClassDef const& p){}
-
+  virtual void Visit(VarName const& p){}
 
 
 private:

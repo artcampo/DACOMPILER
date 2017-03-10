@@ -26,6 +26,23 @@ private:
 
 };
 
+/////////////////////////////////////////////////////////
+// This is mean to te the Rhs of the dot operator
+class VarName : public Node{
+public:
+  virtual ~VarName() = default;
+  VarName(const std::string& name, const ScopeId scope_id , const Locus& locus)
+    : Node(scope_id, locus), name_(name){}
+
+
+  std::string str() const noexcept{return name_;}
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(IRGenerator& v, const Node* successor);
+private:
+  const std::string name_;
+
+};
 
 
 

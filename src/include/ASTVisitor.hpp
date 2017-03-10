@@ -27,6 +27,7 @@ public:
   virtual void Visit(FuncRet const& p) = 0;
   virtual void Visit(ReturnStmt const& p) = 0;
   virtual void Visit(ClassDef const& p) = 0;
+  virtual void Visit(VarName const& p) = 0;
 
 
 };

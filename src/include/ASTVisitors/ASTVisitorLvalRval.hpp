@@ -49,8 +49,10 @@ public:
   virtual void Visit(FuncCall const& p){ unit_.SetNodeAsLval(p); }
 
   virtual void Visit(FuncRet const& p){
-    if( p.GetType().IsPtr() ) unit_.SetNodeAsLval(p);
-    else                      unit_.SetNodeAsRval(p);
+    if( p.GetType().IsPtr() or p.GetType().IsClass() )
+      unit_.SetNodeAsLval(p);
+    else
+      unit_.SetNodeAsRval(p);
   }
 
   //Traversal
@@ -91,6 +93,7 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(ClassDef const& p){}
+  virtual void Visit(VarName const& p){}
 
 
 

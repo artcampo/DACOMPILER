@@ -56,7 +56,10 @@ class DerefOp;
 //Functions
 class FuncRet;
 class FuncCall;
+
+//Class related nodes
 class ClassDef;
+class VarName;
 
 namespace Ptrs{
 
@@ -86,6 +89,7 @@ using PtrFuncRet    = std::unique_ptr<FuncRet>;
 using PtrFuncCall   = std::unique_ptr<FuncCall>;
 using PtrReturnStmt = std::unique_ptr<ReturnStmt>;
 using PtrClassDef   = std::unique_ptr<ClassDef>;
+using PtrVarName    = std::unique_ptr<VarName>;
 
 
 }//end namespace Ptrs

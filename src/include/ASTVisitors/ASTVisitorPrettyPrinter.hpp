@@ -28,6 +28,7 @@ public:
   virtual void Visit(FuncRet const& p);
   virtual void Visit(ReturnStmt const& p);
   virtual void Visit(ClassDef const& p);
+  virtual void Visit(VarName const& p);
 
   ASTVisitorPrettyPrinter(): indent_(0){};
 

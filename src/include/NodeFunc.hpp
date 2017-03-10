@@ -91,6 +91,8 @@ public:
 
 /////////////////////////////////////////////////////////
 //Provides range-for iteration over its arg expressions
+//only stores reference to target function's name, as later rules could
+//change behaviour of what is executed
 class FuncCall: public Node {
 public:
   virtual ~FuncCall() = default;

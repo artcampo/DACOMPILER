@@ -118,6 +118,7 @@ public:
   virtual void Visit(ProgInit const& p){}
   virtual void Visit(ProgEnd const& p){}
   virtual void Visit(ClassDef const& p){}
+  virtual void Visit(VarName const& p){}
 
 private:
   CompilationUnit&  unit_;
