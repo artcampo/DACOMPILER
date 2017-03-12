@@ -92,29 +92,28 @@ public:
 
 /////////////////////////////////////////////////////////
 //Provides range-for iteration over its arg expressions
-//only stores reference to target function's name, as later rules could
-//change behaviour of what is executed
+//accepts as call target any ExprVar
 class FuncCall: public Node {
 public:
   virtual ~FuncCall() = default;
-  FuncCall(const std::string& name
+  FuncCall(PtrExprVar& expr_var
     , const FuncType& function_type
     , std::vector<PtrExpr>& arg_list
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), name_(name), function_type_(function_type)
+  : Node(id, locus), expr_var_(std::move(expr_var)), function_type_(function_type)
     , arg_list_(std::move(arg_list)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return std::string("FuncCall: ") + name_;}
+  virtual std::string str() const noexcept { return std::string("FuncCall: ") + expr_var_->str();}
 
-  const std::string&  Name() const noexcept{ return name_;}
+//   const std::string&  Name() const noexcept{ return name_;}
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
   const FuncType& GetType()const noexcept{return function_type_;}
 private:
-  std::string   name_;
+  PtrExprVar              expr_var_;
   const FuncType&   function_type_;
   std::vector<PtrExpr> arg_list_;
 

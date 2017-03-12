@@ -31,7 +31,7 @@ const static std::string kErr33("[err:33] function must start with return type")
 const static std::string kErr34("[err:34] parameters must be separated with comma");
 const static std::string kErr35("[err:35] Expecting rpar closing function call");
 const static std::string kErr36("[err:36] Argument not containing an expression");
-const static std::string kErr37("[err:37] Function call referes to non declared function");
+const static std::string kErr37("[err:37] Function call refers to non declared function");
 const static std::string kErr38("[err:38] Function call with a non-function name");
 const static std::string kErr39("[err:39] Function call with less arguments than expected");
 const static std::string kErr40("[err:40] Function call with more arguments than expected (extra arguments will be discarded)");
@@ -40,12 +40,14 @@ const static std::string kErr42("[err:42] ");
 const static std::string kErr43("[err:43] Missing semicolon after return statement. ");
 const static std::string kErr44("[err:44] Return statement not inside function definition. ");
 const static std::string kErr45("[err:45] Return's expression doesn not match function return type: ");
+const static std::string kErr46("[err:46] function call used before declaration");
 
 const static std::string kErr80("[err:80] class declaration name missing");
 const static std::string kErr81("[err:81] class declaration not started with '{'");
 const static std::string kErr82("[err:82] class declaration not closed with '}'");
 const static std::string kErr83("[err:83] class declaration must start with 'class'");
 const static std::string kErr84("[err:84] class name already exists");
+const static std::string kErr85("[err:85] class instance used before declaration");
 
 
 const static std::string kErrUn1("[err:x1] name not followed by valid token");

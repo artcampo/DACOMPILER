@@ -89,6 +89,7 @@ using PtrFuncCall   = std::unique_ptr<FuncCall>;
 using PtrReturnStmt = std::unique_ptr<ReturnStmt>;
 using PtrClassDef   = std::unique_ptr<ClassDef>;
 using PtrVarName    = std::unique_ptr<VarName>;
+using PtrExprVar    = std::unique_ptr<ExprVar>;
 
 
 }//end namespace Ptrs
