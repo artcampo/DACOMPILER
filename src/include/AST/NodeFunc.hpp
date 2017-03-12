@@ -112,10 +112,11 @@ public:
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
   const FuncType& GetType()const noexcept{return function_type_;}
+  ExprVar& GetExprVar() const noexcept{ return *expr_var_;}
 private:
-  PtrExprVar              expr_var_;
-  const FuncType&   function_type_;
-  std::vector<PtrExpr> arg_list_;
+  PtrExprVar            expr_var_;
+  const FuncType&       function_type_;
+  std::vector<PtrExpr>  arg_list_;
 
 public:
 

@@ -76,6 +76,7 @@ public:
   std::string str() const noexcept{return name_;}
 
   Symbols::SymbolId Id() const noexcept{return id_;}
+  const std::string&  Name() const noexcept{ return name_;}
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);

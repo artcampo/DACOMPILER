@@ -211,7 +211,13 @@ void IRGenerator::Visit(FuncCall const& p, const Node* successor){
   //generate set prior to call
   for(const auto& it : p) stream_.AppendSetPar( reg_dst_of_expr_[&*it]);
 
-  const MemAddr a = MemAddr(unit_.GetFunc(p.Name()).EntryLabel(), 0);
+  //Create address of function
+  MemAddr a;
+
+  //1) When function is a variable
+  ExprVar* e  = &p.GetExprVar();
+  Var* e_var  = dynamic_cast<Var*>(e);
+  if(e_var) a = MemAddr(unit_.GetFunc(e_var->Name()).EntryLabel(), 0);
   stream_.AppendCall(a);
 }
 
