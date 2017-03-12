@@ -78,7 +78,7 @@ public:
       if( unit_.GetTypeOfNode(*it) != unit_.GetType(*ftype_it) ){
         unit_.Error(kErr41
           + " is \""      + unit_.GetTypeOfNode(*it).str()
-          + "\" but "     //+ unit_.GetFunc( p.Name() ).str()
+          + "\" but "     + unit_.GetFunc( p.Name() ).str()
           + " expects \"" + unit_.GetType(*ftype_it).str()
           + "\""
           , it->GetLocus());
