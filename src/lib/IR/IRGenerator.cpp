@@ -188,6 +188,13 @@ void IRGenerator::Visit(DerefOp const& n, const Node* successor){
 }
 
 void IRGenerator::Visit(Var const& p, const Node* successor){
+
+  if(p.GetType().IsFunc()){
+    const MemAddr a = MemAddr( unit_.GetFunc(p.Name()).EntryLabel(), 0);
+    addr_of_var_[&p] = a;
+    return;
+  }
+
   Offset o        = unit_.LocalVarOffset(p);
   const MemAddr a = MemAddr(local_label_inht_, o);
 
@@ -209,15 +216,18 @@ void IRGenerator::Visit(FuncCall const& p, const Node* successor){
   //generate arguments
   for(const auto& it : p) it->Accept(*this, successor);
   //generate set prior to call
-  for(const auto& it : p) stream_.AppendSetPar( reg_dst_of_expr_[&*it]);
+  for(const auto& it : p) stream_.AppendSetPar( reg_dst_of_expr_[&*it] );
 
+  //Process receiver to get its add
+  p.Receiver().Accept(*this, successor);
+  const MemAddr a = addr_of_var_[&p.Receiver()];
   //Create address of function
-  MemAddr a;
+//   MemAddr a;
 
   //1) When function is a variable
-  ExprVar* e  = &p.GetExprVar();
-  Var* e_var  = dynamic_cast<Var*>(e);
-  if(e_var) a = MemAddr(unit_.GetFunc(e_var->Name()).EntryLabel(), 0);
+//   ExprVar* e  = &p.GetExprVar();
+//   Var* e_var  = dynamic_cast<Var*>(e);
+//   if(e_var) a = MemAddr(unit_.GetFunc(e_var->Name()).EntryLabel(), 0);
   stream_.AppendCall(a);
 }
 

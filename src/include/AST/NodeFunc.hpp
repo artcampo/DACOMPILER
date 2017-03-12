@@ -112,7 +112,7 @@ public:
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
   const FuncType& GetType()const noexcept{return function_type_;}
-  ExprVar& GetExprVar() const noexcept{ return *expr_var_;}
+  ExprVar& Receiver() const noexcept{ return *expr_var_;}
 private:
   PtrExprVar            expr_var_;
   const FuncType&       function_type_;
