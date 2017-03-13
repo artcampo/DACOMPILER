@@ -61,8 +61,10 @@ public:
     }
 
 
-  void NewClass(std::string& name){
-    ClassManager::NewClass(name, NewScopeOwner(), FreeScopeId());
+  const ScopeId NewClass(std::string& name){
+    const ScopeId id = FreeScopeId();
+    ClassManager::NewClass(name, NewScopeOwner(), id);
+    return id;
   }
 
   const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){

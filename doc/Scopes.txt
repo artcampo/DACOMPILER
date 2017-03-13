@@ -1,0 +1,14 @@
+Notes about scopes implementation.
+
+There are three cases according to how to resolve symbols.
+
+1) Access to member symbol. We only have to look up the hierarchical scope
+of the class being accessed.
+
+2) Inside a function not belonging to a class. We only have to look on its
+lexical scope.
+
+3) Inside a class' function definition. First we have to look on its own
+lexical scope, then if it fails on the hierarchical scope belonging to that
+class. This check is allowed to fail, as a symbol could be defined later.
+
