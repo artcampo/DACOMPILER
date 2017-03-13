@@ -1,5 +1,6 @@
 #pragma once
 #include "IR/Label.hpp"
+#include "Symbol.hpp"
 #include <map>
 
 namespace Compiler{
@@ -21,7 +22,19 @@ public:
   const ScopeOwnerId NewScopeOwner() noexcept{ return FreeScopeOwnerId(); }
   const ScopeOwnerId GlobalScopeOwnerId() const noexcept{ return global_scope_ownner_id_; }
 
+  bool IsDeclValid(const std::string& name, const ScopeId scope_id){
+    return GetScope(scope_id)->IsDeclValid(name);
+  }
 
+  bool HasDecl(const std::string& name, const ScopeId scope_id){
+    return GetScope(scope_id)->HasDecl(name);
+
+  }
+
+  const AST::Symbols::SymbolId DeclId(const std::string& name
+    , const ScopeId scope_id) const{
+    return GetScope(scope_id)->DeclId(name);
+  }
 
   const ScopeId NewNestedScope(const ScopeOwnerId scope_owner_id){
     const ScopeId id = FreeScopeId();
@@ -39,13 +52,14 @@ public:
 //     std::cout << "*** to: " << current_scope_->str()<< "\n";
   }
 
-  LexicalScope* GetScope(const ScopeId id) const{
+  Scope* GetScope(const ScopeId id) const{
 //     std::cout << "asking: " << id<<std::endl;
     return scope_by_id_.at(id);
   }
   size_t NumScopes() const noexcept{ return free_scope_id_;};
-  LexicalScope& Scope() noexcept{return *current_scope_;}
-  const LexicalScope& Scope() const noexcept{return *current_scope_;}
+
+//   LexicalScope& Scope() noexcept{return *current_scope_;}
+//   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
 
 

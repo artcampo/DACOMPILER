@@ -70,30 +70,20 @@ public:
     Label local;
     if(name == "main")  local = GetLabelMainLocals();
     else                local = NewFunctionARLabel(name);
-
     FunctionManager::NewFunction(name, ModuleOffsetTable(), scope_owner_id
       , entry, local);
-
     return NewNestedScope(scope_owner_id);
   }
 
-
-
-  bool IsDeclValid(const std::string& name){return Scope().IsDeclValid(name);}
-  bool HasDecl(const std::string& name){return Scope().HasDecl(name);}
-
-  const Type& GetType(const std::string& name){
-    return module_declaration_table_.at(Scope().DeclId(name))->GetType();
+  const Type& GetType(const std::string& name, const ScopeId scope_id){
+    return module_declaration_table_.at(GetScope(scope_id)->DeclId(name))->GetType();
   }
   const Type& GetType(const TypeId id) const{ return TypeTable::GetType(id);}
 
-/*
-  bool RegisterDecl(const std::string& name, const Type& type, const Node& n,
-    Scope& scope){
-    */
-  bool RegisterDecl(const std::string& name, const Type& type, const Node& n){
+  bool RegisterDecl(const std::string& name, const Type& type, const Node& n
+    , const ScopeId scope_id){
     AST::Symbols::SymbolId symbol_id = free_symbol_id_;
-    bool registered = Scope().RegisterDecl(name, type, n, free_symbol_id_);
+    bool registered = GetScope(scope_id)->RegisterDecl(name, type, n, free_symbol_id_);
     if(registered){
       symbolid_of_node_[&n] = symbol_id;
       ++free_symbol_id_;
