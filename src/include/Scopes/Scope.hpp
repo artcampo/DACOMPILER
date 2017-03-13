@@ -21,7 +21,9 @@ using InsertedDeclarations = std::pair<Symbols::SymbolId, Symbols::Symbol&>;
 using SymbolIdOfNode = std::map<const Node*, Symbols::SymbolId>;
 
 class LexicalScope;
+class HierarchicalScope;
 using PtrLexicalScope = std::unique_ptr<LexicalScope>;
+using PtrHierarchicalScope = std::unique_ptr<HierarchicalScope>;
 
 
 class Scope {

@@ -29,6 +29,10 @@ public:
     for(auto& c : p.statements_) c->Accept(*this);
   };
 
+  virtual void Visit(ClassDef const& p){
+    std::cout << unit_.GetClass(p.Name()).GetScope().str() << "\n";
+  }
+
   //Traversal
   virtual void Visit(FuncDef const& p){
     p.GetBody().Accept(*this);
@@ -64,7 +68,7 @@ public:
   virtual void Visit(FuncCall const& p){}
   virtual void Visit(FuncRet const& p){}
   virtual void Visit(ReturnStmt const& p){}
-  virtual void Visit(ClassDef const& p){}
+
   virtual void Visit(VarName const& p){}
 
 private:

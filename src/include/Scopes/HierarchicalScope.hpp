@@ -6,26 +6,65 @@ namespace AST{
 
 class HierarchicalScope : public Scope{
 public:
-  HierarchicalScope(const ScopeId id, const ScopeOwnerId scope_owner_id)
-  : Scope(id, scope_owner_id){}
+  HierarchicalScope(const ScopeId id, const ScopeOwnerId scope_owner_id
+    , const std::string& name_owner)
+  : Scope(id, scope_owner_id), name_("HierScope for:" + name_owner){}
 
   ~HierarchicalScope() = default;
 
-  bool IsDeclValid(const std::string& name){};
-  bool HasDecl(const std::string& name){};
+  bool RegisterDecl(const std::string& name, const Type& type
+    ,  const Node& n, AST::Symbols::SymbolId symbol_id){
+    auto it = symbol_table_.find(name);
+    Symbols::SymbolId previous_id = -1;
+    if(it != symbol_table_.end()){
+      previous_id = it->second;
+      if(declaration_table_[previous_id]->GetScopeId() == GetScopeId())
+        return false;
+    }
+    symbol_table_[name] = symbol_id;
+    declaration_table_[symbol_id] = std::make_unique<Symbols::Symbol>
+                              (name, type, GetScopeId(), symbol_id);
+//     symbolid_of_node_[&n] = symbol_id;
+    return true;
+  }
 
-  bool RegisterDecl(const std::string& name, const Type& type, const Node& n
-      , AST::Symbols::SymbolId symbol_id){};
+  bool IsDeclValid(const std::string& name){
+    auto it = symbol_table_.find(name);
+    Symbols::SymbolId previous_id = -1;
+    if(it != symbol_table_.end()){
+      previous_id = it->second;
+      if(declaration_table_[previous_id]->GetScopeId() == GetScopeId())
+        return false;
+    }
+    return true;
+  }
 
+  bool HasDecl(const std::string& name){
+    auto it = symbol_table_.find(name);
+    if(it == symbol_table_.end()) return false;
+    return true;
+  }
 
+  const Symbols::SymbolId DeclId(const std::string& name) const{
+    auto it = symbol_table_.find(name);
+    return it->second;
+  }
 
   std::string str() const noexcept{
-    std::string s("hieScope not impl");
-    return s;
+    std::string s = name_ + " " + std::to_string(id_) + (": {");
+    for(const auto& it : declaration_table_){
+      s+= "(" + std::to_string(it.first) + ":";
+      s+= it.second->str()+ ") ";
+    }
+    s += "}";
+    return name_;
   }
 
 private:
-
+  std::string       name_;
+  SymbolTable       symbol_table_;
+  DeclarationTable  declaration_table_;
+//   SymbolIdOfNode    symbolid_of_node_;
 };
 
 

@@ -40,7 +40,7 @@ public:
     , const ScopeOwnerId scope_owner_id)
     : Function(name, nullptr, module_offset_table, scope_owner_id){}
 */
-  Function(std::string& name, OffsetTable& module_offset_table
+  Function(const std::string& name, OffsetTable& module_offset_table
     , const ScopeOwnerId scope_owner_id, const Label entry_label
     , const Label locals_label)
   : name_(name)

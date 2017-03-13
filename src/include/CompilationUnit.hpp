@@ -60,6 +60,10 @@ public:
   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
 
+  void NewClass(std::string& name){
+    ClassManager::NewClass(name, NewScopeOwner(), FreeScopeId());
+  }
+
   const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){
     const Label entry = NewFunctionEntryLabel(name);
     Label local;
