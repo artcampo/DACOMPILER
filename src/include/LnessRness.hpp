@@ -1,7 +1,7 @@
 #pragma once
 #include "AST/AST.hpp"
 #include "AST/ASTNodes.hpp"
-#include "LexicalScope.hpp"
+#include "Scopes/LexicalScope.hpp"
 #include "Types.hpp"
 #include "Symbol.hpp"
 #include "SymbolTable.hpp"

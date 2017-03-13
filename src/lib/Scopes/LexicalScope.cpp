@@ -1,4 +1,4 @@
-#include "LexicalScope.hpp"
+#include "Scopes/LexicalScope.hpp"
  #include <iostream>
 
 namespace Compiler{

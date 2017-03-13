@@ -2,7 +2,7 @@
 #include <map>
 #include <cstddef>
 #include "Types.hpp"
-#include "ScopeId.hpp"
+#include "Scopes/ScopeId.hpp"
 
 namespace Compiler{
 namespace AST{

@@ -2,7 +2,7 @@
 #include <memory>
 #include "Symbol.hpp"
 
-#include "ScopeId.hpp"
+#include "Scopes/ScopeId.hpp"
 #include "AST/Node.hpp"
 
 namespace Compiler{

@@ -1,7 +1,7 @@
 #pragma once
 #include "AST/AST.hpp"
 #include "Function.hpp"
-#include "LexicalScope.hpp"
+#include "Scopes/LexicalScope.hpp"
 #include "IR/Label.hpp"
 #include <map>
 #include <cassert>

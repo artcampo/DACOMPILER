@@ -5,7 +5,7 @@
 #include <memory>
 #include <cstddef>
 #include "Types.hpp"
-#include "ScopeId.hpp"
+#include "Scopes/ScopeId.hpp"
 #include "Locus.hpp"
 
 

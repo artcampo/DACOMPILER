@@ -4,7 +4,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../DAVM/src/include")
 
 set(files
     Node.cpp
-    LexicalScope.cpp
+    Scopes/LexicalScope.cpp
     Module/TypeTable.cpp
     ASTVisitors/ASTVisitorDump.cpp
     ASTVisitors/ASTVisitorPrettyPrinter.cpp
