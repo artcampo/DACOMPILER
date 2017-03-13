@@ -19,22 +19,14 @@ namespace AST{
 class LexicalScope : public Scope {
 public:
   LexicalScope(const ScopeId id, LexicalScope* const parent
-    , Node* const generator
     , const ScopeOwnerId scope_owner_id
     , SymbolTable& symbol_table
     , DeclarationTable& declaration_table
     , SymbolIdOfNode& symbolid_of_node)
-  : Scope(id, generator,scope_owner_id), parent_(parent)
+  : Scope(id, scope_owner_id), parent_(parent)
     , symbol_table_(symbol_table), declaration_table_(declaration_table)
     , symbolid_of_node_(symbolid_of_node){}
 
-  LexicalScope(const ScopeId id, LexicalScope* const parent
-    , const ScopeOwnerId scope_owner_id
-    , SymbolTable& symbol_table
-    , DeclarationTable& declaration_table
-    , SymbolIdOfNode& symbolid_of_node)
-  : LexicalScope(id, parent, nullptr, scope_owner_id, symbol_table, declaration_table
-    , symbolid_of_node){}
 
   virtual ~LexicalScope() = default;
 

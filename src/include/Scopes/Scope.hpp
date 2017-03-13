@@ -26,12 +26,9 @@ using PtrLexicalScope = std::unique_ptr<LexicalScope>;
 
 class Scope {
 public:
-  Scope(const ScopeId id, Node* const generator
-    , const ScopeOwnerId scope_owner_id)
-  : id_(id), generator_(generator), scope_owner_id_(scope_owner_id){}
-
   Scope(const ScopeId id, const ScopeOwnerId scope_owner_id)
-  : Scope(id, nullptr, scope_owner_id){}
+  : id_(id), scope_owner_id_(scope_owner_id){}
+
 
   virtual ~Scope() = default;
 
@@ -50,7 +47,6 @@ public:
 protected:
   ScopeId       id_;
   ScopeOwnerId  scope_owner_id_;
-  Node*         generator_;
 
 };
 
