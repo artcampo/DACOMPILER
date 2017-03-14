@@ -37,7 +37,7 @@ public:
     return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
   }
 
-  void NewFunction(std::string& name
+  void NewFunction(const std::string& name
     , OffsetTable& module_offset_table
     , const ScopeOwnerId scope_owner_id
     , const Label entry, const Label local){

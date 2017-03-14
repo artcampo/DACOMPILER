@@ -67,7 +67,7 @@ public:
     return id;
   }
 
-  const ScopeId NewFunction(std::string& name, const ScopeOwnerId scope_owner_id){
+  const ScopeId NewFunction(const std::string& name, const ScopeOwnerId scope_owner_id){
     const Label entry = NewFunctionEntryLabel(name);
     Label local;
     if(name == "main")  local = GetLabelMainLocals();

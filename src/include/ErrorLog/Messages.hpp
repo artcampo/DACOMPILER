@@ -48,6 +48,10 @@ const static std::string kErr82("[err:82] class declaration not closed with '}'"
 const static std::string kErr83("[err:83] class declaration must start with 'class'");
 const static std::string kErr84("[err:84] class name already exists");
 const static std::string kErr85("[err:85] class instance used before declaration");
+const static std::string kErr86("[err:86] class member name symbol missing");
+const static std::string kErr87("[err:87] class member should be either var decl or function, but it's missing either ';' or '('");
+const static std::string kErr88("[err:88] expecting class member");
+
 
 
 const static std::string kErrUn1("[err:x1] name not followed by valid token");
