@@ -145,6 +145,13 @@ void ASTVisitorDump::Visit(VarName const& p){
   std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
 }
 
+void ASTVisitorDump::Visit(DotOp const& p){
+  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  IncreaseIndent(); Indent(); p.Lhs().Accept(*this); DecreaseIndent();
+  IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
+}
+
+
 
 void ASTVisitorDump::Indent(){
   for(int i = 0; i < indent_; ++i) std::cout<< "-";

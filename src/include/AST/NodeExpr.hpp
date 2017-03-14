@@ -64,27 +64,6 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////
-class Var : public ExprVar{
-public:
-  virtual ~Var() = default;
-  Var(const std::string& name, const Type& type, Symbols::SymbolId id
-    , const ScopeId scope_id , const Locus& locus)
-    : ExprVar(scope_id, locus), name_(name),type_(type), id_(id){}
-
-  const Type& GetType()const noexcept{return type_;}
-  std::string str() const noexcept{return name_;}
-
-  Symbols::SymbolId Id() const noexcept{return id_;}
-  const std::string&  Name() const noexcept{ return name_;}
-
-  virtual void Accept(ASTVisitor& v);
-  virtual void Accept(IRGenerator& v, const Node* successor);
-private:
-  const std::string name_;
-  const Type&  type_;
-  Symbols::SymbolId id_;
-};
 
 /////////////////////////////////////////////////////////
 class UnaryOp  {
@@ -133,6 +112,30 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);
 };
+
+/////////////////////////////////////////////////////////
+class Var : public ExprVar{
+public:
+  virtual ~Var() = default;
+  Var(const std::string& name, const Type& type, Symbols::SymbolId id
+    , const ScopeId scope_id , const Locus& locus)
+    : ExprVar(scope_id, locus), name_(name),type_(type), id_(id){}
+
+  const Type& GetType()const noexcept{return type_;}
+  std::string str() const noexcept{return name_;}
+
+  Symbols::SymbolId Id() const noexcept{return id_;}
+  const std::string&  Name() const noexcept{ return name_;}
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(IRGenerator& v, const Node* successor);
+private:
+  const std::string name_;
+  const Type&  type_;
+  Symbols::SymbolId id_;
+};
+
+
 
 }//end namespace AST
 }//end namespace Compiler

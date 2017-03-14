@@ -109,7 +109,8 @@ public:
     for (auto& c : p.statements_) c->Accept(*this);
   }
 
-
+  virtual void Visit(VarName const& p){}
+  virtual void Visit(DotOp const& p){};
 
   //Nothing to do
   virtual void Visit(DeclStmt const& p){}
@@ -118,7 +119,7 @@ public:
   virtual void Visit(ProgInit const& p){}
   virtual void Visit(ProgEnd const& p){}
   virtual void Visit(ClassDef const& p){}
-  virtual void Visit(VarName const& p){}
+
 
 private:
   CompilationUnit&  unit_;

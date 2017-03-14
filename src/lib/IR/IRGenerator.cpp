@@ -253,6 +253,10 @@ void IRGenerator::Visit(VarName const& p, const Node* successor){
 
 }
 
+/////////////////////////////////////////////////////////////////////////////
+void IRGenerator::Visit(DotOp const& p, const Node* successor){
+
+}
 
 
 

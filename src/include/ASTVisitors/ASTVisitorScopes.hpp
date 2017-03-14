@@ -68,8 +68,8 @@ public:
   virtual void Visit(FuncCall const& p){}
   virtual void Visit(FuncRet const& p){}
   virtual void Visit(ReturnStmt const& p){}
-
   virtual void Visit(VarName const& p){}
+  virtual void Visit(DotOp const& p){};
 
 private:
   CompilationUnit&  unit_;

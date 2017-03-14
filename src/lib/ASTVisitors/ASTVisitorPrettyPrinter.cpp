@@ -130,6 +130,12 @@ void ASTVisitorPrettyPrinter::Visit(VarName const& p){
   std::cout << p.str();
 }
 
+void ASTVisitorPrettyPrinter::Visit(DotOp const& p){
+  std::cout << p.str(); std::cout << "\n";
+  IncreaseIndent(); Indent(); p.Lhs().Accept(*this); DecreaseIndent();
+  IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 void ASTVisitorPrettyPrinter::Indent(){

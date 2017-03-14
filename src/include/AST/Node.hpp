@@ -47,13 +47,17 @@ class VarDecl;
 //subtypes of expr
 class Literal;
 class BinaryOp;
-class Var;
 class UnaryOp;
 class RefOp;
+
+//subtypes of ExprVar (can evaluate to lval, unlike Expr)
+class Var;
+class FuncRet;
 class DerefOp;
+class DotOp;
 
 //Functions
-class FuncRet;
+
 class FuncCall;
 
 //Class related nodes
@@ -90,6 +94,7 @@ using PtrReturnStmt = std::unique_ptr<ReturnStmt>;
 using PtrClassDef   = std::unique_ptr<ClassDef>;
 using PtrVarName    = std::unique_ptr<VarName>;
 using PtrExprVar    = std::unique_ptr<ExprVar>;
+using PtrDotOp      = std::unique_ptr<DotOp>;
 
 
 }//end namespace Ptrs

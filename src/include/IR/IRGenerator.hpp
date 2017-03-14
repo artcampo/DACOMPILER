@@ -43,6 +43,8 @@ public:
   virtual void Visit(ReturnStmt const& p, const Node* successor);
   virtual void Visit(ClassDef const& p, const Node* successor);
   virtual void Visit(VarName const& p, const Node* successor);
+  virtual void Visit(DotOp const& p, const Node* successor);
+
 
 
   void EndOfProgram();

@@ -91,6 +91,7 @@ public:
   virtual void Visit(Literal const& p){}
   virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
+  virtual void Visit(DotOp const& p){}
 
 private:
   CompilationUnit&  unit_;

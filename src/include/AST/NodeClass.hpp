@@ -51,6 +51,29 @@ private:
 };
 
 
+/////////////////////////////////////////////////////////
+class DotOp : public ExprVar{
+public:
+
+  virtual ~DotOp() = default;
+  //TODO change op to own type
+  DotOp(PtrExprVar& lhs, PtrVarName& rhs, const ScopeId scope_id
+  , const Locus& locus)
+    : ExprVar(scope_id, locus), lhs_(std::move(lhs)), rhs_(std::move(rhs)){}
+
+  virtual std::string str() const noexcept{
+    return lhs_->str() + "." + rhs_->str();
+  };
+
+  virtual void Accept(ASTVisitor& v);
+  virtual void Accept(IRGenerator& v, const Node* successor);
+
+  ExprVar& Lhs() const noexcept {return *lhs_;}
+  VarName& Rhs() const noexcept {return *rhs_;}
+private:
+  PtrExprVar lhs_;
+  PtrVarName rhs_;
+};
 
 }//end namespace AST
 }//end namespace Compiler
