@@ -61,11 +61,11 @@ public:
     }
 
 
-  const ScopeId NewClass(std::string& name){
+  const ScopeId NewClass(std::string& class_name){
     const ScopeOwnerId owner_id = NewScopeOwner();
-    const ScopeId id = NewHierarchicalScope(name, owner_id);
+    const ScopeId id = NewHierarchicalScope(class_name, owner_id, GetClassType(class_name));
 //     HierarchicalScope& s = ;
-    ClassManager::NewClass(name, owner_id, id
+    ClassManager::NewClass(class_name, owner_id, id
       , dynamic_cast<HierarchicalScope&>(*GetScope(id)));
     return id;
   }

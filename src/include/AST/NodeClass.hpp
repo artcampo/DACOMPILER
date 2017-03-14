@@ -42,6 +42,7 @@ public:
 
 
   std::string str() const noexcept{return name_;}
+  std::string Name() const noexcept{return name_;}
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);

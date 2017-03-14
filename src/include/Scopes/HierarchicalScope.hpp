@@ -50,6 +50,11 @@ public:
     return it->second;
   }
 
+  const Type& GetType(const std::string& name) const{
+    const Symbols::SymbolId sid = DeclId(name);
+    return declaration_table_.at(sid)->GetType();
+  }
+
   std::string str() const noexcept{
     std::string s = name_ + " "+  std::to_string(id_) + (": {");
     for(const auto& it : declaration_table_){

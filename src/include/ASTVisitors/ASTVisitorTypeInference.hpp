@@ -62,7 +62,9 @@ public:
   }
 
   virtual void Visit(Literal const& p){unit_.SetTypeOfNode(p, p.GetType());}
-  virtual void Visit(Var const& p)    {unit_.SetTypeOfNode(p, p.GetType());}
+  virtual void Visit(Var const& p)    {
+    std::cout << "set " << p.str() << " to " << p.GetType().str() << "\n";
+    unit_.SetTypeOfNode(p, p.GetType());}
 
   virtual void Visit(FuncRet const& p){
     p.GetCall().Accept(*this);
@@ -109,8 +111,27 @@ public:
     for (auto& c : p.statements_) c->Accept(*this);
   }
 
-  virtual void Visit(VarName const& p){}
-  virtual void Visit(DotOp const& p){};
+
+  virtual void Visit(DotOp const& p){
+    //TODO: may be this move out somewhere else, this is more than
+    //type inference
+    p.Lhs().Accept(*this);
+    const Type& lhs_type = unit_.GetTypeOfNode(p.Lhs());
+    if(not lhs_type.IsClass()){
+      unit_.Error(kErr89);
+      unit_.SetTypeOfNode(p, unit_.GetTypeError());
+      return;
+    }
+    HierarchicalScope& s = unit_.GetHScope(lhs_type);
+    std::string name = p.Rhs().Name();
+    if(not s.HasDecl(name)){
+      unit_.Error(kErr91 + name + " in expression: " + p.Lhs().str());
+      unit_.SetTypeOfNode(p, unit_.GetTypeError());
+      return;
+    }
+    const Type& dotop_type = s.GetType(name);
+    unit_.SetTypeOfNode(p, dotop_type);
+  };
 
   //Nothing to do
   virtual void Visit(DeclStmt const& p){}
@@ -119,7 +140,7 @@ public:
   virtual void Visit(ProgInit const& p){}
   virtual void Visit(ProgEnd const& p){}
   virtual void Visit(ClassDef const& p){}
-
+  virtual void Visit(VarName const& p){}
 
 private:
   CompilationUnit&  unit_;

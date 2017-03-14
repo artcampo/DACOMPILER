@@ -16,6 +16,10 @@ enum class kBasicTypeId : size_t{
     kVoid = 0
   , kInt  = 1
   , kBool = 2
+  //used when an expression's type could not be determined
+  , kError = 3
+  //used when a type is unknow at parsing but will be later resolved
+  , kUnknown = 4
 };
 
 class Type;
@@ -33,8 +37,8 @@ public:
   virtual std::string str() const noexcept = 0;
   virtual bool IsBool()     const noexcept = 0;
   virtual bool IsPtr()      const noexcept = 0;
-  virtual bool IsFunc()     const noexcept= 0;
-  virtual bool IsClass()    const noexcept= 0;
+  virtual bool IsFunc()     const noexcept = 0;
+  virtual bool IsClass()    const noexcept = 0;
 
   const bool operator<  ( const Type &type )const noexcept
     {return type_id_ < type.type_id_;}

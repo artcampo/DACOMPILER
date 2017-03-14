@@ -15,6 +15,8 @@ public:
     if(basic_id_ == kBasicTypeId::kInt) return std::string("int");
     if(basic_id_ == kBasicTypeId::kBool) return std::string("bool");
     if(basic_id_ == kBasicTypeId::kVoid) return std::string("void");
+    if(basic_id_ == kBasicTypeId::kError) return std::string("typeError");
+    if(basic_id_ == kBasicTypeId::kUnknown) return std::string("typeUnknown");
     return std::string("BasicType not implemented.");
   }
 

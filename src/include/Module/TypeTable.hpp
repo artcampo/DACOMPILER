@@ -50,6 +50,9 @@ public:
 
   const Type& GetType(const TypeId id) const{ return *type_table_.at(id);}
 
+  const Type& GetTypeError(){ return GetType(kBasicTypeId::kError);}
+  const Type& GetTypeUnknown(){ return GetType(kBasicTypeId::kUnknown);}
+
 private:
   const Type& GetType(const kBasicTypeId basic_id);
 
