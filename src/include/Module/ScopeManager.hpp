@@ -1,6 +1,10 @@
 #pragma once
-#include "IR/Label.hpp"
 #include "Symbol.hpp"
+#include "IR/Label.hpp"
+#include "Scopes/Scope.hpp"
+#include "Scopes/ScopeId.hpp"
+#include "Scopes/LexicalScope.hpp"
+#include "Scopes/HierarchicalScope.hpp"
 #include <map>
 
 namespace Compiler{
@@ -11,6 +15,8 @@ using AST::SymbolIdOfNode;
 using AST::ScopeOwnerId;
 using AST::PtrLexicalScope;
 using AST::LexicalScope;
+using AST::PtrHierarchicalScope;
+using AST::HierarchicalScope;
 
 class ScopeManager{
 public:
@@ -36,13 +42,21 @@ public:
     return GetScope(scope_id)->DeclId(name);
   }
 
+  const ScopeId NewHierarchicalScope(const std::string& name, const ScopeOwnerId scope_owner_id){
+    const ScopeId id = FreeScopeId();
+    hier_scopes_.push_back( std::move(
+      std::make_unique<HierarchicalScope>(id, scope_owner_id, name) ));
+    scope_by_id_[id] = hier_scopes_.back().get();
+    return id;
+  }
+
   const ScopeId NewNestedScope(const ScopeOwnerId scope_owner_id){
     const ScopeId id = FreeScopeId();
     LexicalScope* new_scope;
     new_scope = current_scope_->NewNestedScope(id, scope_owner_id);
     scope_by_id_[id] = new_scope;
     current_scope_   = new_scope;
-    return new_scope->GetScopeId();
+    return id;
   }
 
   void RestoreScope(){
@@ -70,8 +84,9 @@ protected:
   ScopeId                 free_scope_id_;
   ScopeOwnerId            free_scope_ownner_id_;
   ScopeOwnerId            global_scope_ownner_id_;
-  std::map<ScopeId,LexicalScope*>   scope_by_id_;
+  std::map<ScopeId,Scope*>   scope_by_id_;
   LexicalScope*     current_scope_;
+  std::vector<PtrHierarchicalScope> hier_scopes_;
 
 
 };

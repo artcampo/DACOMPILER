@@ -4,6 +4,7 @@
 #include "AST/AST.hpp"
 #include "AST/Node.hpp"
 #include "Module/TypeTable.hpp"
+#include "Scopes/Scope.hpp"
 #include "Scopes/ScopeId.hpp"
 #include "Scopes/HierarchicalScope.hpp"
 #include <map>
@@ -16,6 +17,7 @@ using AST::Ast;
 using AST::Type;
 using AST::Node;
 using AST::ScopeId;
+using AST::HierarchicalScope;
 using namespace Compiler::AST::Ptrs;
 using IR::Label;
 
@@ -29,11 +31,11 @@ public:
 
   Class(const std::string& name
     , const ScopeOwnerId scope_owner_id
-    , const ScopeId scope_id)
+    , const ScopeId scope_id
+    , HierarchicalScope& scope)
   : name_(name)
     , scope_owner_id_(scope_owner_id)
-    , scope_(std::move(
-      std::make_unique<HierarchicalScope>(scope_id, scope_owner_id, name))){}
+    , scope_(scope){}
 
 
   /*
@@ -52,13 +54,13 @@ public:
     origin_node_ = const_cast<FuncDef*>(&n);
   }
   */
-  HierarchicalScope& GetScope() const noexcept{ return *scope_;}
+  HierarchicalScope& GetScope() const noexcept{ return scope_;}
 
   std::string str()  const noexcept{ return name_;}
 private:
   ScopeOwnerId          scope_owner_id_;
   std::string           name_;
-  PtrHierarchicalScope  scope_;
+  HierarchicalScope&    scope_;
 
 
 };

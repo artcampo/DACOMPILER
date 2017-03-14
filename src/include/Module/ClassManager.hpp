@@ -8,6 +8,7 @@ namespace Compiler{
 
 using AST::Class;
 using AST::ScopeId;
+using AST::HierarchicalScope;
 
 class ClassManager{
 public:
@@ -25,11 +26,11 @@ public:
   const Class& GetClass(const std::string& name) const { return *class_by_name_.at(name);}
 
 protected:
-
   void NewClass(const std::string& name, const ScopeOwnerId scope_owner_id
-    , const ScopeId scope_id){
+    , const ScopeId scope_id
+    , HierarchicalScope& scope){
     classes_.push_back( std::move(
-      std::make_unique<Class>(name, scope_owner_id, scope_id) ));
+      std::make_unique<Class>(name, scope_owner_id, scope_id, scope) ));
     class_by_name_[name] = classes_.back().get();
   }
 

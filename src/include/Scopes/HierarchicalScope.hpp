@@ -8,7 +8,7 @@ class HierarchicalScope : public Scope{
 public:
   HierarchicalScope(const ScopeId id, const ScopeOwnerId scope_owner_id
     , const std::string& name_owner)
-  : Scope(id, scope_owner_id), name_("HierScope for:" + name_owner){}
+  : Scope(id, scope_owner_id), name_("HScope of " + name_owner){}
 
   ~HierarchicalScope() = default;
 
@@ -51,13 +51,13 @@ public:
   }
 
   std::string str() const noexcept{
-    std::string s = name_ + " " + std::to_string(id_) + (": {");
+    std::string s = name_ + " "+  std::to_string(id_) + (": {");
     for(const auto& it : declaration_table_){
       s+= "(" + std::to_string(it.first) + ":";
-      s+= it.second->str()+ ") ";
+      s+= it.second->BareName()+ ") ";
     }
     s += "}";
-    return name_;
+    return s;
   }
 
 private:

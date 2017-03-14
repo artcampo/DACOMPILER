@@ -12,3 +12,7 @@ lexical scope.
 lexical scope, then if it fails on the hierarchical scope belonging to that
 class. This check is allowed to fail, as a symbol could be defined later.
 
+When creating a class' vars or functions, the inherited scope is the
+hierarchical scope of the class. However inside a member function definition,
+the inherited scope is the lexical scope (or its descendants) of the function
+itself.

@@ -62,8 +62,11 @@ public:
 
 
   const ScopeId NewClass(std::string& name){
-    const ScopeId id = FreeScopeId();
-    ClassManager::NewClass(name, NewScopeOwner(), id);
+    const ScopeOwnerId owner_id = NewScopeOwner();
+    const ScopeId id = NewHierarchicalScope(name, owner_id);
+//     HierarchicalScope& s = ;
+    ClassManager::NewClass(name, owner_id, id
+      , dynamic_cast<HierarchicalScope&>(*GetScope(id)));
     return id;
   }
 
@@ -86,6 +89,7 @@ public:
     , const ScopeId scope_id){
     AST::Symbols::SymbolId symbol_id = free_symbol_id_;
     bool registered = GetScope(scope_id)->RegisterDecl(name, type, n, free_symbol_id_);
+//     std::cout << "Register: " << name << " in " << GetScope(scope_id)->str()<<"\n";
     if(registered){
       symbolid_of_node_[&n] = symbol_id;
       ++free_symbol_id_;
