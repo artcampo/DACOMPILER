@@ -51,6 +51,9 @@ const static std::string kErr85("[err:85] class instance used before declaration
 const static std::string kErr86("[err:86] class member name symbol missing");
 const static std::string kErr87("[err:87] class member should be either var decl or function, but it's missing either ';' or '('");
 const static std::string kErr88("[err:88] expecting class member");
+const static std::string kErr89("[err:89] symbol is not a class (of dot op)");
+const static std::string kErr90("[err:90] rhs of dot must be a name");
+const static std::string kErr91("[err:91] invalid member variable access ");
 
 
 

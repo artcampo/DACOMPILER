@@ -42,10 +42,11 @@ public:
     return GetScope(scope_id)->DeclId(name);
   }
 
-  const ScopeId NewHierarchicalScope(const std::string& name, const ScopeOwnerId scope_owner_id){
+  const ScopeId NewHierarchicalScope(const std::string& class_name
+    , const ScopeOwnerId scope_owner_id){
     const ScopeId id = FreeScopeId();
     hier_scopes_.push_back( std::move(
-      std::make_unique<HierarchicalScope>(id, scope_owner_id, name) ));
+      std::make_unique<HierarchicalScope>(id, scope_owner_id, class_name) ));
     scope_by_id_[id] = hier_scopes_.back().get();
     return id;
   }
@@ -72,6 +73,15 @@ public:
   }
   size_t NumScopes() const noexcept{ return free_scope_id_;};
 
+  bool ClassHasHScope(const std::string& class_name) const{
+    auto it = hscope_by_class_name_.find(class_name);
+    return it != hscope_by_class_name_.end();
+  }
+  HierarchicalScope& GetHScope(const std::string& class_name) const{
+    const ScopeId id = hscope_by_class_name_.at(class_name);
+    return dynamic_cast<HierarchicalScope&>(*scope_by_id_.at(id));
+  }
+
 //   LexicalScope& Scope() noexcept{return *current_scope_;}
 //   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
@@ -87,6 +97,7 @@ protected:
   std::map<ScopeId,Scope*>   scope_by_id_;
   LexicalScope*     current_scope_;
   std::vector<PtrHierarchicalScope> hier_scopes_;
+  std::map<std::string, ScopeId> hscope_by_class_name_;
 
 
 };
