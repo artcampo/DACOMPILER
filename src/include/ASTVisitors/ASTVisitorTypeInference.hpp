@@ -63,7 +63,7 @@ public:
 
   virtual void Visit(Literal const& p){unit_.SetTypeOfNode(p, p.GetType());}
   virtual void Visit(Var const& p)    {
-    std::cout << "set " << p.str() << " to " << p.GetType().str() << "\n";
+//     std::cout << "set " << p.str() << " to " << p.GetType().str() << "\n";
     unit_.SetTypeOfNode(p, p.GetType());}
 
   virtual void Visit(FuncRet const& p){

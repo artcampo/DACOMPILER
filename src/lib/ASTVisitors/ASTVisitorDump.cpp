@@ -18,10 +18,10 @@ void ASTVisitorDump::Visit(FuncDef const& p){
 }
 
 void ASTVisitorDump::Visit(ClassDef const& p){
-  std::cout << p.str();
+  std::cout << p.str()<<"\n";
   /*
   IncreaseIndent(); Indent();
-  p.¿?.Accept(*this);
+  p.¿?.Accept(*this);   //hahahah, that's an operator to implement '¿?'
   DecreaseIndent();
   */
 }
@@ -142,7 +142,7 @@ void ASTVisitorDump::Visit(ReturnStmt const& p){
 }
 
 void ASTVisitorDump::Visit(VarName const& p){
-  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  std::cout << p.str(); DisplayAttributes(p);
 }
 
 void ASTVisitorDump::Visit(DotOp const& p){
