@@ -94,7 +94,7 @@ public:
     p.RetExpr().Accept(*this);
     const Type& rt = p.GetFuncDecl().GetRetType();
     const Type& et = unit_.GetTypeOfNode(p.RetExpr());
-    if(rt != et) unit_.Error(kErr45 + rt.str() + " vs " + et.str());
+    if(rt != et) unit_.Error(kErr45 + rt.str() + " vs " + et.str(), p.GetLocus());
   }
 
   //Traversal
@@ -127,7 +127,7 @@ public:
     HierarchicalScope& s = unit_.GetHScope(lhs_type);
     std::string name = p.Rhs().Name();
     if(not s.HasDecl(name)){
-      unit_.Error(kErr91 + name + " in expression: " + p.Lhs().str());
+      unit_.Error(kErr91 + name + " in expression: " + p.Lhs().str(), p.GetLocus());
       unit_.SetTypeOfNode(p, unit_.GetTypeError());
       return;
     }

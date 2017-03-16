@@ -2,13 +2,12 @@
 #include "AST/ASTVisitor.hpp"
 #include "AST/Node.hpp"
 #include "CompilationUnit.hpp"
-#include "ASTVisitors/FullTraversal.hpp"
 
 namespace Compiler{
 namespace AST{
 namespace Visitor{
 
-class VarIsReadOrWrite : public FullTraversal{
+class VarIsReadOrWrite : public ASTVisitor{
 public:
 
   VarIsReadOrWrite(CompilationUnit& unit)
