@@ -29,7 +29,15 @@ private:
   std::vector<PtrVarDecl> var_decl_;
   std::vector<PtrFuncDef> func_def_;
 
-
+public:
+  using iterator       = std::vector<PtrFuncDef>::iterator;
+  using const_iterator = std::vector<PtrFuncDef>::const_iterator;
+  iterator begin() { return func_def_.begin(); }
+  iterator end()   { return func_def_.end(); }
+  const_iterator begin()  const { return func_def_.begin(); }
+  const_iterator end()    const { return func_def_.end(); }
+  const_iterator cbegin() const { return func_def_.cbegin(); }
+  const_iterator cend()   const { return func_def_.cend(); }
 };
 
 /////////////////////////////////////////////////////////

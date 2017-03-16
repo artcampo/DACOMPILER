@@ -97,26 +97,7 @@ public:
     if(rt != et) unit_.Error(kErr45 + rt.str() + " vs " + et.str(), p.GetLocus());
   }
 
-  //Traversal
-  virtual void Visit(ProgBody const& p){
-    p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
-    for(auto& it : p.GetClassDefs() ) it->Accept(*this);
-    p.GetProgEnd().Accept(*this);
-  }
-
-  virtual void Visit(FuncDef const& p){
-    p.GetBody().Accept(*this);
-  }
-
-  virtual void Visit(Block const& p){
-    for (auto& c : p.statements_) c->Accept(*this);
-  }
-
-
   virtual void Visit(DotOp const& p){
-    //TODO: may be this move out somewhere else, this is more than
-    //type inference
     p.Lhs().Accept(*this);
     const Type& lhs_type = unit_.GetTypeOfNode(p.Lhs());
     if(not lhs_type.IsClass()){
@@ -135,13 +116,31 @@ public:
     unit_.SetTypeOfNode(p, dotop_type);
   };
 
+  //Traversal
+  virtual void Visit(ProgBody const& p){
+    p.GetProgInit().Accept(*this);
+    for(auto& it : p) it->Accept(*this);
+    for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+    p.GetProgEnd().Accept(*this);
+  }
+
+  virtual void Visit(FuncDef const& p){
+    p.GetBody().Accept(*this);
+  }
+
+  virtual void Visit(Block const& p){
+    for (auto& c : p.statements_) c->Accept(*this);
+  }
+
+  virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
+
+
   //Nothing to do
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(ProgInit const& p){}
   virtual void Visit(ProgEnd const& p){}
-  virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
 
 private:

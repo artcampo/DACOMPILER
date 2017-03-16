@@ -74,6 +74,7 @@ public:
   virtual void Visit(Block const& p){
     for(auto& c : p.statements_) c->Accept(*this);
   };
+  virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
 
   //Nothing to do
   virtual void Visit(ProgInit const& p){};
@@ -88,7 +89,6 @@ public:
   virtual void Visit(FuncCall& p){}
   virtual void Visit(FuncRet& p){}
   virtual void Visit(ReturnStmt const& p){}
-  virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
   virtual void Visit(DotOp const& p){}
 

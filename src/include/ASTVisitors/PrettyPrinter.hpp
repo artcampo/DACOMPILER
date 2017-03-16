@@ -2,6 +2,8 @@
 #include "AST/ASTVisitor.hpp"
 #include "AST/Node.hpp"
 
+//WARNING This is outdated! used dump instead
+
 namespace Compiler{
 namespace AST{
 

@@ -19,6 +19,9 @@ void Dump::Visit(FuncDef const& p){
 
 void Dump::Visit(ClassDef const& p){
   std::cout << p.str()<<"\n";
+  for(auto& it : p) {
+    IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
+  }
   /*
   IncreaseIndent(); Indent();
   p.¿?.Accept(*this);   //hahahah, that's an operator to implement '¿?'

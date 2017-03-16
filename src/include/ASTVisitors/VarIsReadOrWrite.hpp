@@ -80,6 +80,7 @@ public:
     p.Rhs().Accept(*this);
   }
 
+  virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
   virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
 
   //Nothing to do
@@ -89,7 +90,6 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(Literal const& p){}
-  virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
   virtual void Visit(DotOp const& p){}
 

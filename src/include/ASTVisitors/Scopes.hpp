@@ -31,6 +31,7 @@ public:
 
   virtual void Visit(ClassDef const& p){
     std::cout << unit_.GetClass(p.Name()).GetScope().str() << "\n";
+    for(const auto& it : p) it->Accept(*this);
   }
 
   //Traversal

@@ -61,10 +61,8 @@ public:
   virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
   virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
-
-  virtual void Visit(FuncCall& p){
-    for(const auto& it : p) it->Accept(*this);
-  }
+  virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
+  virtual void Visit(FuncCall& p){ for(const auto& it : p) it->Accept(*this); }
 
   //Nothing to do
   virtual void Visit(Literal const& p){}
@@ -73,7 +71,6 @@ public:
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
-  virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
   virtual void Visit(DotOp const& p){}
 
