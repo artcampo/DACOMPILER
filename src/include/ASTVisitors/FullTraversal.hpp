@@ -1,49 +1,26 @@
 #pragma once
 #include "AST/ASTVisitor.hpp"
 #include "AST/Node.hpp"
-#include "CompilationUnit.hpp"
-#include "ASTVisitors/FullTraversal.hpp"
 
 namespace Compiler{
 namespace AST{
-namespace Visitor{
 
-class VarIsReadOrWrite : public FullTraversal{
+
+class FullTraversal : public ASTVisitor{
 public:
 
-  VarIsReadOrWrite(CompilationUnit& unit)
-    : unit_(unit)
-    , is_read_or_write_inht_(true){};
+  FullTraversal(){};
 
-
-  //santa's little helper
-  void Set(ExprVar const& p){
-    if(is_read_or_write_inht_)  unit_.SetAsRead(p);
-    else                        unit_.SetAsWrite(p);
-  }
 
   virtual void Visit(AssignStmt const& p){
-    is_read_or_write_inht_ = false; p.Lhs().Accept(*this);
-    is_read_or_write_inht_ = true;  p.Rhs().Accept(*this);
-  }
-
-  virtual void Visit(DerefOp const& p){
-    Set(p);
+    p.Lhs().Accept(*this);
     p.Rhs().Accept(*this);
-    is_read_or_write_inht_ = true;
   }
 
-  virtual void Visit(Var const& p)      { Set(p);}
   virtual void Visit(FuncCall& p) {
-    //TODO: should funcCall be an expression?
+    p.Receiver().Accept(*this);
     for(const auto& it : p) it->Accept(*this);
   }
-
-  virtual void Visit(ReturnStmt const& p){
-    is_read_or_write_inht_ = true;
-    p.RetExpr().Accept(*this);
-  }
-  //SDD
 
   //Traversal
   virtual void Visit(ProgBody const& p){
@@ -53,9 +30,6 @@ public:
     p.GetProgEnd().Accept(*this);
   }
 
-  virtual void Visit(FuncDef const& p){
-    p.GetBody().Accept(*this);
-  }
 
   virtual void Visit(Block const& p){
     for (auto& c : p.statements_) c->Accept(*this);
@@ -77,13 +51,15 @@ public:
     p.Rhs().Accept(*this);
   }
 
-  virtual void Visit(RefOp const& p){
-    p.Rhs().Accept(*this);
-  }
+  virtual void Visit(DotOp const& p){}
 
+  virtual void Visit(DerefOp const& p){ p.Rhs().Accept(*this);}
+  virtual void Visit(ReturnStmt const& p){p.RetExpr().Accept(*this);}
+  virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
+  virtual void Visit(RefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
 
-  //Nothing to do
+  //Leaf nodes
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
   virtual void Visit(DeclStmt const& p){}
@@ -92,14 +68,11 @@ public:
   virtual void Visit(Literal const& p){}
   virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
-  virtual void Visit(DotOp const& p){}
 
-private:
-  CompilationUnit&  unit_;
-  bool              is_read_or_write_inht_;
+  virtual void Visit(Var const& p){}
+
 };
 
 
-}//end namespace Visitor
 }//end namespace AST
 }//end namespace Compiler

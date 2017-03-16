@@ -2,48 +2,58 @@
 #include "AST/ASTVisitor.hpp"
 #include "AST/Node.hpp"
 #include "CompilationUnit.hpp"
-#include "ASTVisitors/FullTraversal.hpp"
 
 namespace Compiler{
 namespace AST{
-namespace Visitor{
 
-class VarIsReadOrWrite : public FullTraversal{
+class LvalRval : public ASTVisitor{
 public:
 
-  VarIsReadOrWrite(CompilationUnit& unit)
-    : unit_(unit)
-    , is_read_or_write_inht_(true){};
+  LvalRval(CompilationUnit& unit)
+    : unit_(unit){};
 
 
-  //santa's little helper
-  void Set(ExprVar const& p){
-    if(is_read_or_write_inht_)  unit_.SetAsRead(p);
-    else                        unit_.SetAsWrite(p);
+  virtual void Visit(BinaryOp const& p){
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
+    unit_.SetNodeAsRval(p);
   }
 
   virtual void Visit(AssignStmt const& p){
-    is_read_or_write_inht_ = false; p.Lhs().Accept(*this);
-    is_read_or_write_inht_ = true;  p.Rhs().Accept(*this);
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
+
+    if(not unit_.IsLValue(p.Lhs()))
+      unit_.Error(kErr22, p.Lhs().GetLocus());
+  }
+
+  virtual void Visit(RefOp const& p){
+    p.Rhs().Accept(*this);
+
+    if(not unit_.IsLValue(p.Rhs()))
+      unit_.Error(kErr23, p.Rhs().GetLocus());
+    unit_.SetNodeAsLval(p);
   }
 
   virtual void Visit(DerefOp const& p){
-    Set(p);
     p.Rhs().Accept(*this);
-    is_read_or_write_inht_ = true;
+    if(not unit_.IsLValue(p.Rhs()))
+      unit_.Error(kErr24, p.Rhs().GetLocus());
+    unit_.SetNodeAsLval(p);
   }
 
-  virtual void Visit(Var const& p)      { Set(p);}
-  virtual void Visit(FuncCall& p) {
-    //TODO: should funcCall be an expression?
-    for(const auto& it : p) it->Accept(*this);
-  }
+  virtual void Visit(Literal const& p){unit_.SetNodeAsRval(p);}
 
-  virtual void Visit(ReturnStmt const& p){
-    is_read_or_write_inht_ = true;
-    p.RetExpr().Accept(*this);
+  virtual void Visit(Var const& p){unit_.SetNodeAsLval(p);}
+
+  virtual void Visit(FuncCall& p){ unit_.SetNodeAsLval(p); }
+
+  virtual void Visit(FuncRet& p){
+    if( p.GetType().IsPtr() or p.GetType().IsClass() )
+      unit_.SetNodeAsLval(p);
+    else
+      unit_.SetNodeAsRval(p);
   }
-  //SDD
 
   //Traversal
   virtual void Visit(ProgBody const& p){
@@ -72,16 +82,9 @@ public:
     p.GetBody().Accept(*this);
   }
 
-  virtual void Visit(BinaryOp const& p){
-    p.Lhs().Accept(*this);
-    p.Rhs().Accept(*this);
+  virtual void Visit(ReturnStmt const& p){
+    p.RetExpr().Accept(*this);
   }
-
-  virtual void Visit(RefOp const& p){
-    p.Rhs().Accept(*this);
-  }
-
-  virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
 
   //Nothing to do
   virtual void Visit(ProgInit const& p){};
@@ -89,17 +92,15 @@ public:
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
-  virtual void Visit(Literal const& p){}
   virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
   virtual void Visit(DotOp const& p){}
 
+
 private:
   CompilationUnit&  unit_;
-  bool              is_read_or_write_inht_;
 };
 
 
-}//end namespace Visitor
 }//end namespace AST
 }//end namespace Compiler
