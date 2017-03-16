@@ -29,3 +29,14 @@ Return statement is mandatory if return type is not void.
 -- Objects
 No inheritance (to be soon changed).
 Closed class structure.
+
+
+------------------------------------
+
+ptr<int>
+ptr<void (int, int)>
+const ptr<const inst>
+ptr<const bool>
+
+uptr<int> //unique
+sptr<int> //shared

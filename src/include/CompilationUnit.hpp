@@ -165,7 +165,9 @@ public:
     , kLocalVarOffsets = 3
     , kVarAccessIsReadOrWrite = 4
     , kVarAccessIsValOrAddress = 5
-    , kIR
+    , kIR = 6
+    , kAstIncomplete1 = 7
+    , kAstIncomplete2 = 8
   };
 // }
 

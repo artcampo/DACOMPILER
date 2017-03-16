@@ -4,32 +4,30 @@
 #include "CompilationUnit.hpp"
 #include "Types.hpp"
 #include "ErrorLog/Messages.hpp"
-#include "ASTVisitors/ASTVisitorTypeInference.hpp"
+#include "ASTVisitors/ResolveMemberTypes.hpp"
 
 namespace Compiler{
 
 using namespace AST;
 
-class TypeInference : public Pass{
+
+class ResolveMemberTypes : public Pass{
 public:
-  TypeInference(CompilationUnit& unit)
+  ResolveMemberTypes(CompilationUnit& unit)
     : Pass(unit
-        , {CompUnitInfo::kAst, CompUnitInfo::kLnessRnessOfNode}
-        , {CompUnitInfo::kTypeOfNode})
-    , v_(unit_){};
+      , {CompUnitInfo::kAstIncomplete2}
+      , {CompUnitInfo::kAst}) {};
 
   virtual void Run(){
     if(unit_.ValidAst()){
-      v_.Visit(*unit_.GetAstProg());
+      Visitor::ResolveMemberTypes v(unit_);
+      v.Visit(*unit_.GetAstProg());
     }
   };
 
   virtual std::string str() const noexcept{
-    return std::string("Type inference");
+    return std::string("ResolveMemberTypes");
   };
-
-  ASTVisitorTypeInference v_;
-
 };
 
 

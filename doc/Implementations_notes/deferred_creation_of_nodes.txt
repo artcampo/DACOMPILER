@@ -1,0 +1,5 @@
+There are nodes that we can't fully build when parsing the program.
+These are related to types that cannot be know yet.
+
+Examples:
+Member function call.

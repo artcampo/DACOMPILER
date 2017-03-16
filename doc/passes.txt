@@ -1,6 +1,17 @@
-Passes 
+List of passes in their order of execution
 
-variable declaration list expansion
-type inference and synthesis
+Lness/Rness computation and check
+Variable is read or write
+Variable is value or address
+
+type inference and type check
+compute local variables offsets
+
+After all those have been computed:
+IRGenerator (includes backpatch)
+
+
+
+Not implemented:
 type cohercion
-backpatch
+unintialized var check

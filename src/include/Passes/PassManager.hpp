@@ -5,9 +5,13 @@
 #include "ComputeLocalVarOffsets.hpp"
 #include "VarIsValueOrAddress.hpp"
 #include "VarIsReadOrWrite.hpp"
+#include "ResolveMemberTypes.hpp"
+#include "DeferredNodesCreation.hpp"
 #include <memory>
 
 namespace Compiler{
+
+//AST comes from parsing in kAstIncomplete1 form
 
 class PassManager{
 public:
@@ -18,12 +22,16 @@ public:
     , var_is_val_or_addr_(unit_)
     , type_inference_(unit_)
     , compute_local_var_offsets_(unit_)
-    , passes_ { &check_lval_rval_
+    , resolve_member_types_(unit_)
+    , deferred_nodes_creation_(unit_, type_inference_.v_)
+    , passes_ { &deferred_nodes_creation_
+              , &resolve_member_types_
+              , &check_lval_rval_
               , &var_is_read_or_write_
               , &var_is_val_or_addr_
               , &type_inference_
               , &compute_local_var_offsets_}
-  { defined_[CompUnitInfo::kAst] = true;};
+  { defined_[CompUnitInfo::kAstIncomplete1] = true;};
 
   void Run(){
     for(auto& pass: passes_) Run(*pass);
@@ -36,6 +44,8 @@ private:
   VarIsValueOrAddress     var_is_val_or_addr_;
   TypeInference           type_inference_;
   ComputeLocalVarOffsets  compute_local_var_offsets_;
+  ResolveMemberTypes      resolve_member_types_;
+  DeferredNodesCreation   deferred_nodes_creation_;
 
   std::vector<Pass*> passes_;
   std::map<CompUnitInfo, bool> defined_;
