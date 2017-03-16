@@ -3,7 +3,7 @@
 #include "AST/Node.hpp"
 #include "CompilationUnit.hpp"
 #include "ErrorLog/Messages.hpp"
-#include "ASTVisitors/ASTVisitorTypeInference.hpp"
+#include "ASTVisitors/TypeInference.hpp"
 
 namespace Compiler{
 namespace AST{
@@ -13,7 +13,7 @@ class DeferredNodesCreation : public ASTVisitor{
 public:
 
   DeferredNodesCreation(CompilationUnit& unit
-  , ASTVisitorTypeInference& type_inf_visitor)
+  , TypeInference& type_inf_visitor)
     : unit_(unit), type_inf_visitor_(type_inf_visitor){};
 
   //SDD
@@ -104,7 +104,7 @@ public:
 
 private:
   CompilationUnit&  unit_;
-  ASTVisitorTypeInference& type_inf_visitor_;
+  TypeInference& type_inf_visitor_;
 };
 
 

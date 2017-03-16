@@ -31,10 +31,10 @@ using AST::ScopeId;
 using AST::SymbolTable;
 using AST::DeclarationTable;
 using namespace Compiler::AST::Ptrs;
-// class Compiler::AST::ASTVisitorDump;
+// class Compiler::AST::Dump;
 // class ASTVisitor;
-// namespace AST{ class ASTVisitorDump; class Function;};
-namespace AST{ class ASTVisitorDump;};
+// namespace AST{ class Dump; class Function;};
+namespace AST{ class Dump;};
 
 using AST::PtrLexicalScope;
 using AST::Scope;
@@ -123,7 +123,7 @@ private:
   SymbolIdOfNode                    symbolid_of_node_;
 
 public:
-  friend class AST::ASTVisitorDump;
+  friend class AST::Dump;
 
   using iterator = std::vector<PtrFunction>::iterator;
   using const_iterator = std::vector<PtrFunction>::const_iterator;

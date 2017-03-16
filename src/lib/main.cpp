@@ -2,7 +2,7 @@
 #include "AST/Node.hpp"
 #include "Utils.hpp"
 #include "ASTVisitorCodeGenerator.hpp"
-#include "ASTVisitors/ASTVisitorPrettyPrinter.hpp"
+#include "ASTVisitors/PrettyPrinter.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 
     {
     std::cout << "Print AST\n";
-    ASTVisitorPrettyPrinter visitor;
+    PrettyPrinter visitor;
     visitor.Visit(*programBlock);
     }
 

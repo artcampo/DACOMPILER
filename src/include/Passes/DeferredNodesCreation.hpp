@@ -5,7 +5,7 @@
 #include "Types.hpp"
 #include "ErrorLog/Messages.hpp"
 #include "ASTVisitors/DeferredNodesCreation.hpp"
-#include "ASTVisitors/ASTVisitorTypeInference.hpp"
+#include "ASTVisitors/TypeInference.hpp"
 
 namespace Compiler{
 
@@ -15,7 +15,7 @@ using namespace AST;
 class DeferredNodesCreation : public Pass{
 public:
   DeferredNodesCreation(CompilationUnit& unit
-  , ASTVisitorTypeInference& type_inf_visitor)
+  , Visitor::TypeInference& type_inf_visitor)
     : Pass(unit
       , {CompUnitInfo::kAstIncomplete1}
       , {CompUnitInfo::kAstIncomplete2})
@@ -33,7 +33,7 @@ public:
   };
 
 private:
-  ASTVisitorTypeInference& type_inf_visitor_;
+  Visitor::TypeInference& type_inf_visitor_;
 };
 
 

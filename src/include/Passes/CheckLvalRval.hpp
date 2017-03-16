@@ -4,7 +4,7 @@
 #include "CompilationUnit.hpp"
 #include "Types.hpp"
 #include "ErrorLog/Messages.hpp"
-#include "ASTVisitors/ASTVisitorLvalRval.hpp"
+#include "ASTVisitors/LvalRval.hpp"
 
 namespace Compiler{
 
@@ -21,7 +21,7 @@ public:
 
   virtual void Run(){
     if(unit_.ValidAst()){
-      ASTVisitorLvalRval v(unit_);
+      LvalRval v(unit_);
       v.Visit(*unit_.GetAstProg());
     }
   };

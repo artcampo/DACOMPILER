@@ -6,8 +6,8 @@ set(files
     Node.cpp
     Scopes/LexicalScope.cpp
     Module/TypeTable.cpp
-    ASTVisitors/ASTVisitorDump.cpp
-    ASTVisitors/ASTVisitorPrettyPrinter.cpp
+    ASTVisitors/Dump.cpp
+    ASTVisitors/PrettyPrinter.cpp
     CodeGenerator/RegisterAllocator.cpp
     IR/IR.cpp
     IR/IRStream.cpp

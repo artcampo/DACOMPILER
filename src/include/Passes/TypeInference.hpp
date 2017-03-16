@@ -4,7 +4,7 @@
 #include "CompilationUnit.hpp"
 #include "Types.hpp"
 #include "ErrorLog/Messages.hpp"
-#include "ASTVisitors/ASTVisitorTypeInference.hpp"
+#include "ASTVisitors/TypeInference.hpp"
 
 namespace Compiler{
 
@@ -28,7 +28,7 @@ public:
     return std::string("Type inference");
   };
 
-  ASTVisitorTypeInference v_;
+  Visitor::TypeInference v_;
 
 };
 
