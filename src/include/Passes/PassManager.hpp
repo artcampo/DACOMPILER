@@ -34,7 +34,11 @@ public:
   { defined_[CompUnitInfo::kAstIncomplete1] = true;};
 
   void Run(){
-    for(auto& pass: passes_) Run(*pass);
+    for(auto& pass: passes_){
+      Run(*pass);
+      //Any error in the semantic phase is critical
+      if(unit_.HasErrors()) break;
+    }
   };
 
 private:

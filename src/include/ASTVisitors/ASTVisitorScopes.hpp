@@ -65,8 +65,8 @@ public:
   virtual void Visit(DerefOp const& p){}
   virtual void Visit(ProgInit const& p){}
   virtual void Visit(ProgEnd const& p){}
-  virtual void Visit(FuncCall const& p){}
-  virtual void Visit(FuncRet const& p){}
+  virtual void Visit(FuncCall& p){}
+  virtual void Visit(FuncRet& p){}
   virtual void Visit(ReturnStmt const& p){}
   virtual void Visit(VarName const& p){}
   virtual void Visit(DotOp const& p){};

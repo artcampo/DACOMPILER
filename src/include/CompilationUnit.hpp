@@ -153,8 +153,10 @@ public:
   }
 
   void Error(const std::string& message){
-    std::cout << message << "\n";
+    error_log_.Error(message);
   }
+
+  bool HasErrors() const noexcept {return error_log_.NumErrors() > 0;}
 };
 
 // namespace CompilationUnitInfo{

@@ -212,7 +212,7 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void IRGenerator::Visit(FuncCall const& p, const Node* successor){
+void IRGenerator::Visit(FuncCall& p, const Node* successor){
   //generate arguments
   for(const auto& it : p) it->Accept(*this, successor);
   //generate set prior to call
@@ -232,7 +232,7 @@ void IRGenerator::Visit(FuncCall const& p, const Node* successor){
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void IRGenerator::Visit(FuncRet const& p, const Node* successor){
+void IRGenerator::Visit(FuncRet& p, const Node* successor){
   p.GetCall().Accept(*this, successor);
   if( p.GetType() != unit_.GetTypeVoid() )
     stream_.AppendGetRetVal();

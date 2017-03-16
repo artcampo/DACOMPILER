@@ -66,12 +66,12 @@ public:
 //     std::cout << "set " << p.str() << " to " << p.GetType().str() << "\n";
     unit_.SetTypeOfNode(p, p.GetType());}
 
-  virtual void Visit(FuncRet const& p){
+  virtual void Visit(FuncRet& p){
     p.GetCall().Accept(*this);
     unit_.SetTypeOfNode(p, p.GetType());
   }
 
-  virtual void Visit(FuncCall const& p){
+  virtual void Visit(FuncCall& p){
     unit_.SetTypeOfNode(p, p.GetType());
     const FuncType& ftype = p.GetType();
     const auto& ftype_it  = ftype.cbegin();
@@ -86,6 +86,7 @@ public:
           , it->GetLocus());
       }
     }
+
   }
 
   virtual void Visit(ReturnStmt const& p){

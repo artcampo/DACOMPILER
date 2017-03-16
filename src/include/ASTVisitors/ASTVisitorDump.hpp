@@ -24,8 +24,8 @@ public:
   virtual void Visit(Var const& p);
   virtual void Visit(RefOp const& p);
   virtual void Visit(DerefOp const& p);
-  virtual void Visit(FuncCall const& p);
-  virtual void Visit(FuncRet const& p);
+  virtual void Visit(FuncCall& p);
+  virtual void Visit(FuncRet& p);
   virtual void Visit(ReturnStmt const& p);
   virtual void Visit(ClassDef const& p);
   virtual void Visit(VarName const& p);

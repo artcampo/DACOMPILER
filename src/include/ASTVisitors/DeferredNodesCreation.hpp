@@ -2,6 +2,7 @@
 #include "AST/ASTVisitor.hpp"
 #include "AST/Node.hpp"
 #include "CompilationUnit.hpp"
+#include "ErrorLog/Messages.hpp"
 #include "ASTVisitors/ASTVisitorTypeInference.hpp"
 
 namespace Compiler{
@@ -16,14 +17,33 @@ public:
     : unit_(unit), type_inf_visitor_(type_inf_visitor){};
 
   //SDD
-  virtual void Visit(RefOp const& p){
+  virtual void Visit(FuncRet& p){
+    p.GetCall().Accept(*this); if(unit_.HasErrors()) return;
 
-    p.Rhs().Accept(*this);
 
+    const Type& type = unit_.GetTypeOfNode(p.GetCall());
+    const AST::FuncType& type_func = dynamic_cast<const AST::FuncType&>(type);
+    const Type& type_ret = unit_.GetType(type_func.RetTypeId());
+    p.SetType(type_ret);
   }
 
-  virtual void Visit(Var const& p){
+  virtual void Visit(FuncCall& p){
+    p.Receiver().Accept(type_inf_visitor_);
+
+    const Type& type = unit_.GetTypeOfNode(p.Receiver());
+
+    if(not type.IsFunc()) { unit_.Error(kErr38, p.GetLocus()); return;}
+
+    const AST::FuncType& type_func = dynamic_cast<const AST::FuncType&>(type);
+
+    if(p.NumArgs() < type_func.NumPars()){ unit_.Error(kErr39, p.GetLocus()); return;}
+    if(p.NumArgs() > type_func.NumPars()){ unit_.Error(kErr40, p.GetLocus()); return;}
+
+    p.SetType(type_func);
+    unit_.SetTypeOfNode(p, type_func);
   }
+
+
 
   //Traversal
   virtual void Visit(ProgBody const& p){
@@ -64,11 +84,10 @@ public:
 
   virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
   virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
-  virtual void Visit(FuncRet const& p){ p.GetCall().Accept(*this); }
+  virtual void Visit(RefOp const& p){p.Rhs().Accept(*this);}
 
-  virtual void Visit(FuncCall const& p){
-    for(const auto& it : p) it->Accept(*this);
-  }
+
+
 
   //Nothing to do
   virtual void Visit(Literal const& p){}
@@ -80,6 +99,7 @@ public:
   virtual void Visit(ClassDef const& p){}
   virtual void Visit(VarName const& p){}
   virtual void Visit(DotOp const& p){}
+  virtual void Visit(Var const& p){}
 
 
 private:

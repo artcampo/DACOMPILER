@@ -33,7 +33,7 @@ public:
   }
 
   virtual void Visit(Var const& p)      { Set(p);}
-  virtual void Visit(FuncCall const& p) {
+  virtual void Visit(FuncCall& p) {
     //TODO: should funcCall be an expression?
     for(const auto& it : p) it->Accept(*this);
   }
@@ -80,7 +80,7 @@ public:
     p.Rhs().Accept(*this);
   }
 
-  virtual void Visit(FuncRet const& p){ p.GetCall().Accept(*this); }
+  virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
 
   //Nothing to do
   virtual void Visit(ProgInit const& p){};

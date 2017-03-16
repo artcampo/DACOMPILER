@@ -15,7 +15,12 @@ public:
     , ret_str_(return_type.str())
     {
       pars_str_ = std::string("");
-      for(auto& it : par_types) pars_str_ += it->str();
+      bool first_par = true;
+      for(auto& it : par_types){
+        if(not first_par) pars_str_ += ", ";
+        pars_str_ += it->str();
+        first_par = false;
+      }
       for(auto& it : par_types) pars_tid_.push_back( it->GetTypeId());
     }
 

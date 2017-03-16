@@ -46,9 +46,9 @@ public:
 
   virtual void Visit(Var const& p){unit_.SetNodeAsLval(p);}
 
-  virtual void Visit(FuncCall const& p){ unit_.SetNodeAsLval(p); }
+  virtual void Visit(FuncCall& p){ unit_.SetNodeAsLval(p); }
 
-  virtual void Visit(FuncRet const& p){
+  virtual void Visit(FuncRet& p){
     if( p.GetType().IsPtr() or p.GetType().IsClass() )
       unit_.SetNodeAsLval(p);
     else

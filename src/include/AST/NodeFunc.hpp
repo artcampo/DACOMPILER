@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "AST/Node.hpp"
+#include "Types/FuncType.hpp"
 
 namespace Compiler{
 namespace AST{
@@ -103,7 +104,8 @@ public:
     , const ScopeId id
     , const Locus& locus)
   : Node(id, locus), name_(name), expr_var_(std::move(expr_var))
-    , function_type_(function_type), arg_list_(std::move(arg_list)){}
+    , function_type_(const_cast<FuncType*>(&function_type))
+    , arg_list_(std::move(arg_list)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
@@ -112,12 +114,19 @@ public:
   const std::string&  Name() const noexcept{ return name_;}
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
-  const FuncType& GetType()const noexcept{return function_type_;}
   ExprVar& Receiver() const noexcept{ return *expr_var_;}
+
+  const FuncType& GetType()const noexcept{
+    //return *const_cast<const FuncType*>(function_type_);
+    return *function_type_;
+  }
+  void SetType(const FuncType& function_type)noexcept{
+    function_type_ = const_cast<FuncType*>(&function_type);
+  }
 private:
   std::string           name_;
   PtrExprVar            expr_var_;
-  const FuncType&       function_type_;
+  FuncType*             function_type_;
   std::vector<PtrExpr>  arg_list_;
 
 public:
@@ -140,19 +149,25 @@ public:
     , PtrFuncCall& call
     , const ScopeId id
     , const Locus& locus)
-  : ExprVar(id, locus), ret_type_(ret_type)
+  : ExprVar(id, locus), ret_type_(const_cast<Type*>(&ret_type))
     , call_(std::move(call)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return "FuncRet: " + ret_type_.str();}
+  virtual std::string str() const noexcept { return "FuncRet: " + ret_type_->str();}
 
   FuncCall&    GetCall() const noexcept{ return *call_;}
-  const Type& GetType()const noexcept{return ret_type_;}
+  const Type& GetType()const noexcept{
+    return *ret_type_;
+
+  }
+  void SetType(const Type& ret_type)noexcept{
+    ret_type_ = const_cast<Type*>(&ret_type);
+  }
 private:
 
-  const Type&   ret_type_;
-  PtrFuncCall   call_;
+  Type*       ret_type_;
+  PtrFuncCall call_;
 };
 
 

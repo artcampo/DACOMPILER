@@ -124,14 +124,24 @@ void ASTVisitorDump::Visit(DerefOp const& p){
   IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
 }
 
-void ASTVisitorDump::Visit(FuncCall const& p){
+void ASTVisitorDump::Visit(FuncCall& p){
   std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+
+  //Dump receiver
+  IncreaseIndent(); Indent(); p.Receiver().Accept(*this); DecreaseIndent();std::cout << "\n";
+
+  //Dump args
+//   IncreaseIndent();
+  bool first_arg = true;
   for(const auto& it : p){
+    if(not first_arg)std::cout << "\n";
     IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
+    first_arg = false;
   }
+//   DecreaseIndent();
 }
 
-void ASTVisitorDump::Visit(FuncRet const& p){
+void ASTVisitorDump::Visit(FuncRet& p){
   std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
   IncreaseIndent(); Indent(); p.GetCall().Accept(*this); DecreaseIndent();
 }
