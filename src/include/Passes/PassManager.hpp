@@ -37,7 +37,7 @@ public:
     for(auto& pass: passes_){
       Run(*pass);
       //Any error in the semantic phase is critical
-      if(unit_.HasErrors()) break;
+      if(unit_.HasErrors()) { std::cout << "Pass failed. \n"; break; }
     }
   };
 
@@ -59,6 +59,7 @@ private:
       if(not InfoIsDefined(info))
         unit_.Error(p.str() + " is missing input info: " + str(info));
     p.Run();
+    std::cout << "Run pass: " << p.str() << "\n";
     for(const auto& info : p.Defines()) defined_[info] = true;
   }
 

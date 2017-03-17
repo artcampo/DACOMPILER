@@ -24,8 +24,9 @@ public:
   }
 
   virtual void Visit(Var& p){
-
+    std::cout << "may patch: " <<  p.str() << "\n";
     if(p.Id() == Symbol::UnknownSymbol()){
+      std::cout << "Patching : " << p.str() << "\n";
       if(not unit_.HasDecl(p.Name(), member_scope_id_inht_)){
         p.SetType (unit_.GetTypeError());
         unit_.Error(kErr91, p.GetLocus());
@@ -39,6 +40,7 @@ public:
 
   //Traversal
   virtual void Visit(ProgBody const& p){
+    std::cout << "may patch: " <<  p.str() << "\n";
     p.GetProgInit().Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
     for(auto& it : p) it->Accept(*this);
@@ -69,13 +71,17 @@ public:
     p.Lhs().Accept(*this);
     p.Rhs().Accept(*this);
   }
+  virtual void Visit(FuncCall& p){
+    p.Receiver().Accept(*this);
+    for(const auto& it : p) it->Accept(*this);
+  }
 
   virtual void Visit(ReturnStmt const& p){p.RetExpr().Accept(*this);}
   virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
   virtual void Visit(RefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
-  virtual void Visit(FuncCall& p){ for(const auto& it : p) it->Accept(*this); }
+  virtual void Visit(DotOp const& p){ p.Lhs().Accept(*this); }
 
   //Nothing to do
   virtual void Visit(Literal const& p){}
@@ -85,7 +91,7 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(VarName const& p){}
-  virtual void Visit(DotOp const& p){}
+
 
 
 private:

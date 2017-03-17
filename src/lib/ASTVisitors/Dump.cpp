@@ -11,14 +11,14 @@ void Dump::Visit(ProgBody const& p){
 }
 
 void Dump::Visit(FuncDef const& p){
-  std::cout << p.str()<<"\n";
+  std::cout << "[FDef] " << p.str()<<"\n";
   IncreaseIndent(); //Indent();
   p.GetBody().Accept(*this);
   DecreaseIndent();
 }
 
 void Dump::Visit(ClassDef const& p){
-  std::cout << p.str()<<"\n";
+  std::cout << "[CDef] " << p.str()<<"\n";
   for(auto& it : p) {
     IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
   }
@@ -49,7 +49,7 @@ void Dump::Visit(Block const& p) {
 
 /////////////////////////////////////////////////////////////////////////////
 void Dump::Visit(Literal const& p){
-  std::cout << "Literal: ";
+  std::cout << "[Lit] " ;
   std::cout << p.Value();
   DisplayAttributes(p);
 }
@@ -102,11 +102,11 @@ void Dump::Visit(VarDeclList const& p){
   }
 }
 void Dump::Visit(VarDecl const& p){
-  std::cout << p.str();
+  std::cout << "[VDec] " << p.str();
 }
 
 void Dump::Visit(AssignStmt const& p){
-  std::cout << "Assign"; DisplayAttributes(p); std::cout<<"\n";
+  std::cout<< "[Asgst] "; DisplayAttributes(p); std::cout<<"\n";
   IncreaseIndent();
   Indent(); p.Lhs().Accept(*this); std::cout << "\n";
   Indent(); p.Rhs().Accept(*this);
@@ -114,21 +114,21 @@ void Dump::Visit(AssignStmt const& p){
 }
 
 void Dump::Visit(Var& p){
-  std::cout << p.str(); DisplayAttributes(p);
+  std::cout << "[Var] "<< p.str(); DisplayAttributes(p);
 }
 
 void Dump::Visit(RefOp const& p){
-  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  std::cout << "[Refop] "<< p.str(); DisplayAttributes(p);std::cout << "\n";
   IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
 }
 
 void Dump::Visit(DerefOp const& p){
-  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  std::cout << "[Derop] "<< p.str(); DisplayAttributes(p);std::cout << "\n";
   IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
 }
 
 void Dump::Visit(FuncCall& p){
-  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  std::cout << "[Fcal] " << p.str(); DisplayAttributes(p);std::cout << "\n";
 
   //Dump receiver
   IncreaseIndent(); Indent(); p.Receiver().Accept(*this); DecreaseIndent();std::cout << "\n";
@@ -145,21 +145,21 @@ void Dump::Visit(FuncCall& p){
 }
 
 void Dump::Visit(FuncRet& p){
-  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  std::cout << "[Fret] " << p.str(); DisplayAttributes(p);std::cout << "\n";
   IncreaseIndent(); Indent(); p.GetCall().Accept(*this); DecreaseIndent();
 }
 
 void Dump::Visit(ReturnStmt const& p){
-  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  std::cout << "[Retst] "<< p.str(); DisplayAttributes(p);std::cout << "\n";
   IncreaseIndent(); Indent(); p.RetExpr().Accept(*this); DecreaseIndent();
 }
 
 void Dump::Visit(VarName const& p){
-  std::cout << p.str(); DisplayAttributes(p);
+  std::cout << "[Vnam] " << p.str(); DisplayAttributes(p);
 }
 
 void Dump::Visit(DotOp const& p){
-  std::cout << p.str(); DisplayAttributes(p);std::cout << "\n";
+  std::cout << "[Dotop] " << p.str(); DisplayAttributes(p);std::cout << "\n";
   IncreaseIndent(); Indent(); p.Lhs().Accept(*this); DecreaseIndent();std::cout << "\n";
   IncreaseIndent(); Indent(); p.Rhs().Accept(*this); DecreaseIndent();
 }

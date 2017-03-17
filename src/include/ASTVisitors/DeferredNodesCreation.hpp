@@ -41,6 +41,8 @@ public:
 
     p.SetType(type_func);
     unit_.SetTypeOfNode(p, type_func);
+
+    for(const auto& it : p) it->Accept(*this);
   }
 
 
@@ -86,7 +88,7 @@ public:
   virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(RefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
-
+  virtual void Visit(DotOp const& p){ p.Lhs().Accept(*this); }
 
 
   //Nothing to do
@@ -96,9 +98,7 @@ public:
   virtual void Visit(DeclStmt const& p){}
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
-
   virtual void Visit(VarName const& p){}
-  virtual void Visit(DotOp const& p){}
   virtual void Visit(Var& p){}
 
 
