@@ -21,7 +21,7 @@ public:
     is_val_or_addr_inht_ = true;
   }
 
-  virtual void Visit(Var const& p){
+  virtual void Visit(Var& p){
     if(is_val_or_addr_inht_)
       unit_.SetVarUsageAsValue(p);
     else{
@@ -33,8 +33,8 @@ public:
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+    for(auto& it : p) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 

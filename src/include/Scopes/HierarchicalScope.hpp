@@ -50,7 +50,7 @@ public:
     return it->second;
   }
 
-  const Type& GetType(const std::string& name) const{
+  virtual const Type& GetType(const std::string& name) const override{
     const Symbols::SymbolId sid = DeclId(name);
     return declaration_table_.at(sid)->GetType();
   }

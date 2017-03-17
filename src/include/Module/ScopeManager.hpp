@@ -19,10 +19,13 @@ using AST::LexicalScope;
 using AST::PtrHierarchicalScope;
 using AST::HierarchicalScope;
 using AST::TypeId;
+using AST::SymbolTable;
+using AST::DeclarationTable;
 
 class ScopeManager{
 public:
-  ScopeManager() : free_scope_id_(0),  free_scope_ownner_id_(0)
+  ScopeManager() : free_scope_id_(0)
+  ,  free_scope_ownner_id_(0)
   , global_scope_ownner_id_(0){
   }
 
@@ -51,9 +54,22 @@ public:
     hier_scopes_.push_back( std::move(
       std::make_unique<HierarchicalScope>(id, scope_owner_id, class_name) ));
     scope_by_id_[id] = hier_scopes_.back().get();
+//     scope_is_lexical_or_hierarchical_[id] = false;
     hscope_by_class_typeid_[class_type.GetTypeId()] = id;
     hscope_by_class_name_[class_name] = id;
     return id;
+  }
+
+  PtrLexicalScope GlobalLexicalScope(SymbolTable& symbol_table
+    , DeclarationTable& declaration_table
+    , SymbolIdOfNode& symbolid_of_node){
+    const ScopeId id = FreeScopeId();
+    PtrLexicalScope g = std::make_unique<LexicalScope>(
+        id, nullptr, FreeScopeOwnerId(), symbol_table
+        , declaration_table, symbolid_of_node);
+    scope_by_id_[id] = g.get();
+    current_scope_ = g.get();
+    return std::move(g);
   }
 
   const ScopeId NewNestedScope(const ScopeOwnerId scope_owner_id){
@@ -61,6 +77,7 @@ public:
     LexicalScope* new_scope;
     new_scope = current_scope_->NewNestedScope(id, scope_owner_id);
     scope_by_id_[id] = new_scope;
+//     scope_is_lexical_or_hierarchical_[id] = true;
     current_scope_   = new_scope;
     return id;
   }
@@ -70,6 +87,11 @@ public:
     current_scope_->UndoTables();
     current_scope_ = current_scope_->GetParentScope();
 //     std::cout << "*** to: " << current_scope_->str()<< "\n";
+  }
+
+  bool ScopeIsLexical(const ScopeId id) const{
+//     std::cout << "asking: " << id<<std::endl;
+    return scope_is_lexical_or_hierarchical_.at(id);
   }
 
   Scope* GetScope(const ScopeId id) const{
@@ -111,6 +133,7 @@ protected:
   std::vector<PtrHierarchicalScope> hier_scopes_;
   std::map<std::string, ScopeId>    hscope_by_class_name_;
   std::map<TypeId, ScopeId>         hscope_by_class_typeid_;
+  std::map<ScopeId,bool>            scope_is_lexical_or_hierarchical_;
 
 
 };

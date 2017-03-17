@@ -44,7 +44,7 @@ public:
 
   virtual void Visit(Literal const& p){unit_.SetNodeAsRval(p);}
 
-  virtual void Visit(Var const& p){unit_.SetNodeAsLval(p);}
+  virtual void Visit(Var& p){unit_.SetNodeAsLval(p);}
 
   virtual void Visit(FuncCall& p){ unit_.SetNodeAsLval(p); }
 
@@ -58,8 +58,8 @@ public:
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+    for(auto& it : p) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 

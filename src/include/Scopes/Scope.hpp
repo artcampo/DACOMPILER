@@ -42,6 +42,8 @@ public:
   const ScopeId GetScopeId() const noexcept{return id_;};
   const ScopeOwnerId GetScopeOwnerId() const noexcept{ return scope_owner_id_;}
 
+  virtual const Type& GetType(const std::string& name) const = 0;
+
 protected:
   ScopeId       id_;
   ScopeOwnerId  scope_owner_id_;

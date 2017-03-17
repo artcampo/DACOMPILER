@@ -122,6 +122,7 @@ public:
 
   std::string str() const noexcept{return name_;}
   Symbols::SymbolId Id() const noexcept{return id_;}
+  void SetId(const Symbols::SymbolId& sid) noexcept{id_ = sid;}
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);

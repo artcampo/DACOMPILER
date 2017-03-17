@@ -48,10 +48,10 @@ class CompilationUnit : public TreeDecoration, public TypeTable
   , public ScopeManager{
 public:
 
-  CompilationUnit(): ast_(), free_symbol_id_(0)
+  CompilationUnit(): ast_()
+    , free_symbol_id_(AST::Symbols::Symbol::InitialFreeId())
     , TypeTable(error_log_)
-    , module_scope_(std::move(std::make_unique<LexicalScope>
-        (FreeScopeId(), nullptr, FreeScopeOwnerId(), symbol_table_
+    , module_scope_(std::move(GlobalLexicalScope(symbol_table_
         , module_declaration_table_, symbolid_of_node_)))
     , module_declaration_table_()
 
@@ -81,7 +81,8 @@ public:
   }
 
   const Type& GetType(const std::string& name, const ScopeId scope_id){
-    return module_declaration_table_.at(GetScope(scope_id)->DeclId(name))->GetType();
+//     if(ScopeIsLexical(scope_id))
+    return GetScope(scope_id)->GetType(name);
   }
   const Type& GetType(const TypeId id) const{ return TypeTable::GetType(id);}
 

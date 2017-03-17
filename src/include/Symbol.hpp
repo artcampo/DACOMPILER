@@ -56,6 +56,10 @@ public:
     scope_id_ = s.scope_id_;
   }*/
 
+  static const SymbolId UnknownSymbol() {return 0;}
+  static const SymbolId InitialFreeId() {return 1;}
+
+
   const SymbolId Id() const noexcept {return id_;}
 
   const Type& GetType() const noexcept{return type_;}

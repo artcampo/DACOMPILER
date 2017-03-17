@@ -63,7 +63,7 @@ public:
   }
 
   virtual void Visit(Literal const& p){unit_.SetTypeOfNode(p, p.GetType());}
-  virtual void Visit(Var const& p)    {
+  virtual void Visit(Var& p)    {
 //     std::cout << "set " << p.str() << " to " << p.GetType().str() << "\n";
     unit_.SetTypeOfNode(p, p.GetType());}
 
@@ -119,8 +119,8 @@ public:
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+    for(auto& it : p) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 

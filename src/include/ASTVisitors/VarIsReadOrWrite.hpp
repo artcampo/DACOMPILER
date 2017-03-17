@@ -32,7 +32,7 @@ public:
     is_read_or_write_inht_ = true;
   }
 
-  virtual void Visit(Var const& p)      { Set(p);}
+  virtual void Visit(Var& p)      { Set(p);}
   virtual void Visit(FuncCall& p) {
     //TODO: should funcCall be an expression?
     for(const auto& it : p) it->Accept(*this);
@@ -47,8 +47,8 @@ public:
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+    for(auto& it : p) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 

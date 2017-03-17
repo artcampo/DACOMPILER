@@ -43,6 +43,11 @@ public:
                               , const ScopeOwnerId scope_owner_id);
   LexicalScope* GetParentScope() const noexcept{return parent_;};
 
+  virtual const Type& GetType(const std::string& name) const override{
+    const Symbols::SymbolId sid = DeclId(name);
+    return declaration_table_.at(sid)->GetType();
+  }
+
   void UndoTables();
 
   std::string str() const noexcept{

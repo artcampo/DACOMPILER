@@ -48,8 +48,8 @@ public:
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+    for(auto& it : p) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 
@@ -99,7 +99,7 @@ public:
 
   virtual void Visit(VarName const& p){}
   virtual void Visit(DotOp const& p){}
-  virtual void Visit(Var const& p){}
+  virtual void Visit(Var& p){}
 
 
 private:

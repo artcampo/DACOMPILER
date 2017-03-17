@@ -1,4 +1,5 @@
 #pragma once
+#include "Symbol.hpp"
 #include "AST/ASTVisitor.hpp"
 #include "AST/Node.hpp"
 #include "CompilationUnit.hpp"
@@ -7,6 +8,8 @@ namespace Compiler{
 namespace AST{
 namespace Visitor{
 
+using namespace Symbols;
+
 class ResolveMemberTypes : public ASTVisitor{
 public:
 
@@ -14,18 +17,31 @@ public:
     : unit_(unit){};
 
   //SDD
-  virtual void Visit(RefOp const& p){
-    p.Rhs().Accept(*this);
+  virtual void Visit(ClassDef const& p){
+    member_scope_id_inht_ =
+      unit_.GetClass( p.Name() ).GetHScope().GetScopeId();
+    for(const auto& it : p) it->Accept(*this);
   }
 
-  virtual void Visit(Var const& p){
+  virtual void Visit(Var& p){
+
+    if(p.Id() == Symbol::UnknownSymbol()){
+      if(not unit_.HasDecl(p.Name(), member_scope_id_inht_)){
+        p.SetType (unit_.GetTypeError());
+        unit_.Error(kErr91, p.GetLocus());
+        return;
+      }
+      p.SetType (unit_.GetType(p.Name(), member_scope_id_inht_));
+      p.SetId   (unit_.DeclId (p.Name(), member_scope_id_inht_));
+    }
   }
+
 
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
-    for(auto& it : p) it->Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+    for(auto& it : p) it->Accept(*this);
     p.GetProgEnd().Accept(*this);
   }
 
@@ -54,14 +70,11 @@ public:
     p.Rhs().Accept(*this);
   }
 
-  virtual void Visit(ReturnStmt const& p){
-    p.RetExpr().Accept(*this);
-  }
-
+  virtual void Visit(ReturnStmt const& p){p.RetExpr().Accept(*this);}
   virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
+  virtual void Visit(RefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
-  virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
   virtual void Visit(FuncCall& p){ for(const auto& it : p) it->Accept(*this); }
 
   //Nothing to do
@@ -77,6 +90,8 @@ public:
 
 private:
   CompilationUnit&  unit_;
+
+  ScopeId member_scope_id_inht_;
 };
 
 

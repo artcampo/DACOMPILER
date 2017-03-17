@@ -5,8 +5,8 @@ namespace AST{
 
 void Dump::Visit(ProgBody const& p){
   p.GetProgInit().Accept(*this);
-  for(auto& it : p) { Indent(); it->Accept(*this); }
   for(auto& it : p.GetClassDefs() ) { Indent(); it->Accept(*this);}
+  for(auto& it : p) { Indent(); it->Accept(*this); }
   p.GetProgEnd().Accept(*this);
 }
 
@@ -113,7 +113,7 @@ void Dump::Visit(AssignStmt const& p){
   DecreaseIndent();
 }
 
-void Dump::Visit(Var const& p){
+void Dump::Visit(Var& p){
   std::cout << p.str(); DisplayAttributes(p);
 }
 

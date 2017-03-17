@@ -54,7 +54,7 @@ public:
     origin_node_ = const_cast<FuncDef*>(&n);
   }
   */
-  HierarchicalScope& GetScope() const noexcept{ return scope_;}
+  HierarchicalScope& GetHScope() const noexcept{ return scope_;}
 
   std::string str()  const noexcept{ return name_;}
 private:

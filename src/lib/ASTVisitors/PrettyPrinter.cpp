@@ -5,8 +5,8 @@ namespace AST{
 
 void PrettyPrinter::Visit(ProgBody const& p){
   p.GetProgInit().Accept(*this);
-  for(auto& it : p) it->Accept(*this);
   for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+  for(auto& it : p) it->Accept(*this);
   p.GetProgEnd().Accept(*this);
 }
 
@@ -98,7 +98,7 @@ void PrettyPrinter::Visit(AssignStmt const& p){
   p.Rhs().Accept(*this);
 }
 
-void PrettyPrinter::Visit(Var const& p){
+void PrettyPrinter::Visit(Var& p){
   std::cout << p.str();
 }
 

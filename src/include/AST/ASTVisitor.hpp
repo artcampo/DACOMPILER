@@ -20,7 +20,7 @@ public:
   virtual void Visit(VarDeclList const& p) = 0;
   virtual void Visit(VarDecl const& p) = 0;
   virtual void Visit(AssignStmt const& p) = 0;
-  virtual void Visit(Var const& p) = 0;
+  virtual void Visit(Var& p) = 0;
   virtual void Visit(RefOp const& p) = 0;
   virtual void Visit(DerefOp const& p) = 0;
   virtual void Visit(FuncCall& p) = 0;
