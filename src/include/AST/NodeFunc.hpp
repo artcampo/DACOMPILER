@@ -7,7 +7,7 @@ namespace Compiler{
 namespace AST{
 
   /////////////////////////////////////////////////////////
-class FuncDecl : public Node {
+class FuncDecl : public Node, public NamedNode, public TypedNode {
 public:
   virtual ~FuncDecl() = default;
   FuncDecl(const std::string& name
@@ -15,7 +15,7 @@ public:
     , std::vector<PtrVarDecl>& par_list
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), name_(name), ret_type_(ret_type)
+  : Node(id, locus), NamedNode(name), TypedNode(ret_type)
     , par_list_(std::move(par_list)){}
 
 
@@ -26,15 +26,12 @@ public:
   virtual std::string str() const noexcept { return std::string("FuncDecl: ") + name_;}
 
 
-  const std::string&  Name() const noexcept{ return name_;}
-  const Type&  GetRetType() const noexcept{ return ret_type_;}
+  const Type&  GetRetType() const noexcept{ return GetType(); }
 
   size_t NumPars()  const noexcept{ return par_list_.size();}
   const std::vector<PtrVarDecl>& ParList()const noexcept{ return par_list_;}
   std::vector<PtrVarDecl>& ParList() noexcept{ return par_list_;}
 private:
-  std::string   name_;
-  const Type&   ret_type_;
   std::vector<PtrVarDecl> par_list_;
 
 public:
@@ -52,21 +49,21 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class FuncDef : public Node {
+class FuncDef : public Node, public NamedNode {
 public:
   virtual ~FuncDef() = default;
   FuncDef(PtrFuncDecl& decl
     , PtrBlock& body
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), body_(std::move(body)), decl_(std::move(decl)){}
+  : Node(id, locus), body_(std::move(body)), decl_(std::move(decl))
+    , NamedNode(decl->Name()){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return "FuncDef: " + decl_->Name();}
+  virtual std::string str() const noexcept { return "FuncDef: " + Name();}
 
   Block&    GetBody() const noexcept{ return *body_;}
-  const std::string&  Name() const noexcept{ return decl_->Name();}
   const Type&  GetRetType() const noexcept{ return decl_->GetRetType();}
 
   size_t NumPars()  const noexcept{ return decl_->NumPars();}
@@ -94,7 +91,7 @@ public:
 /////////////////////////////////////////////////////////
 //Provides range-for iteration over its arg expressions
 //accepts as call target any ExprVar
-class FuncCall: public Node {
+class FuncCall: public Node, public NamedNode, public TypedNode {
 public:
   virtual ~FuncCall() = default;
   FuncCall(const std::string& name
@@ -103,30 +100,27 @@ public:
     , std::vector<PtrExpr>& arg_list
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), name_(name), expr_var_(std::move(expr_var))
-    , function_type_(const_cast<FuncType*>(&function_type))
+  : Node(id, locus), NamedNode(name)
+    , TypedNode(dynamic_cast<const Type&>(function_type))
+    , expr_var_(std::move(expr_var))
     , arg_list_(std::move(arg_list)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const noexcept { return std::string("FuncCall: ") + expr_var_->str();}
 
-  const std::string&  Name() const noexcept{ return name_;}
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
   ExprVar& Receiver() const noexcept{ return *expr_var_;}
 
-  const FuncType& GetType()const noexcept{
-    //return *const_cast<const FuncType*>(function_type_);
-    return *function_type_;
+  const FuncType& GetType() const noexcept{
+    return dynamic_cast<const FuncType&>(TypedNode::GetType());
   }
-  void SetType(const FuncType& function_type)noexcept{
-    function_type_ = const_cast<FuncType*>(&function_type);
+  void SetType(const FuncType& function_type) noexcept{
+    TypedNode::SetType( dynamic_cast<const Type&>(function_type));
   }
 private:
-  std::string           name_;
   PtrExprVar            expr_var_;
-  FuncType*             function_type_;
   std::vector<PtrExpr>  arg_list_;
 
 public:
@@ -142,31 +136,23 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class FuncRet: public ExprVar {
+class FuncRet: public ExprVar, public TypedNode {
 public:
   virtual ~FuncRet() = default;
   FuncRet(const Type& ret_type
     , PtrFuncCall& call
     , const ScopeId id
     , const Locus& locus)
-  : ExprVar(id, locus), ret_type_(const_cast<Type*>(&ret_type))
+  : ExprVar(id, locus), TypedNode(ret_type)
     , call_(std::move(call)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return "FuncRet: " + ret_type_->str();}
+  virtual std::string str() const noexcept { return "FuncRet: " + GetType().str();}
 
   FuncCall&    GetCall() const noexcept{ return *call_;}
-  const Type& GetType()const noexcept{
-    return *ret_type_;
-
-  }
-  void SetType(const Type& ret_type)noexcept{
-    ret_type_ = const_cast<Type*>(&ret_type);
-  }
 private:
 
-  Type*       ret_type_;
   PtrFuncCall call_;
 };
 

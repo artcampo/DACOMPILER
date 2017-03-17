@@ -118,6 +118,23 @@ private:
 
 };
 
+struct NamedNode{
+  NamedNode(const std::string& name) : name_(name){}
+  const std::string&  Name() const noexcept{ return name_;}
+protected:
+  const std::string name_;
+};
+
+struct TypedNode{
+  TypedNode(const Type& type) : type_(&type){}
+  const Type& GetType()const noexcept{return *type_;}
+  void SetType(const Type& type)noexcept{type_ = &type;}
+protected:
+  const Type*  type_;
+};
+
+
+
 class Expr : public Node{
 public:
   virtual ~Expr() = default;

@@ -7,7 +7,7 @@ namespace AST{
 
 
 /////////////////////////////////////////////////////////
-class ClassDef : public Node {
+class ClassDef : public Node, public NamedNode {
 public:
   virtual ~ClassDef() = default;
   ClassDef(const std::string& name
@@ -15,7 +15,7 @@ public:
     , std::vector<PtrFuncDef>& func_def
     , const ScopeId id
     , const Locus& locus)
-  : Node(id, locus), name_(name), var_decl_(std::move(var_decl))
+  : Node(id, locus), NamedNode(name), var_decl_(std::move(var_decl))
   , func_def_(std::move(func_def)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
@@ -23,9 +23,8 @@ public:
   virtual std::string str() const noexcept { return "ClassDef: " + name_;}
 
 
-  const std::string&  Name() const noexcept{ return name_;}
+
 private:
-  std::string name_;
   std::vector<PtrVarDecl> var_decl_;
   std::vector<PtrFuncDef> func_def_;
 
@@ -42,21 +41,16 @@ public:
 
 /////////////////////////////////////////////////////////
 // This is mean to te the Rhs of the dot operator
-class VarName : public Node{
+class VarName : public Node, public NamedNode{
 public:
   virtual ~VarName() = default;
   VarName(const std::string& name, const ScopeId scope_id , const Locus& locus)
-    : Node(scope_id, locus), name_(name){}
+    : Node(scope_id, locus), NamedNode(name){}
 
 
   std::string str() const noexcept{return name_;}
-  std::string Name() const noexcept{return name_;}
-
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);
-private:
-  const std::string name_;
-
 };
 
 

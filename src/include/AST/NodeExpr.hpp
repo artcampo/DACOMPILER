@@ -18,14 +18,13 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class Literal : public Expr {
+class Literal : public Expr, public TypedNode {
 public:
   virtual ~Literal() = default;
   Literal(const uint32_t &value, const Type& type, const ScopeId id
     , const Locus& locus)
-    : Expr(id, locus), value_(value), type_(type){}
+    : Expr(id, locus), TypedNode(type), value_(value){}
 
-  const Type& GetType()const noexcept{return type_;}
   uint32_t Value() const noexcept{ return value_;};
 
   virtual void Accept(ASTVisitor& v);
@@ -33,13 +32,13 @@ public:
   std::string str() const noexcept{return std::to_string(value_);}
 
 private:
-  const Type&  type_;
   //todo: uint32_t->NodeValue
   uint32_t  value_;
 };
 
 
 /////////////////////////////////////////////////////////
+// TODO: highly suspicious
 class BinaryOp : public Expr {
 public:
   virtual ~BinaryOp() = default;
@@ -114,24 +113,20 @@ public:
 };
 
 /////////////////////////////////////////////////////////
-class Var : public ExprVar{
+class Var : public ExprVar, public NamedNode, public TypedNode{
 public:
   virtual ~Var() = default;
   Var(const std::string& name, const Type& type, Symbols::SymbolId id
     , const ScopeId scope_id , const Locus& locus)
-    : ExprVar(scope_id, locus), name_(name),type_(type), id_(id){}
+    : ExprVar(scope_id, locus), NamedNode(name), TypedNode(type), id_(id){}
 
-  const Type& GetType()const noexcept{return type_;}
   std::string str() const noexcept{return name_;}
-
   Symbols::SymbolId Id() const noexcept{return id_;}
-  const std::string&  Name() const noexcept{ return name_;}
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);
+
 private:
-  const std::string name_;
-  const Type&  type_;
   Symbols::SymbolId id_;
 };
 

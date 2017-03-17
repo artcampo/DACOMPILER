@@ -41,28 +41,16 @@ private:
 };
 
 /////////////////////////////////////////////////////////
-class VarDecl : public Node{
+class VarDecl : public Node, public NamedNode, public TypedNode{
 public:
   virtual ~VarDecl() = default;
   VarDecl(const std::string& name, const Type& type, const ScopeId id
     , const Locus& locus)
-    : Node(id, locus), name_(name), type_(type){}
+    : Node(id, locus), NamedNode(name), TypedNode(type){}
+
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);
-
-  std::string str() const noexcept{
-    std::string s;
-    s += type_.str();
-    s += " ";
-    s += name_;
-    return s;
-  }
-
-  const Type& GetType() const noexcept{ return type_;};
-
-private:
-  const std::string name_;
-  const Type& type_;
+  std::string str() const noexcept{ return  GetType().str() + " " + name_;}
 };
 
 
