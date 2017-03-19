@@ -14,7 +14,9 @@ using namespace AST;
 class ComputeLocalVarOffsets : public Pass{
 public:
   ComputeLocalVarOffsets(CompilationUnit& unit)
-    : Pass(unit, {CompUnitInfo::kAst}, {CompUnitInfo::kLocalVarOffsets}) {};
+    : Pass(unit
+    , {CompUnitInfo::kAst, CompUnitInfo::kTypeCheck}
+    , {CompUnitInfo::kLocalVarOffsets}) {};
 
   virtual void Run(){
     if(unit_.ValidAst())

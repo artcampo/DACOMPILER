@@ -1,6 +1,7 @@
 #pragma once
 #include "CompilationUnit.hpp"
 #include "TypeInference.hpp"
+#include "TypeCheck.hpp"
 #include "CheckLvalRval.hpp"
 #include "ComputeLocalVarOffsets.hpp"
 #include "VarIsValueOrAddress.hpp"
@@ -21,6 +22,7 @@ public:
     , var_is_read_or_write_(unit_)
     , var_is_val_or_addr_(unit_)
     , type_inference_(unit_)
+    , type_check_(unit_)
     , compute_local_var_offsets_(unit_)
     , resolve_member_types_(unit_)
     , deferred_nodes_creation_(unit_, type_inference_.v_)
@@ -30,6 +32,7 @@ public:
               , &var_is_read_or_write_
               , &var_is_val_or_addr_
               , &type_inference_
+              , &type_check_
               , &compute_local_var_offsets_}
   { defined_[CompUnitInfo::kAstIncomplete1] = true;};
 
@@ -47,6 +50,7 @@ private:
   VarIsReadOrWrite        var_is_read_or_write_;
   VarIsValueOrAddress     var_is_val_or_addr_;
   TypeInference           type_inference_;
+  TypeCheck               type_check_;
   ComputeLocalVarOffsets  compute_local_var_offsets_;
   ResolveMemberTypes      resolve_member_types_;
   DeferredNodesCreation   deferred_nodes_creation_;
