@@ -17,8 +17,8 @@ public:
   DeferredNodesCreation(CompilationUnit& unit
   , Visitor::TypeInference& type_inf_visitor)
     : Pass(unit
-      , {CompUnitInfo::kAstIncomplete1}
-      , {CompUnitInfo::kAstIncomplete2})
+    , {CompUnitInfo::kAstIncomplete2}
+    , {CompUnitInfo::kAst})
     , type_inf_visitor_(type_inf_visitor){};
 
   virtual void Run(){

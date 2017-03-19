@@ -24,9 +24,9 @@ public:
   }
 
   virtual void Visit(Var& p){
-    std::cout << "may patch: " <<  p.str() << "\n";
+//     std::cout << "may patch: " <<  p.str() << "\n";
     if(p.Id() == Symbol::UnknownSymbol()){
-      std::cout << "Patching : " << p.str() << "\n";
+//       std::cout << "Patching : " << p.str() << "\n";
       if(not unit_.HasDecl(p.Name(), member_scope_id_inht_)){
         p.SetType (unit_.GetTypeError());
         unit_.Error(kErr91, p.GetLocus());
@@ -40,7 +40,7 @@ public:
 
   //Traversal
   virtual void Visit(ProgBody const& p){
-    std::cout << "may patch: " <<  p.str() << "\n";
+//     std::cout << "may patch: " <<  p.str() << "\n";
     p.GetProgInit().Accept(*this);
     for(auto& it : p.GetClassDefs() ) it->Accept(*this);
     for(auto& it : p) it->Accept(*this);

@@ -15,8 +15,8 @@ class ResolveMemberTypes : public Pass{
 public:
   ResolveMemberTypes(CompilationUnit& unit)
     : Pass(unit
-      , {CompUnitInfo::kAstIncomplete2}
-      , {CompUnitInfo::kAst}) {};
+      , {CompUnitInfo::kAstIncomplete1}
+      , {CompUnitInfo::kAstIncomplete2}){}
 
   virtual void Run(){
     if(unit_.ValidAst()){

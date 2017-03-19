@@ -24,8 +24,8 @@ public:
     , compute_local_var_offsets_(unit_)
     , resolve_member_types_(unit_)
     , deferred_nodes_creation_(unit_, type_inference_.v_)
-    , passes_ { &deferred_nodes_creation_
-              , &resolve_member_types_
+    , passes_ { &resolve_member_types_
+              , &deferred_nodes_creation_
               , &check_lval_rval_
               , &var_is_read_or_write_
               , &var_is_val_or_addr_
@@ -37,7 +37,7 @@ public:
     for(auto& pass: passes_){
       Run(*pass);
       //Any error in the semantic phase is critical
-      if(unit_.HasErrors()) { std::cout << "Pass failed. \n"; break; }
+      if(unit_.HasErrors())break;
     }
   };
 
@@ -59,7 +59,8 @@ private:
       if(not InfoIsDefined(info))
         unit_.Error(p.str() + " is missing input info: " + str(info));
     p.Run();
-    std::cout << "Run pass: " << p.str() << "\n";
+//     std::cout << "Run pass: " << p.str() << "\n";
+    if(unit_.HasErrors()) std::cout << p.str() << " failed. \n";
     for(const auto& info : p.Defines()) defined_[info] = true;
   }
 

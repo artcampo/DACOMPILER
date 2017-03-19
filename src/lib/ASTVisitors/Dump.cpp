@@ -95,10 +95,12 @@ void Dump::Visit(DeclStmt const& p){
   p.GetVarDeclList().Accept(*this);
 }
 void Dump::Visit(VarDeclList const& p){
+  bool first_elem = true;
   for(const auto& it : p.GetVarDeclVector()){
 //     Indent();
-    it->Accept(*this);
-    std::cout << " ";
+    if(not first_elem) std::cout << "\n";
+    it->Accept(*this); std::cout << " ";
+    first_elem = false;
   }
 }
 void Dump::Visit(VarDecl const& p){
@@ -131,7 +133,7 @@ void Dump::Visit(FuncCall& p){
   std::cout << "[Fcal] " << p.str(); DisplayAttributes(p);std::cout << "\n";
 
   //Dump receiver
-  IncreaseIndent(); Indent(); p.Receiver().Accept(*this); DecreaseIndent();std::cout << "\n";
+  IncreaseIndent(); Indent(); p.Receiver().Accept(*this); DecreaseIndent();
 
   //Dump args
 //   IncreaseIndent();
