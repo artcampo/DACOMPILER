@@ -139,7 +139,7 @@ void Dump::Visit(FuncCall& p){
 //   IncreaseIndent();
   bool first_arg = true;
   for(const auto& it : p){
-    if(not first_arg)std::cout << "\n";
+    std::cout << "\n";
     IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
     first_arg = false;
   }

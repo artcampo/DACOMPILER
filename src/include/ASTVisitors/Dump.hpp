@@ -33,7 +33,7 @@ public:
 
 
   Dump(CompilationUnit& unit, const bool show_attributes = false)
-    :  unit_(unit), indent_(1), show_attributes_(show_attributes){};
+    :  unit_(unit), indent_(0), show_attributes_(show_attributes){};
 
 private:
   void Indent();
