@@ -87,9 +87,7 @@ public:
   RefOp(PtrExpr& rhs, const ScopeId id, const Locus& locus)
     : Expr(id, locus), UnaryOp(rhs){}
 
-  virtual std::string str() const noexcept{
-    return std::string("@");
-  };
+  virtual std::string str() const noexcept{return "@";};
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);
@@ -104,9 +102,7 @@ public:
   DerefOp(PtrExpr& rhs, const ScopeId id, const Locus& locus)
     : ExprVar(id, locus), UnaryOp(rhs){}
 
-  virtual std::string str() const noexcept{
-    return std::string("*");
-  };
+  virtual std::string str() const noexcept{return "*";};
 
   virtual void Accept(ASTVisitor& v);
   virtual void Accept(IRGenerator& v, const Node* successor);

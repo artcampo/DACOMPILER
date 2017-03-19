@@ -60,15 +60,15 @@ public:
 
 
   std::string ReadWriteStr(const Node& n) const{
-    if(not HasReadWrite(n)) return std::string("No ReadWrite");
-    if(IsRead(dynamic_cast<const ExprVar&>(n)))  return std::string("Read");
-    if(IsWrite(dynamic_cast<const ExprVar&>(n))) return std::string("Write");
+    if(not HasReadWrite(n)) return "No ReadWrite";
+    if(IsRead(dynamic_cast<const ExprVar&>(n)))  return "Read";
+    if(IsWrite(dynamic_cast<const ExprVar&>(n))) return "Write";
   }
 
   std::string VarUsageStr(const Node& n) const{
-    if(not HasVarUsage(n))  return std::string("No VarUsage");
-    if(IsValueAccess(dynamic_cast<const Var&>(n)))    return std::string("Value");
-    if(IsAddressAccess(dynamic_cast<const Var&>(n)))  return std::string("Address");
+    if(not HasVarUsage(n))  return "No VarUsage";
+    if(IsValueAccess(dynamic_cast<const Var&>(n)))    return "Value";
+    if(IsAddressAccess(dynamic_cast<const Var&>(n)))  return "Address";
   }
 
 

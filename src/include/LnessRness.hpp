@@ -28,9 +28,9 @@ public:
   }
 
   std::string LRnessStr(const Node& n) const{
-    if(not HasLRness(n))  return std::string("No LRness");
-    if(IsLValue(n))       return std::string("Lvalue");
-    if(IsRValue(n))       return std::string("Rvalue");
+    if(not HasLRness(n))  return "No LRness";
+    if(IsLValue(n))       return "Lvalue";
+    if(IsRValue(n))       return "Rvalue";
   }
 
   void SetNodeAsLval(const Node& n) noexcept{node_is_lval_or_rval_[&n] = true;}

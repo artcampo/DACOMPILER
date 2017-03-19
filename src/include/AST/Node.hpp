@@ -184,7 +184,7 @@ public:
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const{ return std::string("ProgBody");};
+  virtual std::string str() const{ return "ProgBody";};
 
   ProgInit& GetProgInit() const noexcept{ return *pinit_;}
   ProgEnd&  GetProgEnd()  const noexcept{ return *pend_;}
@@ -218,7 +218,7 @@ public:
 
     virtual void Accept(IRGenerator& v, const Node* successor);
     virtual void Accept(ASTVisitor& v);
-    virtual std::string str() const{ return std::string("ProgInit");};
+    virtual std::string str() const{ return "ProgInit";};
 };
 
 /////////////////////////////////////////////////////////
@@ -229,7 +229,7 @@ public:
 
     virtual void Accept(IRGenerator& v, const Node* successor);
     virtual void Accept(ASTVisitor& v);
-    virtual std::string str() const{ return std::string("ProgEnd");};
+    virtual std::string str() const{ return "ProgEnd";};
 };
 
 

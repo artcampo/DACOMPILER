@@ -9,7 +9,7 @@ class LabelManager{
 public:
   LabelManager() : free_id_(0){
     IR::LabelId id = FreeId();
-    name_of_label_[id] = std::string("MainDS");
+    name_of_label_[id] = "MainDS";
     labels_.push_back(IR::Label::LabelLT(id, name_of_label_[0]));
   }
 

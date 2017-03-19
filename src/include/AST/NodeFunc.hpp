@@ -23,7 +23,7 @@ public:
   virtual void Accept(IRGenerator& v, const Node* successor){};
   virtual void Accept(ASTVisitor& v){};
 
-  virtual std::string str() const noexcept { return std::string("FuncDecl: ") + name_;}
+  virtual std::string str() const noexcept { return "FuncDecl: " + name_;}
 
 
   const Type&  GetRetType() const noexcept{ return GetType(); }
@@ -107,7 +107,7 @@ public:
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return std::string("FuncCall: ") + expr_var_->str();}
+  virtual std::string str() const noexcept { return "FuncCall: " + expr_var_->str();}
 
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 

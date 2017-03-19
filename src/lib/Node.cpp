@@ -62,29 +62,29 @@ void DotOp::Accept       (IRGenerator& v, const Node* successor){ return v.Visit
 std::string BinaryOp::OpString() const noexcept{
   using namespace IRDefinition;
   using namespace SubtypesArithmetic;
-  if (op == IR_ADD ) return std::string(" + ");
-  if (op == IR_SUB ) return std::string(" - ");
-  if (op == IR_MUL ) return std::string(" * ");
-  if (op == IR_DIV ) return std::string(" / ");
+  if (op == IR_ADD ) return " + ";
+  if (op == IR_SUB ) return " - ";
+  if (op == IR_MUL ) return " * ";
+  if (op == IR_DIV ) return " / ";
 }
 
 std::string Block::str() const{
   std::string s("Block {");
   for(const auto& stmt : statements_)
-    s += (stmt->str() +std::string(" "));
-  s += std::string("}");
+    s += (stmt->str() +" ");
+  s += "}";
   return s;
 };
 
 std::string VarDeclList::str() const{
   std::string s("VarDecl: ");
   for(const auto& d : list_)
-    s += (d->str() +std::string(" "));
+    s += (d->str() + " ");
   return s;
 };
 
 std::string IfStmt::str() const{
-  return std::string("If");
+  return "If";
 };
 
 std::string DeclStmt::str() const{
@@ -94,9 +94,9 @@ std::string DeclStmt::str() const{
 std::string WhileStmt::str() const{
   std::string s("While (");
   s += GetCond().str();
-  s += std::string(") {");
+  s +=") {";
   s += GetBody().str();
-  s += std::string("}");
+  s += "}";
   return s;
 };
 
