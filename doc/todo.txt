@@ -1,7 +1,8 @@
 High priority:
 -mul/div/sub
 -logic comparison
-.
+-change pointer declaration
+-pointer to functions
 
 Low priority:
 - allow empty functions

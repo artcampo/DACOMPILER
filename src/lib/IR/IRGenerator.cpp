@@ -234,8 +234,10 @@ void IRGenerator::Visit(FuncCall& p, const Node* successor){
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(FuncRet& p, const Node* successor){
   p.GetCall().Accept(*this, successor);
-  if( p.GetType() != unit_.GetTypeVoid() )
-    stream_.AppendGetRetVal();
+  if( p.GetType() != unit_.GetTypeVoid() ){
+    const IR::Reg r_dst = stream_.AppendGetRetVal();
+    reg_dst_of_expr_[&p] = r_dst;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////
