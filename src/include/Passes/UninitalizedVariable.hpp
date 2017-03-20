@@ -61,8 +61,10 @@ public:
   TypeInference(CompilationUnit& unit) : Pass(unit){};
 
   virtual void Run(){
-    ASTVisitorUninitalizedVariable v(unit_);
-    v.Visit(*unit_.ast_.block_);
+    if(unit_.ValidAst()){
+      Visitor::ASTVisitorUninitalizedVariable v(unit_);
+      v.Visit(*unit_.GetAstProg());
+    }
   };
 protected:
 

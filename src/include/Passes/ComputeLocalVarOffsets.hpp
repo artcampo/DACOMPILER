@@ -15,7 +15,7 @@ class ComputeLocalVarOffsets : public Pass{
 public:
   ComputeLocalVarOffsets(CompilationUnit& unit)
     : Pass(unit
-    , {CompUnitInfo::kAst, CompUnitInfo::kTypeCheck}
+    , {CompUnitInfo::kAst, CompUnitInfo::kTypeCheck, CompUnitInfo::kVarIsMember}
     , {CompUnitInfo::kLocalVarOffsets}) {};
 
   virtual void Run(){
@@ -24,6 +24,7 @@ public:
         LocalVarOffsets v(unit_, *f);
         v.Visit(f->GetFuncDefNode());
       }
+      for(auto& it : p.GetClassDefs() ) it->Accept(*this);
   };
 
   virtual std::string str() const noexcept{

@@ -183,6 +183,7 @@ public:
     , kAstIncomplete1 = 7
     , kAstIncomplete2 = 8
     , kTypeCheck = 9
+    , kVarIsMember = 10
   };
 // }
 
