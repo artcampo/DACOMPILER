@@ -24,7 +24,13 @@ public:
         LocalVarOffsets v(unit_, *f);
         v.Visit(f->GetFuncDefNode());
       }
-      for(auto& it : p.GetClassDefs() ) it->Accept(*this);
+      for(auto& c : unit_.GetAstProg()->GetClassDefs() ){
+        for(auto& f : *c){
+          auto& func = unit_.GetFunc(*f);
+          LocalVarOffsets v(unit_, func);
+          v.Visit(*f);
+        }
+      }
   };
 
   virtual std::string str() const noexcept{

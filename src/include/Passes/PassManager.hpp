@@ -8,6 +8,7 @@
 #include "VarIsReadOrWrite.hpp"
 #include "ResolveMemberTypes.hpp"
 #include "DeferredNodesCreation.hpp"
+#include "VarIsMember.hpp"
 #include <memory>
 
 namespace Compiler{
@@ -26,6 +27,7 @@ public:
     , compute_local_var_offsets_(unit_)
     , resolve_member_types_(unit_)
     , deferred_nodes_creation_(unit_, type_inference_.v_)
+    , var_is_member_(unit_)
     , passes_ { &resolve_member_types_
               , &deferred_nodes_creation_
               , &check_lval_rval_
@@ -33,6 +35,7 @@ public:
               , &var_is_val_or_addr_
               , &type_inference_
               , &type_check_
+              , &var_is_member_
               , &compute_local_var_offsets_}
   { defined_[CompUnitInfo::kAstIncomplete1] = true;};
 
@@ -54,6 +57,7 @@ private:
   ComputeLocalVarOffsets  compute_local_var_offsets_;
   ResolveMemberTypes      resolve_member_types_;
   DeferredNodesCreation   deferred_nodes_creation_;
+  VarIsMember             var_is_member_;
 
   std::vector<Pass*> passes_;
   std::map<CompUnitInfo, bool> defined_;
