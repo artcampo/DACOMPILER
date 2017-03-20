@@ -66,7 +66,8 @@ public:
     const ScopeId id = NewHierarchicalScope(class_name, owner_id, GetClassType(class_name));
 //     HierarchicalScope& s = ;
     ClassManager::NewClass(class_name, owner_id, id
-      , dynamic_cast<HierarchicalScope&>(*GetScope(id)));
+      , dynamic_cast<HierarchicalScope&>(*GetScope(id))
+      , NewClassThisLabel(class_name));
     return id;
   }
 

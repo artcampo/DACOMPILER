@@ -28,9 +28,14 @@ public:
 protected:
   void NewClass(const std::string& name, const ScopeOwnerId scope_owner_id
     , const ScopeId scope_id
-    , HierarchicalScope& scope){
+    , HierarchicalScope& scope
+    , const IR::Label this_label){
     classes_.push_back( std::move(
-      std::make_unique<Class>(name, scope_owner_id, scope_id, scope) ));
+      std::make_unique<Class>(name
+                      , scope_owner_id
+                      , scope_id
+                      , scope
+                      , this_label )));
     class_by_name_[name] = classes_.back().get();
   }
 

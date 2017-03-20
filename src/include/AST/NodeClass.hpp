@@ -22,7 +22,8 @@ public:
   virtual void Accept(ASTVisitor& v);
   virtual std::string str() const noexcept { return "ClassDef: " + name_;}
 
-
+  std::vector<PtrVarDecl>& GetVarDecl() noexcept{ return var_decl_;}
+  const std::vector<PtrVarDecl>& GetVarDecl() const noexcept{ return var_decl_;}
 
 private:
   std::vector<PtrVarDecl> var_decl_;

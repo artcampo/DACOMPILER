@@ -22,6 +22,11 @@ void Dump::Visit(ClassDef const& p){
   for(auto& it : p) {
     IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
   }
+  for(auto& it : p.GetVarDecl()) {
+    IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
+  }
+
+
   /*
   IncreaseIndent(); Indent();
   p.¿?.Accept(*this);   //hahahah, that's an operator to implement '¿?'

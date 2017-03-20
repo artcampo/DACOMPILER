@@ -37,6 +37,14 @@ public:
     return labels_.at(id);
   }
 
+
+  const IR::Label NewClassThisLabel(std::string class_name) noexcept{
+    IR::LabelId id = FreeId();
+    name_of_label_[id] = "this_" + class_name;
+    labels_.push_back(IR::Label::LabelRT(id, name_of_label_[id]));
+    return labels_.at(id);
+  }
+
   const IR::Label GetFunctionEntryLabel(std::string function_name) const{
     return labels_.at(entry_label_of_name_.at(function_name));
   }

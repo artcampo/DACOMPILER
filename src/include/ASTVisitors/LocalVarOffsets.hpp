@@ -36,7 +36,6 @@ public:
   }
 
   virtual void Visit(VarDecl const& p){
-
 //     std::cout << p.str() << " to offset: " << offset_ << std::endl;
     Symbols::Symbol& s = func_.GetSymbolDecl(p);
 //     std::cout << s.str() << std::endl;

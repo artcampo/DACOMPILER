@@ -38,6 +38,8 @@ void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(ClassDef const& p, const Node* successor){
   for(auto& it : p){
+    class_label_inht_ = unit_.GetClass(p.Name()).ThisLabel();
+    class_inht_ = &unit_.GetClass(p.Name());
     NewStream(unit_.GetFunctionEntryLabel(
       unit_.GetFunc(*it).MangledName()));
     it->Accept(*this, successor);
@@ -211,8 +213,16 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
     return;
   }
 
-  Offset o        = unit_.LocalVarOffset(p);
-  const MemAddr a = MemAddr(local_label_inht_, o);
+  Offset o;
+  MemAddr a;
+  if(unit_.IsMemberVar(p)){
+    AST::Symbols::SymbolId sid = class_inht_->GetHScope().DeclId(p.Name());
+    o = class_inht_->MemberVarOffset(sid);
+    a = MemAddr(class_label_inht_, o);
+  }else{
+    o = unit_.LocalVarOffset(p);
+    a = MemAddr(local_label_inht_, o);
+  }
 
   if(unit_.IsRead(p)){
     if(unit_.IsValueAccess(p)){
