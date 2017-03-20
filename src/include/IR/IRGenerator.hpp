@@ -5,9 +5,12 @@
 #include "AST/ASTVisitor.hpp"
 #include "IR/IRStream.hpp"
 #include <map>
+#include <vector>
 
 namespace Compiler{
 namespace AST{
+
+using IR::PtrIRStream;
 
 /*
  * While this is an ASTVisitor it has been set apart for one reasons
@@ -50,7 +53,8 @@ public:
   void EndOfProgram();
 private:
   CompilationUnit&  unit_;
-  IR::IRStream      stream_;
+  std::vector<PtrIRStream> streams_;
+  IR::IRStream* current_stream_;
 
   //reg destination of Node
   std::map<const Node*, IR::Reg>    reg_dst_of_expr_;
@@ -63,13 +67,19 @@ private:
 
   std::map<const Node*, IR::MemAddr> addr_of_var_;
 
+  IR::Label   local_label_inht_;
 
+  IR::IRStream& CurrentStream() const noexcept{ return *current_stream_;}
   void BackPatch(const Node& n, const IR::Addr position);
   void AddToBackPatch(const Node& n, const IR::Addr position);
   void PrintBackPatch();
   void Print() const noexcept;
 
-  IR::Label   local_label_inht_;
+  void NewStream(const Label& entry_label){
+    streams_.push_back( std::move(
+      std::make_unique<IR::IRStream>(entry_label) ));
+    current_stream_ = streams_.back().get();
+  }
 
 };
 

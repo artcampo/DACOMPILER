@@ -76,6 +76,7 @@ Reg IRStream::RegAssignedToPreviousInst() const{
 
 void IRStream::Print() const noexcept{
  Addr a = 0;
+ std::cout << entry_label_.str() << "\n";
  for(auto& it : stream_){ std::cout << a << ": "<< it->str() << "\n"; ++a;}
 }
 

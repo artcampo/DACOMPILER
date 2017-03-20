@@ -1,14 +1,21 @@
 #pragma once
 #include "IR/IR.hpp"
 #include "IR/IRBuilder.hpp"
+#include "IR/Label.hpp"
 #include "AST/Node.hpp"
 #include <vector>
+#include <memory>
 
 namespace Compiler{
 namespace IR{
 
+//Each stream is uniquely associated to a function
+struct IRStream;
+using PtrIRStream = std::unique_ptr<IRStream>;
 
 struct IRStream : public IRBuilder{
+  IRStream(const Label& entry_label) : entry_label_(entry_label){}
+
   Addr NextAddress() const noexcept{ return stream_.size(); }
 
   Inst::Inst& GetInst(const Addr addr) const noexcept{ return *stream_[addr];}
@@ -38,6 +45,7 @@ struct IRStream : public IRBuilder{
   void Print() const noexcept;
 private:
   std::vector<Inst::PtrInst> stream_;
+  Label entry_label_;
 
   void Append(Inst::PtrInst inst){ stream_.push_back( std::move(inst)); }
 

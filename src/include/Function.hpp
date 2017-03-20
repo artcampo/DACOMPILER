@@ -85,8 +85,8 @@ private:
   ScopeOwnerId      scope_owner_id_;
   std::string       name_;
   FuncDef*          origin_node_;
-  const Label      entry_label_;
-  const Label      locals_label_;
+  const Label       entry_label_;
+  const Label       locals_label_;
 
   OffsetTable&      module_offset_table_;
   OffsetTable       offset_table_;

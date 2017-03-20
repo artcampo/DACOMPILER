@@ -17,14 +17,16 @@ void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 
   //Process main
   for(auto& it : p) if(it->Name()=="main"){
+    NewStream(unit_.GetFunctionEntryLabel("main"));
     it->Accept(*this, successor);
-    stream_.AppendReturnMain();
+    CurrentStream().AppendReturnMain();
   }
 
   //Process the rest of the functions
   for(auto& it : p) if(it->Name()!="main"){
+    NewStream(unit_.GetFunctionEntryLabel(it->Name()));
     it->Accept(*this, successor);
-    stream_.AppendReturn();
+    CurrentStream().AppendReturn();
   }
 
   p.GetProgEnd().Accept  (*this, nullptr );
@@ -51,7 +53,7 @@ void IRGenerator::Visit(ProgEnd const& p, const Node* successor){}
 void IRGenerator::Visit(Block const& n, const Node* successor) {
 
 //   std::cout << "B" << n.str()<< " with successor: " << successor->str() << "\n";
-  BackPatch(n, stream_.NextAddress());
+  BackPatch(n, CurrentStream().NextAddress());
 
   for (std::vector<PtrStatement>::const_iterator stmt = n.statements_.cbegin();
         stmt != n.statements_.cend(); ++stmt){
@@ -59,7 +61,7 @@ void IRGenerator::Visit(Block const& n, const Node* successor) {
     if(stmt != n.statements_.cend() - 1 )
       actual_successor = (stmt + 1)->get();
 
-    BackPatch(**stmt, stream_.NextAddress());
+    BackPatch(**stmt, CurrentStream().NextAddress());
 
     (*stmt)->Accept(*this, actual_successor);
   }
@@ -76,7 +78,7 @@ void IRGenerator::Visit(VarDeclList const& p, const Node* successor){
 }
 
 void IRGenerator::Visit(VarDecl const& p, const Node* successor){
-//   stream_.Append( NewVar(0) );
+//   CurrentStream().Append( NewVar(0) );
 }
 
 void IRGenerator::Visit(IfStmt const& p, const Node* successor){
@@ -85,11 +87,11 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
 
   p.GetCond().Accept(*this, successor);
 
-  const IR::Addr current_addr = stream_.NextAddress();
+  const IR::Addr current_addr = CurrentStream().NextAddress();
   const IR::Reg  reg_src       = reg_dst_of_expr_[&p.GetCond()];
 
-  stream_.AppendJumpIfTrue (reg_src);
-  stream_.AppendJumpIfFalse(reg_src);
+  CurrentStream().AppendJumpIfTrue (reg_src);
+  CurrentStream().AppendJumpIfFalse(reg_src);
 
   AddToBackPatch(p.GetThen(), current_addr + 0);
 
@@ -103,14 +105,14 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
   p.GetThen().Accept(*this, successor);
 
   //exit from then stmt
-  stream_.AppendJumpInconditional();
-  AddToBackPatch(*successor, stream_.NextAddress() - 1);
+  CurrentStream().AppendJumpInconditional();
+  AddToBackPatch(*successor, CurrentStream().NextAddress() - 1);
 
   p.GetElse().Accept(*this, successor);
 
   //exit from else stmt
-  stream_.AppendJumpInconditional();
-  AddToBackPatch(*successor, stream_.NextAddress() - 1);
+  CurrentStream().AppendJumpInconditional();
+  AddToBackPatch(*successor, CurrentStream().NextAddress() - 1);
 
 //   std::cout << "-Store backp to: " << successor->str()<<"\n";
 //   std::cout <<"\n";
@@ -121,18 +123,18 @@ void IRGenerator::Visit(IfStmt const& p, const Node* successor){
 void IRGenerator::Visit(WhileStmt const& p, const Node* successor){
 
   //
-  const IR::Addr reentry_addr = stream_.NextAddress();
+  const IR::Addr reentry_addr = CurrentStream().NextAddress();
   p.GetCond().Accept(*this, successor);
-  const IR::Addr current_addr = stream_.NextAddress();
+  const IR::Addr current_addr = CurrentStream().NextAddress();
   const IR::Reg reg_src       = reg_dst_of_expr_[&p.GetCond()];
 
-  stream_.AppendJumpIfTrue(reg_src);
-  stream_.AppendJumpIfFalse(reg_src);
+  CurrentStream().AppendJumpIfTrue(reg_src);
+  CurrentStream().AppendJumpIfFalse(reg_src);
   AddToBackPatch(p.GetBody(), current_addr + 0);
   AddToBackPatch(*successor,   current_addr + 1);
 
   p.GetBody().Accept(*this, successor);
-  stream_.AppendJumpIfFalse(reg_src, reentry_addr);
+  CurrentStream().AppendJumpIfFalse(reg_src, reentry_addr);
 
 }
 
@@ -146,7 +148,7 @@ void IRGenerator::Visit(AssignStmt const& p, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(Literal const& n, const Node* successor){
-  const IR::Reg r  = stream_.AppendLoadI( n.Value() );
+  const IR::Reg r  = CurrentStream().AppendLoadI( n.Value() );
   reg_dst_of_expr_[&n] = r;
 }
 
@@ -159,7 +161,7 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
   const IR::Reg reg_src1 = reg_dst_of_expr_[&n.Lhs()];
   const IR::Reg reg_src2 = reg_dst_of_expr_[&n.Rhs()];
   const IR::ArithType op = IR::ArithType(n.op);
-  const IR::Reg r        = stream_.AppendArith(reg_src1, reg_src2, op);
+  const IR::Reg r        = CurrentStream().AppendArith(reg_src1, reg_src2, op);
   reg_dst_of_expr_[&n]   = r;
 //   std::cout << "OP: " << op << "\n";
 
@@ -168,7 +170,7 @@ void IRGenerator::Visit(BinaryOp const& n, const Node* successor){
 void IRGenerator::Visit(RefOp const& n, const Node* successor){
   n.Rhs().Accept(*this, successor);
   const MemAddr a       = addr_of_var_[&n.Rhs()];
-  const IR::Reg r       = stream_.AppendPtrElem(a);
+  const IR::Reg r       = CurrentStream().AppendPtrElem(a);
   reg_dst_of_expr_[&n]  = r;
 }
 
@@ -177,13 +179,13 @@ void IRGenerator::Visit(DerefOp const& n, const Node* successor){
   const IR::Reg reg_src_addr = reg_dst_of_expr_[&n.Rhs()];
   if(unit_.IsRead(n)){
 
-    const IR::Reg r       = stream_.AppendLoadReg(reg_src_addr);
+    const IR::Reg r       = CurrentStream().AppendLoadReg(reg_src_addr);
     reg_dst_of_expr_[&n]  = r;
   }else{
     const IR::Reg src_value = reg_src_of_assignment_[&n];
-    stream_.AppendStoreReg(reg_src_addr, src_value);
+    CurrentStream().AppendStoreReg(reg_src_addr, src_value);
   }
-//   const IR::Reg r       = stream_.AppendAddrUnary(reg_src, AddrUnaryType::kDereference);
+//   const IR::Reg r       = CurrentStream().AppendAddrUnary(reg_src, AddrUnaryType::kDereference);
 //   reg_dst_of_expr_[&n]  = r;
 }
 
@@ -200,14 +202,14 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
 
   if(unit_.IsRead(p)){
     if(unit_.IsValueAccess(p)){
-      const IR::Reg r  = stream_.AppendLoad(a);
+      const IR::Reg r  = CurrentStream().AppendLoad(a);
       reg_dst_of_expr_[&p] = r;
     }else{
       addr_of_var_[&p] = a;
     }
   }else{
     const IR::Reg r_src = reg_src_of_assignment_[&p];
-    stream_.AppendStore(r_src, a);
+    CurrentStream().AppendStore(r_src, a);
   }
 }
 
@@ -216,9 +218,9 @@ void IRGenerator::Visit(FuncCall& p, const Node* successor){
   //generate arguments
   for(const auto& it : p) it->Accept(*this, successor);
   //generate set prior to call
-  for(const auto& it : p) stream_.AppendSetPar( reg_dst_of_expr_[&*it] );
+  for(const auto& it : p) CurrentStream().AppendSetPar( reg_dst_of_expr_[&*it] );
 
-  //Process receiver to get its add
+  //Process receiver to get its addr
   p.Receiver().Accept(*this, successor);
   const MemAddr a = addr_of_var_[&p.Receiver()];
   //Create address of function
@@ -228,14 +230,14 @@ void IRGenerator::Visit(FuncCall& p, const Node* successor){
 //   ExprVar* e  = &p.GetExprVar();
 //   Var* e_var  = dynamic_cast<Var*>(e);
 //   if(e_var) a = MemAddr(unit_.GetFunc(e_var->Name()).EntryLabel(), 0);
-  stream_.AppendCall(a);
+  CurrentStream().AppendCall(a);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(FuncRet& p, const Node* successor){
   p.GetCall().Accept(*this, successor);
   if( p.GetType() != unit_.GetTypeVoid() ){
-    const IR::Reg r_dst = stream_.AppendGetRetVal();
+    const IR::Reg r_dst = CurrentStream().AppendGetRetVal();
     reg_dst_of_expr_[&p] = r_dst;
   }
 }
@@ -264,12 +266,12 @@ void IRGenerator::Visit(DotOp const& p, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Print() const noexcept{
-  stream_.Print();
+  for(const auto& it : streams_) it->Print();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::EndOfProgram(){
-//   stream_.stream.push_back( IRBuilder::Stop());
+//   CurrentStream().stream.push_back( IRBuilder::Stop());
   Print();
 }
 
@@ -280,7 +282,7 @@ void IRGenerator::BackPatch(const Node& n, const IR::Addr position){
   std::map<const Node*, std::vector<IR::Addr>>::iterator it = back_patch_.find(&n);
   if(it != back_patch_.end()){
     for(const auto& address : it->second){
-      Jump& inst = dynamic_cast<Jump&>(stream_.GetInst(address));
+      Jump& inst = dynamic_cast<Jump&>(CurrentStream().GetInst(address));
 //       std::cout << "Backpatch: "
 //         << IRBuilder::PrintInstruction(inst)
 //         << " with node: " << n->str() << "\n";
@@ -298,7 +300,7 @@ void IRGenerator::BackPatch(const Node& n, const IR::Addr position){
 
 void IRGenerator::AddToBackPatch(const Node& n, const IR::Addr position){
 //   std::cout << "**Backpatch insert ["<< n->str()<< "] has to patch:"
-//             << IRBuilder::PrintInstruction(stream_.GetInst(position))
+//             << IRBuilder::PrintInstruction(CurrentStream().GetInst(position))
 //             << "\n";
   //<<"("<<(void*)n<<")\n";
   back_patch_[&n].push_back(position);
