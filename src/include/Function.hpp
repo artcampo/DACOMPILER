@@ -29,26 +29,28 @@ using OffsetTable = std::map<Symbols::SymbolId, IR::Offset>;
 
 class Function{
 public:
-/*
-  Function(std::string& name, FuncDef* origin_node
-    , OffsetTable& module_offset_table, const ScopeOwnerId scope_owner_id)
-  : name_(name)
-    , origin_node_(origin_node), module_offset_table_(module_offset_table)
-    , scope_owner_id_(scope_owner_id){}
-
-  Function(std::string& name, OffsetTable& module_offset_table
-    , const ScopeOwnerId scope_owner_id)
-    : Function(name, nullptr, module_offset_table, scope_owner_id){}
-*/
-  Function(const std::string& name, OffsetTable& module_offset_table
+  static PtrFunction NewFunction(const std::string& name, OffsetTable& module_offset_table
     , const ScopeOwnerId scope_owner_id, const Label entry_label
-    , const Label locals_label)
-  : name_(name)
-    , origin_node_(nullptr)
-    , module_offset_table_(module_offset_table)
-    , scope_owner_id_(scope_owner_id)
-    , entry_label_(entry_label)
-    , locals_label_(locals_label){}
+    , const Label locals_label){
+    return std::move( std::make_unique<Function>
+      (name, "", name, module_offset_table, scope_owner_id, entry_label
+      , locals_label, false));
+  }
+
+  static PtrFunction NewMemberFunction(const std::string& name
+    , const std::string& class_name
+    , OffsetTable& module_offset_table
+    , const ScopeOwnerId scope_owner_id, const Label entry_label
+    , const Label locals_label){
+    return std::move( std::make_unique<Function>
+      (name, class_name, MangledName(name, class_name), module_offset_table
+      , scope_owner_id, entry_label, locals_label, true));
+  }
+
+  static std::string MangledName(const std::string& name
+    , const std::string& class_name){
+    return class_name + "::" + name;
+  }
 
   FuncDef& GetFuncDefNode() { return *origin_node_; }
   const FuncDef& GetFuncDefNode() const { return *origin_node_; }
@@ -81,16 +83,40 @@ public:
   const Label      LocalsLabel() const noexcept{ return locals_label_;}
 
   std::string str()  const noexcept{ return name_;}
+
+  std::string MangledName()const noexcept{ return mangled_name_;}
+  const bool IsMember() const noexcept{ return is_member_;}
 private:
   ScopeOwnerId      scope_owner_id_;
   std::string       name_;
+  std::string       mangled_name_;
+  std::string       class_name_;
   FuncDef*          origin_node_;
   const Label       entry_label_;
   const Label       locals_label_;
+  bool              is_member_;
+
 
   OffsetTable&      module_offset_table_;
   OffsetTable       offset_table_;
   std::map<const Node*, Symbols::Symbol*> symbol_decl_of_node_;
+
+public:
+  Function(const std::string& name
+    , const std::string& class_name
+    , const std::string& mangled_name
+    , OffsetTable& module_offset_table
+    , const ScopeOwnerId scope_owner_id, const Label entry_label
+    , const Label locals_label, const bool is_member)
+  : name_(name)
+    , class_name_(class_name)
+    , origin_node_(nullptr)
+    , module_offset_table_(module_offset_table)
+    , scope_owner_id_(scope_owner_id)
+    , entry_label_(entry_label)
+    , locals_label_(locals_label)
+    , is_member_ (is_member)
+    , mangled_name_(mangled_name){}
 
 };
 

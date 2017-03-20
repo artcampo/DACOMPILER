@@ -80,6 +80,17 @@ public:
     return NewNestedScope(scope_owner_id);
   }
 
+
+  const ScopeId NewFunction(const std::string& name, const std::string& class_name
+    , const ScopeOwnerId scope_owner_id){
+    const std::string mangled_name = Function::MangledName(name, class_name);
+    const Label entry = NewFunctionEntryLabel(mangled_name);
+    Label local       = NewFunctionARLabel(mangled_name);
+    FunctionManager::NewFunction(name, class_name, ModuleOffsetTable(), scope_owner_id
+      , entry, local);
+    return NewNestedScope(scope_owner_id);
+  }
+
   const Type& GetType(const std::string& name, const ScopeId scope_id){
 //     if(ScopeIsLexical(scope_id))
     return GetScope(scope_id)->GetType(name);

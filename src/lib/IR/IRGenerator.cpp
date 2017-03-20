@@ -11,9 +11,12 @@ using namespace Compiler::IR::Inst;
 
 namespace AST{
 
+/////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(ProgBody const& p, const Node* successor){
 //   std::cout << "P\n";
   p.GetProgInit().Accept (*this, nullptr);
+
+  for(auto& it : p.GetClassDefs() ) it->Accept(*this, nullptr);
 
   //Process main
   for(auto& it : p) if(it->Name()=="main"){
@@ -32,6 +35,17 @@ void IRGenerator::Visit(ProgBody const& p, const Node* successor){
   p.GetProgEnd().Accept  (*this, nullptr );
 }
 
+/////////////////////////////////////////////////////////////////////////////
+void IRGenerator::Visit(ClassDef const& p, const Node* successor){
+  for(auto& it : p){
+    NewStream(unit_.GetFunctionEntryLabel(
+      unit_.GetFunc(*it).MangledName()));
+    it->Accept(*this, successor);
+    CurrentStream().AppendReturn();
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(FuncDef const& p, const Node* successor){
 //   Function& f = unit_.GetFunc(p);
 //   std::cout << "in f: " << f.str();
@@ -247,10 +261,6 @@ void IRGenerator::Visit(ReturnStmt const& p, const Node* successor){
    p.RetExpr().Accept(*this, successor);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-void IRGenerator::Visit(ClassDef const& p, const Node* successor){
-
-}
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(VarName const& p, const Node* successor){

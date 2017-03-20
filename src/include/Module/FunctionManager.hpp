@@ -37,12 +37,13 @@ public:
     return *function_by_funcdef_.at(const_cast<FuncDef*>(&n));
   }
 
+  //Create regular function
   void NewFunction(const std::string& name
     , OffsetTable& module_offset_table
     , const ScopeOwnerId scope_owner_id
     , const Label entry, const Label local){
     functions_.push_back( std::move(
-      std::make_unique<Function>(name
+      Function::NewFunction(name
         , module_offset_table
         , scope_owner_id
         , entry
@@ -50,6 +51,24 @@ public:
     curr_func_ = functions_[ functions_.size() - 1].get();
     function_by_name_[name] = curr_func_;
   }
+
+  //Create member function
+  void NewFunction(const std::string& name
+    , const std::string& class_name
+    , OffsetTable& module_offset_table
+    , const ScopeOwnerId scope_owner_id
+    , const Label entry, const Label local){
+    functions_.push_back( std::move(
+      Function::NewMemberFunction(name
+        , class_name
+        , module_offset_table
+        , scope_owner_id
+        , entry
+        , local)));
+    curr_func_ = functions_[ functions_.size() - 1].get();
+    function_by_name_[name] = curr_func_;
+  }
+
 
 
   void EnterFunctionDefinition(FuncDecl* current_func_decl){
