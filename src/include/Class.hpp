@@ -51,6 +51,8 @@ public:
 
   const IR::Label ThisLabel() const noexcept{ return this_label_; }
   const IR::Offset MemberVarOffset(AST::Symbols::SymbolId& sid) const noexcept{
+//     std::cout << "Asking: " << sid << "\n" << "in ";
+//     for(const auto& it : object_record_) std::cout << it.first << ": " << it.second.str() << "\n";
     return object_record_.at(sid);
   }
 

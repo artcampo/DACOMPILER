@@ -284,12 +284,14 @@ void IRGenerator::Visit(DotOp const& p, const Node* successor){
   p.Lhs().Accept(*this, successor);
   p.Rhs().Accept(*this, successor);
 
-  const ClassType& t = dynamic_cast<const ClassType&>(unit_.GetTypeOfNode(p.Lhs()));
-  if(t.IsFunc()){
+  const Type& t_dot      = unit_.GetTypeOfNode(p);
+  const ClassType& t_lhs = dynamic_cast<const ClassType&>(unit_.GetTypeOfNode(p.Lhs()));
+
+  if(t_dot.IsFunc()){
     //Dot with function
   }else{
     //Dot with var
-    const Class& c = unit_.GetClass(t);
+    const Class& c = unit_.GetClass(t_lhs);
     AST::Symbols::SymbolId sid = c.GetHScope().DeclId(p.Rhs().Name());
     IR::Offset o = c.MemberVarOffset(sid);
     const IR::Reg r_src = reg_dst_of_expr_[&p.Lhs()];
