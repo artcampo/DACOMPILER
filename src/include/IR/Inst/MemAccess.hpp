@@ -41,6 +41,19 @@ struct LoadReg : public Inst, public InstDst, public InstSrc{
 };
 
 
+struct LoadRegOffs : public Inst, public InstDst, public InstSrc, public InstOffset{
+  LoadRegOffs(const Reg reg_dst, const Reg reg_src, const Offset offset)
+    : InstDst(reg_dst), InstSrc(reg_src), InstOffset(offset){};
+  virtual ~LoadRegOffs() = default;
+
+  virtual std::string str() const noexcept{
+    return std::string("%")  + std::to_string(dst_)
+         + " = Load [ %" + std::to_string(src_)
+         + " + " + offset_.str()
+         + "]";
+  }
+};
+
 
 struct Store : public Inst, public InstSrc, public InstAddress{
   Store(const Reg src, const MemAddr addr)

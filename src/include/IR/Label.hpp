@@ -40,7 +40,10 @@ struct Label{
 
 
   std::string str() const noexcept{
-    return name_;
+    std::string  s;
+    if(IsRunTime()) s = "RT "; else s = "LT ";
+    s += name_;
+    return s;
   };
 protected:
   LabelId     id_;

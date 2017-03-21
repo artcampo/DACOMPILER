@@ -73,7 +73,8 @@ public:
     ClassManager::NewClass(class_name, class_decl_owner_id_, hscope_id
       , dynamic_cast<HierarchicalScope&>(*GetScope(hscope_id))
       , NewClassThisLabel(class_name)
-      , class_def);
+      , class_def
+      , GetClassType(class_name));
     const Class& c = GetClass(class_name);
     SetClassTypeSize(class_name, c.Size());
   }

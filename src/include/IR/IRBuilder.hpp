@@ -48,6 +48,11 @@ protected:
     return std::make_unique<Inst::LoadReg>(assigned_reg, src);
   }
 
+  Inst::PtrLoadRegOffs LoadRegOffs(const Reg src, const Offset o){
+    Reg assigned_reg = FreeReg();
+    return std::make_unique<Inst::LoadRegOffs>(assigned_reg, src, o);
+  }
+
   Inst::PtrStore Store(const Reg src, const MemAddr addr){
     Reg assigned_reg = FreeReg();
     return std::make_unique<Inst::Store>(src, addr);

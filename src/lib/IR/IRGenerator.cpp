@@ -225,6 +225,7 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
   }
 
   if(unit_.IsRead(p)){
+    //Var, Read
     if(unit_.IsValueAccess(p)){
       const IR::Reg r  = CurrentStream().AppendLoad(a);
       reg_dst_of_expr_[&p] = r;
@@ -232,6 +233,7 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
       addr_of_var_[&p] = a;
     }
   }else{
+    //Var, Write
     const IR::Reg r_src = reg_src_of_assignment_[&p];
     CurrentStream().AppendStore(r_src, a);
   }
@@ -279,7 +281,22 @@ void IRGenerator::Visit(VarName const& p, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(DotOp const& p, const Node* successor){
+  p.Lhs().Accept(*this, successor);
+  p.Rhs().Accept(*this, successor);
 
+  const ClassType& t = dynamic_cast<const ClassType&>(unit_.GetTypeOfNode(p.Lhs()));
+  if(t.IsFunc()){
+    //Dot with function
+  }else{
+    //Dot with var
+    const Class& c = unit_.GetClass(t);
+    AST::Symbols::SymbolId sid = c.GetHScope().DeclId(p.Rhs().Name());
+    IR::Offset o = c.MemberVarOffset(sid);
+    const IR::Reg r_src = reg_dst_of_expr_[&p.Lhs()];
+
+    const IR::Reg r_dst = CurrentStream().AppendLoadRegOffs(r_src, o);
+    reg_dst_of_expr_[&p] = r_dst;
+  }
 }
 
 

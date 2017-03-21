@@ -37,6 +37,11 @@ Reg IRStream::AppendLoadReg(const Reg src){
   return RegAssignedToPreviousInst();
 }
 
+Reg IRStream::AppendLoadRegOffs(const Reg src, const Offset o){
+  Append( LoadRegOffs(src, o) );
+  return RegAssignedToPreviousInst();
+}
+
 void IRStream::AppendStore(const Reg src, const MemAddr addr){
   Append( Store(src, addr) );
 }

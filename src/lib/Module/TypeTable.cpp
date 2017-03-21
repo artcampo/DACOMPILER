@@ -50,15 +50,15 @@ const Type& TypeTable::GetFuncType(const Type& return_type
   return *type_table_[it->second];
 }
 
-const Type& TypeTable::GetClassType(const std::string& name){
+const ClassType& TypeTable::GetClassType(const std::string& name){
   auto it = type_id_of_class_.find(name);
   if(it == type_id_of_class_.end()){
     const TypeId id = FreeTypeId();
     type_id_of_class_[name] = id;
     type_table_[id] = std::make_unique<ClassType>(id, name);
-    return *type_table_[id];
+    return dynamic_cast<const ClassType&>(*type_table_[id]);
   }
-  return *type_table_[it->second];
+  return dynamic_cast<const ClassType&>(*type_table_[it->second]);
 }
 
 }//end namespace Compiler

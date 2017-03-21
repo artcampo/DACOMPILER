@@ -18,6 +18,7 @@ struct JumpIncond;
 struct LoadI;
 struct Load;
 struct LoadReg;
+struct LoadRegOffs;
 struct Store;
 struct StoreReg;
 struct Arith;
@@ -36,6 +37,7 @@ using PtrJumpCond     = std::unique_ptr<JumpCond>;
 using PtrLoadI        = std::unique_ptr<LoadI>;
 using PtrLoad         = std::unique_ptr<Load>;
 using PtrLoadReg      = std::unique_ptr<LoadReg>;
+using PtrLoadRegOffs  = std::unique_ptr<LoadRegOffs>;
 using PtrStore        = std::unique_ptr<Store>;
 using PtrStoreReg     = std::unique_ptr<StoreReg>;
 using PtrArith        = std::unique_ptr<Arith>;
@@ -50,6 +52,7 @@ using PtrReturnMain   = std::unique_ptr<ReturnMain>;
 using PtrCall         = std::unique_ptr<Call>;
 
 
+
 struct InstAddress{
   InstAddress(const MemAddr addr)
     :addr_(addr){}
@@ -61,7 +64,7 @@ protected:
 struct InstSrc{
   InstSrc(const Reg src) : src_(src){}
   ~InstSrc() = default;
-  Reg RegSrc() const noexcept { return src_;};
+  Reg RegSrc() const noexcept { return src_;}
 protected:
   Reg src_;
 };
@@ -69,8 +72,8 @@ protected:
 struct InstSrcSrc{
   InstSrcSrc(const Reg src1, const Reg src2) : src1_(src1), src2_(src2){}
   ~InstSrcSrc() = default;
-  Reg RegSrc1() const noexcept { return src1_;};
-  Reg RegSrc2() const noexcept { return src2_;};
+  Reg RegSrc1() const noexcept { return src1_;}
+  Reg RegSrc2() const noexcept { return src2_;}
 protected:
   Reg src1_;
   Reg src2_;
@@ -80,7 +83,7 @@ struct InstDst {
   InstDst(const Reg reg_dst) : dst_(reg_dst){};
   ~InstDst() = default;
 
-  Reg RegDst() const noexcept { return dst_;};
+  Reg RegDst() const noexcept { return dst_;}
 protected:
   Reg dst_;
 };
@@ -89,9 +92,18 @@ struct InstVal {
   InstVal( const NodeValue val) : val_(val){};
   ~InstVal() = default;
 
-  NodeValue Value() const noexcept { return val_;};
+  NodeValue Value() const noexcept { return val_;}
 protected:
   NodeValue val_;
+};
+
+struct InstOffset {
+  InstOffset(const Offset offset) : offset_(offset){};
+  ~InstOffset() = default;
+
+  const Offset GetOffset() const noexcept { return offset_;}
+protected:
+   Offset offset_;
 };
 
 
