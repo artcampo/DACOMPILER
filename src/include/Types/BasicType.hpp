@@ -8,9 +8,8 @@ class BasicType : public Type{
 public:
   virtual ~BasicType() = default;
   BasicType(const TypeId& type_id, const kBasicTypeId& basic_id)
-    : Type(type_id), basic_id_(basic_id){}
+    : Type(type_id, 1), basic_id_(basic_id){}
 
-  virtual size_t  Size() const noexcept{ return 1;};
   virtual std::string str() const noexcept{
     if(basic_id_ == kBasicTypeId::kInt) return std::string("int");
     if(basic_id_ == kBasicTypeId::kBool) return std::string("bool");

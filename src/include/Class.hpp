@@ -18,6 +18,7 @@ namespace AST{
 using AST::Ast;
 using AST::Type;
 using AST::Node;
+using AST::ClassDef;
 using AST::ScopeId;
 using AST::HierarchicalScope;
 using namespace Compiler::AST::Ptrs;
@@ -36,26 +37,48 @@ public:
     , const ScopeOwnerId scope_owner_id
     , const ScopeId scope_id
     , HierarchicalScope& scope
-    , const IR::Label this_label)
+    , const IR::Label this_label
+    , ClassDef& class_def)
   : name_(name)
     , scope_owner_id_(scope_owner_id)
     , scope_(scope)
-    , this_label_(this_label){}
+    , this_label_(this_label)
+    , class_def_(class_def){
+    BuildObjectRecord(class_def_);
+  }
 
   HierarchicalScope& GetHScope() const noexcept{ return scope_;}
 
   const IR::Label ThisLabel() const noexcept{ return this_label_; }
   const IR::Offset MemberVarOffset(AST::Symbols::SymbolId& sid) const noexcept{
-    return Offset(0, "test");
+    return object_record_.at(sid);
   }
 
   std::string str()  const noexcept{ return name_;}
+
+  const size_t Size() const noexcept{ return class_size_;}
 private:
   ScopeOwnerId          scope_owner_id_;
   std::string           name_;
   HierarchicalScope&    scope_;
   IR::Label             this_label_;
+  ClassDef&             class_def_;
+  //Data computed
+  size_t  class_size_;
+  std::map<AST::Symbols::SymbolId, IR::Offset> object_record_;
 
+  void BuildObjectRecord(const ClassDef& class_def){
+    size_t offset = 0;
+    for( const auto& it : class_def.GetVarDecl()){
+      const std::string name  = it->Name();
+      const Type& type        = it->GetType();
+      const size_t size       = type.Size();
+      AST::Symbols::SymbolId sid = scope_.DeclId(name);
+      object_record_[sid] = Offset(offset, name);
+      offset += size;
+    }
+    class_size_ = offset;
+  }
   /*
   Symbols::Symbol& GetSymbolDecl(const Node& n) const{
 //     std::cout << "Asking n: " << &n << " " << n.str() << std::endl;

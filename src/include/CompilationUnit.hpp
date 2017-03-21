@@ -61,14 +61,21 @@ public:
     }
 
 
-  const ScopeId NewClass(std::string& class_name){
+  const ScopeId NewClassDecl(std::string& class_name){
     const ScopeOwnerId owner_id = NewScopeOwner();
     const ScopeId id = NewHierarchicalScope(class_name, owner_id, GetClassType(class_name));
-//     HierarchicalScope& s = ;
-    ClassManager::NewClass(class_name, owner_id, id
-      , dynamic_cast<HierarchicalScope&>(*GetScope(id))
-      , NewClassThisLabel(class_name));
+    class_decl_owner_id_ = owner_id;
     return id;
+  }
+
+  void NewClass(std::string& class_name, const ScopeId hscope_id
+    , ClassDef& class_def){
+    ClassManager::NewClass(class_name, class_decl_owner_id_, hscope_id
+      , dynamic_cast<HierarchicalScope&>(*GetScope(hscope_id))
+      , NewClassThisLabel(class_name)
+      , class_def);
+    const Class& c = GetClass(class_name);
+    SetClassTypeSize(class_name, c.Size());
   }
 
   const ScopeId NewFunction(const std::string& name, const ScopeOwnerId scope_owner_id){
@@ -134,6 +141,9 @@ private:
 
   //Referencing structures
   SymbolIdOfNode                    symbolid_of_node_;
+
+  //Info saved while creating a class
+  ScopeOwnerId class_decl_owner_id_;
 
 public:
   friend class AST::Dump;

@@ -31,9 +31,9 @@ class ClassType;
 class Type{
 public:
   virtual ~Type(){}
-  Type(const TypeId& type_id) : type_id_(type_id){}
+  Type(const TypeId& type_id, const size_t size)
+    : type_id_(type_id), size_(size){}
 
-  virtual size_t     Size() const noexcept = 0;
   virtual std::string str() const noexcept = 0;
   virtual bool IsBool()     const noexcept = 0;
   virtual bool IsPtr()      const noexcept = 0;
@@ -47,10 +47,13 @@ public:
   const bool operator!=( const Type& t ) const noexcept
     {return not(type_id_ == t.type_id_);}
 
-  TypeId GetTypeId() const noexcept {return type_id_;}
+  TypeId  GetTypeId() const noexcept {return type_id_;}
+  size_t  Size() const noexcept{ return size_;}
+  void    SetSize(const size_t size) noexcept { size_ = size ;}
 
 private:
   TypeId type_id_;
+  size_t size_;
 };
 
 

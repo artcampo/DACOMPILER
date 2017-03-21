@@ -19,19 +19,17 @@ void Dump::Visit(FuncDef const& p){
 
 void Dump::Visit(ClassDef const& p){
   std::cout << "[CDef] " << p.str()<<"\n";
-  for(auto& it : p) {
-    IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
-  }
+  bool first = true;
   for(auto& it : p.GetVarDecl()) {
+    if(not first) std::cout << "\n";
     IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
+    first = false;
   }
-
-
-  /*
-  IncreaseIndent(); Indent();
-  p.¿?.Accept(*this);   //hahahah, that's an operator to implement '¿?'
-  DecreaseIndent();
-  */
+  for(auto& it : p) {
+    if(not first) std::cout << "\n";
+    IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
+    first = false;
+  }
 }
 
 void Dump::Visit(ProgInit const& p){
@@ -45,10 +43,12 @@ void Dump::Visit(ProgEnd const& p){
 /////////////////////////////////////////////////////////////////////////////
 void Dump::Visit(Block const& p) {
 //   std::cout << "Stmts:\n";
+//   bool first = true;
   for (auto& c : p.statements_){
-      Indent();
-      c->Accept(*this);
-      std::cout << std::endl;
+//       if(not first)  std::cout << "\n";
+      Indent(); c->Accept(*this);
+      std::cout << "\n";
+//       first = false;
   }
 }
 
@@ -142,11 +142,10 @@ void Dump::Visit(FuncCall& p){
 
   //Dump args
 //   IncreaseIndent();
-  bool first_arg = true;
   for(const auto& it : p){
     std::cout << "\n";
     IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
-    first_arg = false;
+
   }
 //   DecreaseIndent();
 }
@@ -195,6 +194,8 @@ void Dump::DisplayAttributes(Node const& p){
     if(unit_.HasLRness(p)) std::cout << " " << unit_.LRnessStr(p);
     if(unit_.HasReadWrite(p)) std::cout << " " << unit_.ReadWriteStr(p);
     if(unit_.HasVarUsage(p)) std::cout << " " << unit_.VarUsageStr(p);
+    if(unit_.HasIsVarMember(p)) std::cout << " " << unit_.VarIsMemberStr(p);
+
     if(display) std::cout << "]";
   }
 }

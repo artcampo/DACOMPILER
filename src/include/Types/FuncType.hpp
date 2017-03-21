@@ -11,7 +11,7 @@ public:
 
   FuncType(const TypeId& type_id, const Type& return_type
     , const std::vector<const Type*>& par_types)
-    : Type(type_id), return_tid_(return_type.GetTypeId())
+    : Type(type_id, 1), return_tid_(return_type.GetTypeId())
     , ret_str_(return_type.str())
     {
       pars_str_ = std::string("");
@@ -24,7 +24,6 @@ public:
       for(auto& it : par_types) pars_tid_.push_back( it->GetTypeId());
     }
 
-  virtual size_t  Size() const noexcept{ return 1;};
   virtual std::string str() const noexcept{
     return std::string("function: (") + pars_str_ + std::string(")->") + ret_str_;
   }

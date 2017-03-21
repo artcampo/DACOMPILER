@@ -53,6 +53,9 @@ public:
   const Type& GetTypeError(){ return GetType(kBasicTypeId::kError);}
   const Type& GetTypeUnknown(){ return GetType(kBasicTypeId::kUnknown);}
 
+  void  SetClassTypeSize(const std::string& name, const size_t size){
+    type_table_.at(type_id_of_class_.at(name))->SetSize(size);
+  }
 private:
   const Type& GetType(const kBasicTypeId basic_id);
 

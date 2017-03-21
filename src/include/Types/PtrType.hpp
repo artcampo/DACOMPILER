@@ -9,10 +9,9 @@ public:
   virtual ~PtrType() = default;
 
   PtrType(const TypeId& type_id, const Type& pointed_type)
-    : Type(type_id), pointed_tid_(pointed_type.GetTypeId())
+    : Type(type_id, 1), pointed_tid_(pointed_type.GetTypeId())
     , pointed_str_(pointed_type.str()){}
 
-  virtual size_t  Size() const noexcept{ return 1;};
   virtual std::string str() const noexcept{
     return pointed_str_ + std::string("*");
   }
