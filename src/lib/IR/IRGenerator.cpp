@@ -297,8 +297,11 @@ void IRGenerator::Visit(DotOp const& p, const Node* successor){
   if(t_dot.IsFunc()){
     //Dot with function
 
-    //pass this pointer
-    reg_dst_of_expr_[&p] = reg_dst_of_expr_[&p.Lhs()];
+    //pass pointer this
+    const IR::Reg r_src  = reg_dst_of_expr_[&p.Lhs()];
+    reg_dst_of_expr_[&p] = r_src;
+    //load this as first argument
+    CurrentStream().AppendSetPar(r_src);
 
     //give the addr of the call
     const MemAddr a = MemAddr( c.GetFunction(p.Rhs().Name()).EntryLabel(), 0);
