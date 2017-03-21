@@ -56,8 +56,14 @@ public:
     return object_record_.at(sid);
   }
 
-  std::string str()  const noexcept{ return name_;}
+  void AddFunction(Function& f){
+    function_by_name_[f.Name()] = &f;
+  }
+  Function& GetFunction(const std::string& name)const{
+    return *function_by_name_.at(name);
+  }
 
+  std::string str()  const noexcept{ return name_;}
   const size_t Size() const noexcept{ return class_size_;}
 private:
   ScopeOwnerId          scope_owner_id_;
@@ -68,6 +74,8 @@ private:
   //Data computed
   size_t  class_size_;
   std::map<AST::Symbols::SymbolId, IR::Offset> object_record_;
+  //TODO: should use function sid instead
+  std::map<std::string, Function*> function_by_name_;
 
   void BuildObjectRecord(const ClassDef& class_def){
     size_t offset = 0;

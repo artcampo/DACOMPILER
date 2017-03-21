@@ -23,7 +23,7 @@ using IR::PtrIRStream;
 class IRGenerator{
 public:
 
-  IRGenerator(CompilationUnit& unit): unit_(unit){};
+  IRGenerator(CompilationUnit& unit): unit_(unit), emit_addr_var_inht_(false){};
 
   virtual void Visit(ProgBody const& p, const Node* successor);
   virtual void Visit(ProgInit const& p, const Node* successor);
@@ -67,9 +67,10 @@ private:
 
   std::map<const Node*, IR::MemAddr> addr_of_var_;
 
-  IR::Label   local_label_inht_;  //label of current function's locals
-  IR::Label   class_label_inht_;  //label of current class this
-  Class*      class_inht_;         //current class being processed
+  IR::Label   local_label_inht_;    //label of current function's locals
+  IR::Label   class_label_inht_;    //label of current class this
+  Class*      class_inht_;          //current class being processed
+  bool        emit_addr_var_inht_;
 
   IR::IRStream& CurrentStream() const noexcept{ return *current_stream_;}
   void BackPatch(const Node& n, const IR::Addr position);

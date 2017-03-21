@@ -86,6 +86,7 @@ public:
 
   std::string MangledName()const noexcept{ return mangled_name_;}
   const bool IsMember() const noexcept{ return is_member_;}
+  std::string Name()  const noexcept{ return name_;}
 private:
   ScopeOwnerId      scope_owner_id_;
   std::string       name_;

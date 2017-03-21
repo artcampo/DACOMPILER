@@ -231,6 +231,10 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
       reg_dst_of_expr_[&p] = r;
     }else{
       addr_of_var_[&p] = a;
+      if(emit_addr_var_inht_){
+        const IR::Reg r_dst   = CurrentStream().AppendPtrElem(a);
+        reg_dst_of_expr_[&p]  = r_dst;
+      }
     }
   }else{
     //Var, Write
@@ -281,17 +285,27 @@ void IRGenerator::Visit(VarName const& p, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(DotOp const& p, const Node* successor){
+  emit_addr_var_inht_ = true;
   p.Lhs().Accept(*this, successor);
+  emit_addr_var_inht_ = false;
   p.Rhs().Accept(*this, successor);
 
   const Type& t_dot      = unit_.GetTypeOfNode(p);
   const ClassType& t_lhs = dynamic_cast<const ClassType&>(unit_.GetTypeOfNode(p.Lhs()));
+  const Class& c = unit_.GetClass(t_lhs);
 
   if(t_dot.IsFunc()){
     //Dot with function
+
+    //pass this pointer
+    reg_dst_of_expr_[&p] = reg_dst_of_expr_[&p.Lhs()];
+
+    //give the addr of the call
+    const MemAddr a = MemAddr( c.GetFunction(p.Rhs().Name()).EntryLabel(), 0);
+    addr_of_var_[&p] = a;
   }else{
     //Dot with var
-    const Class& c = unit_.GetClass(t_lhs);
+
     AST::Symbols::SymbolId sid = c.GetHScope().DeclId(p.Rhs().Name());
     IR::Offset o = c.MemberVarOffset(sid);
     const IR::Reg r_src = reg_dst_of_expr_[&p.Lhs()];

@@ -48,12 +48,12 @@ public:
         , scope_owner_id
         , entry
         , local)));
-    curr_func_ = functions_[ functions_.size() - 1].get();
+    curr_func_ = functions_.back().get();
     function_by_name_[name] = curr_func_;
   }
 
   //Create member function
-  void NewFunction(const std::string& name
+  Function& NewFunction(const std::string& name
     , const std::string& class_name
     , OffsetTable& module_offset_table
     , const ScopeOwnerId scope_owner_id
@@ -65,8 +65,9 @@ public:
         , scope_owner_id
         , entry
         , local)));
-    curr_func_ = functions_[ functions_.size() - 1].get();
+    curr_func_ = functions_.back().get();
     function_by_name_[name] = curr_func_;
+    return *functions_.back();
   }
 
 

@@ -95,8 +95,9 @@ public:
     const std::string mangled_name = Function::MangledName(name, class_name);
     const Label entry = NewFunctionEntryLabel(mangled_name);
     Label local       = NewFunctionARLabel(mangled_name);
-    FunctionManager::NewFunction(name, class_name, ModuleOffsetTable(), scope_owner_id
-      , entry, local);
+    Function& f = FunctionManager::NewFunction(name, class_name
+      , ModuleOffsetTable(), scope_owner_id, entry, local);
+    GetClass(class_name).AddFunction(f);
     return NewNestedScope(scope_owner_id);
   }
 
