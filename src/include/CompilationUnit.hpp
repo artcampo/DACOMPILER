@@ -74,7 +74,8 @@ public:
       , dynamic_cast<HierarchicalScope&>(*GetScope(hscope_id))
       , NewClassThisLabel(class_name)
       , class_def
-      , GetClassType(class_name));
+      , GetClassType(class_name)
+      , this );
     const Class& c = GetClass(class_name);
     SetClassTypeSize(class_name, c.Size());
   }
@@ -97,7 +98,6 @@ public:
     Label local       = NewFunctionARLabel(mangled_name);
     Function& f = FunctionManager::NewFunction(name, class_name
       , ModuleOffsetTable(), scope_owner_id, entry, local);
-    GetClass(class_name).AddFunction(f);
     return NewNestedScope(scope_owner_id);
   }
 

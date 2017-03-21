@@ -37,14 +37,16 @@ protected:
     , HierarchicalScope& scope
     , const IR::Label this_label
     , ClassDef& class_def
-    , const ClassType& type){
+    , const ClassType& type
+    , FunctionManager* function_manager){
     classes_.push_back( std::move(
       std::make_unique<Class>(name
                       , scope_owner_id
                       , scope_id
                       , scope
                       , this_label
-                      , class_def)));
+                      , class_def
+                      , function_manager)));
     class_by_name_[name] = classes_.back().get();
     class_by_typeid_[type.GetTypeId()] = classes_.back().get();
 

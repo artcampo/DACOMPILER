@@ -9,10 +9,14 @@
 #include "Scopes/Scope.hpp"
 #include "Scopes/ScopeId.hpp"
 #include "Scopes/HierarchicalScope.hpp"
+// #include "Module/FunctionManager.hpp"
 #include <map>
 #include <memory>
 
 namespace Compiler{
+
+class FunctionManager;
+
 namespace AST{
 
 using AST::Ast;
@@ -38,13 +42,16 @@ public:
     , const ScopeId scope_id
     , HierarchicalScope& scope
     , const IR::Label this_label
-    , ClassDef& class_def)
+    , ClassDef& class_def
+    , FunctionManager* func_manager)
   : name_(name)
     , scope_owner_id_(scope_owner_id)
     , scope_(scope)
     , this_label_(this_label)
-    , class_def_(class_def){
+    , class_def_(class_def)
+    , func_manager_(func_manager){
     BuildObjectRecord(class_def_);
+    BuildFunctionsReferences();
   }
 
   HierarchicalScope& GetHScope() const noexcept{ return scope_;}
@@ -56,9 +63,7 @@ public:
     return object_record_.at(sid);
   }
 
-  void AddFunction(Function& f){
-    function_by_name_[f.Name()] = &f;
-  }
+
   Function& GetFunction(const std::string& name)const{
     return *function_by_name_.at(name);
   }
@@ -89,6 +94,18 @@ private:
     }
     class_size_ = offset;
   }
+
+  void BuildFunctionsReferences(){
+    for( const auto& it : class_def_){
+      Function& f  = func_manager_->GetFunc(*it);
+      AddFunction(f);
+    }
+  }
+  void AddFunction(Function& f){
+    function_by_name_[std::string(f.Name())] = &f;
+  }
+
+  FunctionManager* func_manager_;
   /*
   Symbols::Symbol& GetSymbolDecl(const Node& n) const{
 //     std::cout << "Asking n: " << &n << " " << n.str() << std::endl;
