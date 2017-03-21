@@ -42,9 +42,9 @@ public:
     p.SetType(type_func);
     unit_.SetTypeOfNode(p, type_func);
 
+    p.Receiver().Accept(*this);
     for(const auto& it : p) it->Accept(*this);
   }
-
 
 
   //Traversal

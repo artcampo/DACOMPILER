@@ -63,6 +63,7 @@ public:
     unit_.SetTypeOfNode(p, p.GetType());
     const FuncType& ftype = p.GetType();
     const auto& ftype_it  = ftype.cbegin();
+    p.Receiver().Accept(*this);
     for(const auto& it : p) it->Accept(*this);
   }
 

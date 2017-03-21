@@ -21,7 +21,9 @@ public:
     else                        unit_.SetAsWrite(p);
   }
 
+  //SDD
   virtual void Visit(AssignStmt const& p){
+//     std::cout << "Visit " << p.str() << "\n";
     is_read_or_write_inht_ = false; p.Lhs().Accept(*this);
     is_read_or_write_inht_ = true;  p.Rhs().Accept(*this);
   }
@@ -33,16 +35,16 @@ public:
   }
 
   virtual void Visit(Var& p)      { Set(p);}
-  virtual void Visit(FuncCall& p) {
-    //TODO: should funcCall be an expression?
-    for(const auto& it : p) it->Accept(*this);
-  }
+
 
   virtual void Visit(ReturnStmt const& p){
     is_read_or_write_inht_ = true;
     p.RetExpr().Accept(*this);
   }
-  //SDD
+  virtual void Visit(DotOp const& p){
+    is_read_or_write_inht_ = true;  p.Lhs().Accept(*this);
+    is_read_or_write_inht_ = false; p.Rhs().Accept(*this);
+  }
 
   //Traversal
   virtual void Visit(ProgBody const& p){
@@ -76,12 +78,13 @@ public:
     p.Rhs().Accept(*this);
   }
 
-  virtual void Visit(RefOp const& p){
-    p.Rhs().Accept(*this);
+  virtual void Visit(FuncCall& p) {
+    p.Receiver().Accept(*this);
+    for(const auto& it : p) it->Accept(*this);
   }
-
   virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
   virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
+  virtual void Visit(RefOp const& p){p.Rhs().Accept(*this);
 
   //Nothing to do
   virtual void Visit(ProgInit const& p){};
@@ -91,7 +94,7 @@ public:
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(Literal const& p){}
   virtual void Visit(VarName const& p){}
-  virtual void Visit(DotOp const& p){}
+
 
 private:
   CompilationUnit&  unit_;

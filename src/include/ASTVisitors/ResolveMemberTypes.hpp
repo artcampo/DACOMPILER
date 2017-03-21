@@ -75,13 +75,17 @@ public:
     p.Receiver().Accept(*this);
     for(const auto& it : p) it->Accept(*this);
   }
+  virtual void Visit(DotOp const& p){
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
+  }
 
   virtual void Visit(ReturnStmt const& p){p.RetExpr().Accept(*this);}
   virtual void Visit(FuncDef const& p){p.GetBody().Accept(*this);}
   virtual void Visit(RefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(DerefOp const& p){p.Rhs().Accept(*this);}
   virtual void Visit(FuncRet& p){ p.GetCall().Accept(*this); }
-  virtual void Visit(DotOp const& p){ p.Lhs().Accept(*this); }
+
 
   //Nothing to do
   virtual void Visit(Literal const& p){}

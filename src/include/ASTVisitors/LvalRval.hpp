@@ -46,7 +46,11 @@ public:
 
   virtual void Visit(Var& p){unit_.SetNodeAsLval(p);}
 
-  virtual void Visit(FuncCall& p){ unit_.SetNodeAsLval(p); }
+  virtual void Visit(FuncCall& p) {
+    unit_.SetNodeAsLval(p);
+    p.Receiver().Accept(*this);
+    for(const auto& it : p) it->Accept(*this);
+  }
 
   virtual void Visit(FuncRet& p){
     if( p.GetType().IsPtr() or p.GetType().IsClass() )
@@ -87,6 +91,11 @@ public:
   }
   virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
 
+  virtual void Visit(DotOp const& p){
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
+  }
+
   //Nothing to do
   virtual void Visit(ProgInit const& p){};
   virtual void Visit(ProgEnd const& p){};
@@ -94,7 +103,7 @@ public:
   virtual void Visit(VarDeclList const& p){}
   virtual void Visit(VarDecl const& p){}
   virtual void Visit(VarName const& p){}
-  virtual void Visit(DotOp const& p){}
+
 
 
 private:
