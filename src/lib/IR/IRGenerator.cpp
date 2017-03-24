@@ -42,7 +42,9 @@ void IRGenerator::Visit(ClassDef const& p, const Node* successor){
     class_inht_ = &unit_.GetClass(p.Name());
     NewStream(unit_.GetFunctionEntryLabel(
       unit_.GetFunc(*it).MangledName()));
+    inside_member_func_def_ = true;
     it->Accept(*this, successor);
+    inside_member_func_def_ = false;
     CurrentStream().AppendReturn();
   }
 }
@@ -245,6 +247,14 @@ void IRGenerator::Visit(Var const& p, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(FuncCall& p, const Node* successor){
+  
+  if(inside_member_func_def_ and is_member_call_inht_){
+    //TODO: adjust offset to parent's objects
+    MemAddr a = MemAddr(class_label_inht_, 0);
+    const IR::Reg r  = CurrentStream().AppendLoad(a);
+    CurrentStream().AppendSetPar(r);
+  }
+  
   //generate arguments
   for(const auto& it : p) it->Accept(*this, successor);
   //generate set prior to call
@@ -265,6 +275,7 @@ void IRGenerator::Visit(FuncCall& p, const Node* successor){
 
 /////////////////////////////////////////////////////////////////////////////
 void IRGenerator::Visit(FuncRet& p, const Node* successor){
+  is_member_call_inht_ = unit_.IsMemberVar(p);
   p.GetCall().Accept(*this, successor);
   if( p.GetType() != unit_.GetTypeVoid() ){
     const IR::Reg r_dst = CurrentStream().AppendGetRetVal();

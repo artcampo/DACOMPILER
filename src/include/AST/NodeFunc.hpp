@@ -95,23 +95,23 @@ class FuncCall: public Node, public NamedNode, public TypedNode {
 public:
   virtual ~FuncCall() = default;
   FuncCall(const std::string& name
-    , PtrExprVar& expr_var
+    , PtrExprVar& receiver
     , const FuncType& function_type
     , std::vector<PtrExpr>& arg_list
     , const ScopeId id
     , const Locus& locus)
   : Node(id, locus), NamedNode(name)
     , TypedNode(dynamic_cast<const Type&>(function_type))
-    , expr_var_(std::move(expr_var))
+    , receiver_(std::move(receiver))
     , arg_list_(std::move(arg_list)){}
 
   virtual void Accept(IRGenerator& v, const Node* successor);
   virtual void Accept(ASTVisitor& v);
-  virtual std::string str() const noexcept { return "FuncCall: " + expr_var_->str();}
+  virtual std::string str() const noexcept { return "FuncCall: " + receiver_->str();}
 
   size_t NumArgs()  const noexcept{ return arg_list_.size();}
 
-  ExprVar& Receiver() const noexcept{ return *expr_var_;}
+  ExprVar& Receiver() const noexcept{ return *receiver_;}
 
   const FuncType& GetType() const noexcept{
     return dynamic_cast<const FuncType&>(TypedNode::GetType());
@@ -120,7 +120,7 @@ public:
     TypedNode::SetType( dynamic_cast<const Type&>(function_type));
   }
 private:
-  PtrExprVar            expr_var_;
+  PtrExprVar            receiver_;
   std::vector<PtrExpr>  arg_list_;
 
 public:

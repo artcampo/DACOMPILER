@@ -23,7 +23,8 @@ using IR::PtrIRStream;
 class IRGenerator{
 public:
 
-  IRGenerator(CompilationUnit& unit): unit_(unit), emit_addr_var_inht_(false){};
+  IRGenerator(CompilationUnit& unit): unit_(unit), emit_addr_var_inht_(false)
+    ,inside_member_func_def_(false){};
 
   virtual void Visit(ProgBody const& p, const Node* successor);
   virtual void Visit(ProgInit const& p, const Node* successor);
@@ -71,6 +72,8 @@ private:
   IR::Label   class_label_inht_;    //label of current class this
   Class*      class_inht_;          //current class being processed
   bool        emit_addr_var_inht_;
+  bool        is_member_call_inht_; //only within funcRet/funcCall
+  bool        inside_member_func_def_;
 
   IR::IRStream& CurrentStream() const noexcept{ return *current_stream_;}
   void BackPatch(const Node& n, const IR::Addr position);
