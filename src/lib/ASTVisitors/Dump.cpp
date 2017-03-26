@@ -30,6 +30,7 @@ void Dump::Visit(ClassDef const& p){
     IncreaseIndent(); Indent(); it->Accept(*this); DecreaseIndent();
     first = false;
   }
+  if(not first) std::cout << "\n";
 }
 
 void Dump::Visit(ProgInit const& p){

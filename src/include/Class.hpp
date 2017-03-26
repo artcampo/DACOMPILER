@@ -70,7 +70,15 @@ public:
     return *function_by_name_.at(name);
   }
 
-  std::string str()  const noexcept{ return name_;}
+  std::string str()  const noexcept{ 
+    if(parents_.empty()) return name_;
+    std::string n = name_ + ":"; 
+    bool first = true;
+    for(auto& parent : parents_){
+      if(not first) n += ",";
+      n += parent->str();
+    }
+  }
   const size_t Size() const noexcept{ return class_size_;}
 private:
   ScopeOwnerId          scope_owner_id_;

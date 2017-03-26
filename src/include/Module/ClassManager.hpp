@@ -54,7 +54,7 @@ public:
   
   void NewClass(std::string& class_name, const ScopeId hscope_id
     , ClassDef& class_def){
-      
+//     std::cout << "Creating class with " << class_parents_[class_name].size()<< " parents\n";
     classes_.push_back( std::move(
       std::make_unique<Class>(class_name
                       , class_decl_owner_id_[class_name]
