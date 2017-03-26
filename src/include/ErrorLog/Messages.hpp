@@ -54,7 +54,9 @@ const static std::string kErr88("[err:88] expecting class member");
 const static std::string kErr89("[err:89] symbol is not a class (of dot op), instead it is ");
 const static std::string kErr90("[err:90] rhs of dot must be a name");
 const static std::string kErr91("[err:91] invalid member variable access ");
-
+const static std::string kErr92("[err:92] type in inheritance list is not class, instead is ");
+const static std::string kErr93("[err:93] inheritance list has to start with ':' ");
+const static std::string kErr94("[err:94] inheritance list has to be separated with ',' ");
 
 
 const static std::string kErrUn1("[err:x1] name not followed by valid token");

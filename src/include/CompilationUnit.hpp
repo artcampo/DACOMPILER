@@ -44,13 +44,18 @@ using AST::ScopeOwnerId;
 using IR::Label;
 
 class CompilationUnit : public TreeDecoration, public TypeTable
-  , public LabelManager, public ClassManager, public FunctionManager
-  , public ScopeManager{
+  , public LabelManager, public ScopeManager, public FunctionManager
+  , public ClassManager
+  {
 public:
 
-  CompilationUnit(): ast_()
+  CompilationUnit(): 
+      TypeTable(error_log_)
+    , ScopeManager()
+    , FunctionManager()
+    , ClassManager(this, this, this, this)
+    , ast_()
     , free_symbol_id_(AST::Symbols::Symbol::InitialFreeId())
-    , TypeTable(error_log_)
     , module_scope_(std::move(GlobalLexicalScope(symbol_table_
         , module_declaration_table_, symbolid_of_node_)))
     , module_declaration_table_()
@@ -60,25 +65,16 @@ public:
       current_scope_ = module_scope_.get();
     }
 
-
-  const ScopeId NewClassDecl(std::string& class_name){
+/*
+  const ScopeId NewClassDecl(std::string& class_name
+    , std::vector<ClassType*>& parents){
     const ScopeOwnerId owner_id = NewScopeOwner();
     const ScopeId id = NewHierarchicalScope(class_name, owner_id, GetClassType(class_name));
     class_decl_owner_id_ = owner_id;
     return id;
   }
+  */
 
-  void NewClass(std::string& class_name, const ScopeId hscope_id
-    , ClassDef& class_def){
-    ClassManager::NewClass(class_name, class_decl_owner_id_, hscope_id
-      , dynamic_cast<HierarchicalScope&>(*GetScope(hscope_id))
-      , NewClassThisLabel(class_name)
-      , class_def
-      , GetClassType(class_name)
-      , this );
-    const Class& c = GetClass(class_name);
-    SetClassTypeSize(class_name, c.Size());
-  }
 
   const ScopeId NewFunction(const std::string& name, const ScopeOwnerId scope_owner_id){
     const Label entry = NewFunctionEntryLabel(name);
@@ -144,8 +140,6 @@ private:
   //Referencing structures
   SymbolIdOfNode                    symbolid_of_node_;
 
-  //Info saved while creating a class
-  ScopeOwnerId class_decl_owner_id_;
 
 public:
   friend class AST::Dump;
