@@ -3,12 +3,15 @@
 
 namespace Compiler{
 namespace AST{
+  
 
 class HierarchicalScope : public Scope{
 public:
   HierarchicalScope(const ScopeId id, const ScopeOwnerId scope_owner_id
-    , const std::string& name_owner)
-  : Scope(id, scope_owner_id), name_("HScope of " + name_owner){}
+    , const std::string& name_owner
+    , std::vector<HierarchicalScope*>& parent_scopes)
+  : Scope(id, scope_owner_id), name_("HScope of " + name_owner)
+    , parents_(parent_scopes){}
 
   ~HierarchicalScope() = default;
 

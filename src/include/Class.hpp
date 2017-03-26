@@ -42,12 +42,14 @@ public:
     , const ScopeId scope_id
     , HierarchicalScope& scope
     , const IR::Label this_label
+    , std::vector<Class*>& parents
     , ClassDef& class_def
     , FunctionManager* func_manager)
   : name_(name)
     , scope_owner_id_(scope_owner_id)
     , scope_(scope)
     , this_label_(this_label)
+    , parents_(parents)
     , class_def_(class_def)
     , func_manager_(func_manager){
     BuildObjectRecord(class_def_);
@@ -75,6 +77,7 @@ private:
   std::string           name_;
   HierarchicalScope&    scope_;
   IR::Label             this_label_;
+  std::vector<Class*>   parents_;
   ClassDef&             class_def_;
   //Data computed
   size_t  class_size_;

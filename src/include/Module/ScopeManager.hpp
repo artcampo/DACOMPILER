@@ -49,10 +49,11 @@ public:
 
   const ScopeId NewHierarchicalScope(const std::string& class_name
     , const ScopeOwnerId scope_owner_id
-    , const Type& class_type){
+    , const Type& class_type
+    , std::vector<HierarchicalScope*>& parent_scopes){
     const ScopeId id = FreeScopeId();
     hier_scopes_.push_back( std::move(
-      std::make_unique<HierarchicalScope>(id, scope_owner_id, class_name) ));
+      std::make_unique<HierarchicalScope>(id, scope_owner_id, class_name, parent_scopes) ));
     scope_by_id_[id] = hier_scopes_.back().get();
 //     scope_is_lexical_or_hierarchical_[id] = false;
     hscope_by_class_typeid_[class_type.GetTypeId()] = id;

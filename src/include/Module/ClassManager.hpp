@@ -34,24 +34,34 @@ public:
   const Class& GetClass(const std::string& name) const { return *class_by_name_.at(name);}
 
   const Class& GetClass(const ClassType& type) const { return *class_by_typeid_.at(type.GetTypeId());}
+  Class& GetClass(ClassType& type) { return *class_by_typeid_.at(type.GetTypeId());}
 
   const ScopeId NewClassDecl(std::string& class_name
-    , std::vector<ClassType*>& parents){
+    , std::vector<ClassType*>& parent_types){
+    std::vector<HierarchicalScope*> parent_scopes;
+    std::vector<Class*> parent_classes;
+    for(auto& parent : parent_types) {
+      parent_classes.push_back( &GetClass(*parent) );
+      parent_scopes.push_back ( &GetClass(*parent).GetHScope());
+    }
     const ScopeOwnerId owner_id = scope_manager_.NewScopeOwner();
     const ScopeId id = scope_manager_.NewHierarchicalScope(class_name, owner_id
-      , type_table_.GetClassType(class_name));
+      , type_table_.GetClassType(class_name), parent_scopes);
     class_decl_owner_id_[class_name] = owner_id;
+    class_parents_[class_name] = parent_classes;
     return id;
   }  
   
   void NewClass(std::string& class_name, const ScopeId hscope_id
     , ClassDef& class_def){
+      
     classes_.push_back( std::move(
       std::make_unique<Class>(class_name
                       , class_decl_owner_id_[class_name]
                       , hscope_id
                       , dynamic_cast<HierarchicalScope&>(*scope_manager_.GetScope(hscope_id))
                       , label_manager_.NewClassThisLabel(class_name)
+                      , class_parents_[class_name]
                       , class_def
                       , &function_manager_)));
     Class* c = classes_.back().get();
@@ -75,6 +85,8 @@ private:
 
   //TODO: needed?
   std::map<std::string, ScopeOwnerId> class_decl_owner_id_;
+  std::map<std::string, std::vector<Class*>> class_parents_;
+  
 
 };
 
