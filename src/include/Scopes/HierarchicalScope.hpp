@@ -14,6 +14,7 @@ public:
 
   bool RegisterDecl(const std::string& name, const Type& type
     ,  const Node& n, AST::Symbols::SymbolId symbol_id){
+    //RegisterDecl only can insert in the current HScope
     auto it = symbol_table_.find(name);
     Symbols::SymbolId previous_id = -1;
     if(it != symbol_table_.end()){
@@ -29,9 +30,9 @@ public:
   }
 
   bool IsDeclValid(const std::string& name){
-    auto it = symbol_table_.find(name);
+    auto it = Find(name);
     Symbols::SymbolId previous_id = -1;
-    if(it != symbol_table_.end()){
+    if(not IsLast(it)){
       previous_id = it->second;
       if(declaration_table_[previous_id]->GetScopeId() == GetScopeId())
         return false;
@@ -40,19 +41,43 @@ public:
   }
 
   bool HasDecl(const std::string& name){
-    auto it = symbol_table_.find(name);
-    if(it == symbol_table_.end()) return false;
-    return true;
+    auto it = Find(name);
+    return not IsLast(it);
   }
 
   const Symbols::SymbolId DeclId(const std::string& name) const{
-    auto it = symbol_table_.find(name);
+    auto it = Find(name);
     return it->second;
   }
 
   virtual const Type& GetType(const std::string& name) const override{
-    const Symbols::SymbolId sid = DeclId(name);
-    return declaration_table_.at(sid)->GetType();
+    const DeclarationTable* declaration_table;
+    auto it = Find(name, &declaration_table);
+    const Symbols::SymbolId sid = it->second;
+    return declaration_table->at(sid)->GetType();
+  }
+  
+  SymbolTableItC Find(const std::string& name)const{
+    const DeclarationTable* d;  //won't be used
+    return Find(name, &d);
+  }
+
+  SymbolTableItC Find(const std::string& name, const DeclarationTable** dec) const{
+    auto it = symbol_table_.find(name);
+    if(not IsLast(it)) { *dec = &declaration_table_; return it;} 
+    
+    //check parents
+    for(auto& parent : parents_){
+      auto itp = parent->Find(name);
+      if(not parent->IsLast(itp)) {*dec = &parent->declaration_table_; return itp;}
+    }    
+    
+    //not found, return it to last element within this hscope
+    return it;
+  }
+  
+  bool IsLast(SymbolTableItC& it) const{
+    return it == symbol_table_.end();
   }
 
   std::string str() const noexcept{
@@ -69,6 +94,7 @@ private:
   std::string       name_;
   SymbolTable       symbol_table_;
   DeclarationTable  declaration_table_;
+  std::vector<HierarchicalScope*> parents_;
 //   SymbolIdOfNode    symbolid_of_node_;
 };
 

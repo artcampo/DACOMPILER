@@ -65,16 +65,6 @@ public:
       current_scope_ = module_scope_.get();
     }
 
-/*
-  const ScopeId NewClassDecl(std::string& class_name
-    , std::vector<ClassType*>& parents){
-    const ScopeOwnerId owner_id = NewScopeOwner();
-    const ScopeId id = NewHierarchicalScope(class_name, owner_id, GetClassType(class_name));
-    class_decl_owner_id_ = owner_id;
-    return id;
-  }
-  */
-
 
   const ScopeId NewFunction(const std::string& name, const ScopeOwnerId scope_owner_id){
     const Label entry = NewFunctionEntryLabel(name);

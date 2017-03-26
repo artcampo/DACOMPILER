@@ -40,40 +40,28 @@ public:
     const ScopeOwnerId owner_id = scope_manager_.NewScopeOwner();
     const ScopeId id = scope_manager_.NewHierarchicalScope(class_name, owner_id
       , type_table_.GetClassType(class_name));
-    class_decl_owner_id_ = owner_id;
+    class_decl_owner_id_[class_name] = owner_id;
     return id;
   }  
   
   void NewClass(std::string& class_name, const ScopeId hscope_id
     , ClassDef& class_def){
-    NewClass(class_name, class_decl_owner_id_, hscope_id
-      , dynamic_cast<HierarchicalScope&>(*scope_manager_.GetScope(hscope_id))
-      , label_manager_.NewClassThisLabel(class_name)
-      , class_def
-      , type_table_.GetClassType(class_name));
-    const Class& c = GetClass(class_name);
-    type_table_.SetClassTypeSize(class_name, c.Size());
+    classes_.push_back( std::move(
+      std::make_unique<Class>(class_name
+                      , class_decl_owner_id_[class_name]
+                      , hscope_id
+                      , dynamic_cast<HierarchicalScope&>(*scope_manager_.GetScope(hscope_id))
+                      , label_manager_.NewClassThisLabel(class_name)
+                      , class_def
+                      , &function_manager_)));
+    Class* c = classes_.back().get();
+    const ClassType& type = type_table_.GetClassType(class_name);
+    class_by_name_[class_name] = c;
+    class_by_typeid_[type.GetTypeId()] = c;
+    type_table_.SetClassTypeSize(class_name, c->Size());
   }  
   
 protected:
-  void NewClass(const std::string& name, const ScopeOwnerId scope_owner_id
-    , const ScopeId scope_id
-    , HierarchicalScope& scope
-    , const IR::Label this_label
-    , ClassDef& class_def
-    , const ClassType& type){
-    classes_.push_back( std::move(
-      std::make_unique<Class>(name
-                      , scope_owner_id
-                      , scope_id
-                      , scope
-                      , this_label
-                      , class_def
-                      , &function_manager_)));
-    class_by_name_[name] = classes_.back().get();
-    class_by_typeid_[type.GetTypeId()] = classes_.back().get();
-
-  }
 
 private:
   ScopeManager&                 scope_manager_;
@@ -86,8 +74,7 @@ private:
   std::map<TypeId, Class*>      class_by_typeid_;
 
   //TODO: needed?
-  //Info saved while creating a class
-  ScopeOwnerId class_decl_owner_id_;
+  std::map<std::string, ScopeOwnerId> class_decl_owner_id_;
 
 };
 
