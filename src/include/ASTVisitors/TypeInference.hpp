@@ -88,6 +88,13 @@ public:
     unit_.SetTypeOfNode(p, dotop_type);
   };
 
+  virtual void Visit(ClassDef const& p){ 
+    for(const auto& it : p) it->Accept(*this); 
+    const LexicalScope& lscope = unit_.GetLScopeOfNode(p);
+    const Type& type = lscope.PostGetType(p.Name());
+    unit_.SetTypeOfNode(p, type);
+  }  
+  
   //Traversal
   virtual void Visit(ProgBody const& p){
     p.GetProgInit().Accept(*this);
@@ -104,7 +111,7 @@ public:
     for (auto& c : p.statements_) c->Accept(*this);
   }
 
-  virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
+
 
 
   //Nothing to do

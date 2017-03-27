@@ -2,21 +2,19 @@
 #include "Passes/Pass.hpp"
 #include "AST/ASTVisitor.hpp"
 #include "CompilationUnit.hpp"
-#include "Types.hpp"
 #include "ErrorLog/Messages.hpp"
-#include "ASTVisitors/TypeInference.hpp"
+#include "ASTVisitors/LexicalScopeOfNode.hpp"
 
 namespace Compiler{
 
 using namespace AST;
 
-class TypeInference : public Pass{
+class LexicalScopeOfNode : public Pass{
 public:
-  TypeInference(CompilationUnit& unit)
+  LexicalScopeOfNode(CompilationUnit& unit)
     : Pass(unit
-        , { CompUnitInfo::kAst, CompUnitInfo::kLnessRnessOfNode
-          , CompUnitInfo::kLexicalScopeOfNode}
-        , {CompUnitInfo::kTypeOfNode})
+        , {CompUnitInfo::kAst}
+        , {CompUnitInfo::kLexicalScopeOfNode})
     , v_(unit_){};
 
   virtual void Run(){
@@ -26,10 +24,10 @@ public:
   };
 
   virtual std::string str() const noexcept{
-    return std::string("Type inference");
+    return std::string("LexicalScopeOfNode");
   };
 
-  Visitor::TypeInference v_;
+  Visitor::LexicalScopeOfNode v_;
 
 };
 

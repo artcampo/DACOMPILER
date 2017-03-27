@@ -61,6 +61,16 @@ public:
     return s;
   }
 
+  //Post parse use
+  virtual const Type& PostGetType(const std::string& name) const{
+    const Symbols::SymbolId sid = PostDeclId(name);
+    return post_parse_declaration_table_.at(sid)->GetType();
+  }  
+  
+  const Symbols::SymbolId PostDeclId(const std::string& name) const {
+    auto it = post_parse_symbol_table_.find(name);
+    return it->second;
+  }
 
 private:
   LexicalScope* parent_;
@@ -74,6 +84,10 @@ private:
   SymbolTable&      symbol_table_;
   DeclarationTable& declaration_table_;
   SymbolIdOfNode&   symbolid_of_node_;
+  
+  //these are local copies to consult when parsing is done
+  SymbolTable       post_parse_symbol_table_;
+  DeclarationTable  post_parse_declaration_table_;
 
 };
 

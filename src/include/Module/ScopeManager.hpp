@@ -25,10 +25,8 @@ using AST::DeclarationTable;
 class ScopeManager{
 public:
   ScopeManager() : free_scope_id_(0)
-  ,  free_scope_ownner_id_(0)
-  , global_scope_ownner_id_(0){
-  }
-
+  , free_scope_ownner_id_(0)
+  , global_scope_ownner_id_(0){}
 
   const ScopeOwnerId NewScopeOwner() noexcept{ return FreeScopeOwnerId(); }
   const ScopeOwnerId GlobalScopeOwnerId() const noexcept{ return global_scope_ownner_id_; }
@@ -70,6 +68,7 @@ public:
         , declaration_table, symbolid_of_node);
     scope_by_id_[id] = g.get();
     current_scope_ = g.get();
+    global_scope_id_ = id;
     return std::move(g);
   }
 
@@ -120,7 +119,9 @@ public:
 //   LexicalScope& Scope() noexcept{return *current_scope_;}
 //   const LexicalScope& Scope() const noexcept{return *current_scope_;}
 
-
+  LexicalScope& GetGlobalLexicalScope() noexcept {
+    return *dynamic_cast<LexicalScope*>(GetScope(global_scope_id_));
+  }
 
 protected:
   const ScopeId FreeScopeId() noexcept{ return free_scope_id_++;}
@@ -136,6 +137,7 @@ protected:
   std::map<TypeId, ScopeId>         hscope_by_class_typeid_;
   std::map<ScopeId,bool>            scope_is_lexical_or_hierarchical_;
 
+  ScopeId global_scope_id_;
 
 };
 

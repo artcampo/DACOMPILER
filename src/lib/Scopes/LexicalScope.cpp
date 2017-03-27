@@ -28,6 +28,10 @@ bool LexicalScope::RegisterDecl(const std::string& name, const Type& type
   symbols_.push_back( InsertedSymbol(name, previous_id));
   declarations_.push_back( InsertedDeclarations(symbol_id, *declaration_table_[symbol_id]));
 
+  //store for post parse
+  post_parse_symbol_table_[name] = symbol_id;
+  post_parse_declaration_table_[symbol_id] = std::make_unique<Symbols::Symbol>
+                              (name, type, GetScopeId(), symbol_id);  
   /*
   std::cout << "symbol table:";
   for(const auto& it : symbol_table_)

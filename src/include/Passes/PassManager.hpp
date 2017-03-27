@@ -9,6 +9,8 @@
 #include "ResolveMemberTypes.hpp"
 #include "DeferredNodesCreation.hpp"
 #include "VarIsMember.hpp"
+#include "LexicalScopeOfNode.hpp"
+
 #include <memory>
 
 namespace Compiler{
@@ -28,11 +30,13 @@ public:
     , resolve_member_types_(unit_)
     , deferred_nodes_creation_(unit_, type_inference_.v_)
     , var_is_member_(unit_)
+    , lscope_of_node_(unit_)
     , passes_ { &resolve_member_types_
               , &deferred_nodes_creation_
               , &check_lval_rval_
               , &var_is_read_or_write_
               , &var_is_val_or_addr_
+              , &lscope_of_node_
               , &type_inference_
               , &type_check_
               , &var_is_member_
@@ -58,9 +62,10 @@ private:
   ResolveMemberTypes      resolve_member_types_;
   DeferredNodesCreation   deferred_nodes_creation_;
   VarIsMember             var_is_member_;
+  LexicalScopeOfNode      lscope_of_node_;
 
-  std::vector<Pass*> passes_;
-  std::map<CompUnitInfo, bool> defined_;
+  std::vector<Pass*>            passes_;
+  std::map<CompUnitInfo, bool>  defined_;
 
   void Run(Pass& p){
     for(const auto& info : p.Uses())

@@ -181,6 +181,7 @@ public:
     , kAstIncomplete2 = 8
     , kTypeCheck = 9
     , kVarIsMember = 10
+    , kLexicalScopeOfNode = 11
   };
 // }
 

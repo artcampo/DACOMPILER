@@ -58,6 +58,12 @@ public:
     else
       unit_.SetNodeAsRval(p);
   }
+  
+  virtual void Visit(DotOp const& p){
+    p.Lhs().Accept(*this);
+    p.Rhs().Accept(*this);
+    unit_.SetNodeAsLval(p);
+  }  
 
   //Traversal
   virtual void Visit(ProgBody const& p){
@@ -91,10 +97,7 @@ public:
   }
   virtual void Visit(ClassDef const& p){ for(const auto& it : p) it->Accept(*this); }
 
-  virtual void Visit(DotOp const& p){
-    p.Lhs().Accept(*this);
-    p.Rhs().Accept(*this);
-  }
+
 
   //Nothing to do
   virtual void Visit(ProgInit const& p){};

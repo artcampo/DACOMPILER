@@ -18,7 +18,10 @@ class LnessRness {
 public:
   LnessRness(){}
 
-  bool IsLValue(const Node& n) const{return node_is_lval_or_rval_.at(&n);}
+  bool IsLValue(const Node& n) const{
+    //std::cout << "ask: " << n.str()<<std::endl; 
+    return node_is_lval_or_rval_.at(&n);
+  }
   bool IsRValue(const Node& n) const{return not node_is_lval_or_rval_.at(&n);}
 
 

@@ -70,6 +70,8 @@ public:
     return *function_by_name_.at(name);
   }
 
+  std::string Name()  const noexcept{return name_;}
+  
   std::string str()  const noexcept{ 
     if(parents_.empty()) return name_;
     std::string n = name_ + ":"; 
@@ -78,6 +80,7 @@ public:
       if(not first) n += ",";
       n += parent->str();
     }
+    return n;
   }
   const size_t Size() const noexcept{ return class_size_;}
 private:

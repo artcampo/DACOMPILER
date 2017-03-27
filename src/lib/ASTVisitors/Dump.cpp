@@ -18,7 +18,11 @@ void Dump::Visit(FuncDef const& p){
 }
 
 void Dump::Visit(ClassDef const& p){
-  std::cout << "[CDef] " << p.str()<<"\n";
+//   std::cout << "[CDef] " << p.str(); 
+  std::cout << "[CDef] " << unit_.GetClass(
+    dynamic_cast<const ClassType&>(unit_.GetTypeOfNode(p))
+    ).str();
+  DisplayAttributes(p); std::cout <<"\n";    
   bool first = true;
   for(auto& it : p.GetVarDecl()) {
     if(not first) std::cout << "\n";
@@ -114,7 +118,7 @@ void Dump::Visit(VarDecl const& p){
 }
 
 void Dump::Visit(AssignStmt const& p){
-  std::cout<< "[Asgst] "; DisplayAttributes(p); std::cout<<"\n";
+  std::cout<< "[Assgn] "; DisplayAttributes(p); std::cout<<"\n";
   IncreaseIndent();
   Indent(); p.Lhs().Accept(*this); std::cout << "\n";
   Indent(); p.Rhs().Accept(*this);

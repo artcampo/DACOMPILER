@@ -16,7 +16,7 @@ using AST::Node;
 using AST::Var;
 using AST::ExprVar;
 using AST::OffsetTable;
-using AST::OffsetTable;
+using AST::LexicalScope;
 
 class TreeDecoration : public LnessRness{
 public:
@@ -45,10 +45,21 @@ public:
     type_of_node_[&n]=&t;
   }
 
+  void SetLScopeOfNode(const Node& n, const LexicalScope& s){
+//     std::cout << "Set: " << n->str() << ": " << t.str() << "\n";
+    lscope_of_node_[&n]=&s;
+  }  
+  
+
   const Type& GetTypeOfNode(const Node& n){
 //     std::cout << "Get: " << n->str() << ": " << type_of_node_[n]->str() << "\n";
     return *type_of_node_[&n];
   }
+  
+  const LexicalScope& GetLScopeOfNode(const Node& n){
+//     std::cout << "Get: " << n->str() << ": " << type_of_node_[n]->str() << "\n";
+    return *lscope_of_node_[&n];
+  }    
 
   IR::Offset LocalVarOffset(const Var& n) const{
     return module_offset_table_.at(n.Id());
@@ -95,6 +106,7 @@ protected:
   std::map<const Node*,bool> var_is_val_or_addr_;
   std::map<const Node*,bool> var_is_member_;
 
+  std::map<const Node*, const LexicalScope*>  lscope_of_node_;
   std::map<const Node*, const Type*>  type_of_node_;
   OffsetTable       module_offset_table_;
 
